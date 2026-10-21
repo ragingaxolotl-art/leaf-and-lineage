@@ -1,11 +1,13 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { Lab, phenotype, fromHex, cross, hex, colorInfo, PIGMENTS, habitatAt, survivalChance, match, random, distance2 } = require('../dist/simulation.js');
+const { Lab, phenotype, fromHex, cross, hex, colorInfo, PIGMENTS, habitatAt, survivalChance, match, random, distance2, localSurvival, gridDistance, adjacentSlots } = require('../dist/simulation.js');
 const config = { habitat: fromHex('#8fa967'), pressure: .8, mutationRate: .03 };
 const emptyJars = lab => Array.from({ length: lab.rows }, () => []);
 // Inject predictable hunt rolls only in tests; the browser uses fresh randomness.
 const trial = (...args) => { const lab = new Lab(...args); lab.survivalRng = random((args[0] ?? 42) ^ 0x51f15e); return lab; };
+
+const recipes = (a, b, strengthA = 7, strengthB = 0) => Array.from({length:6},(_,i)=> i<3 ? [a>>i&1,b>>i&1] : [strengthA>>(i-3)&1,strengthB>>(i-3)&1]);
 
 test('the same starting seed and explicitly injected hunt rolls reproduce test trials', () => {
   const a = trial(42, 24, 8, 'warm'), b = trial(42, 24, 8, 'warm');
@@ -28,58 +30,59 @@ test('without mutation a child inherits one copy of each shade and color gene fr
     const child = lab.offspring(a, b, 0);
     child.genes.forEach((pair, locus) => { assert.ok(a.genes[locus].includes(pair[0])); assert.ok(b.genes[locus].includes(pair[1])); });
     child.switches.forEach((pair,locus)=>{assert.ok(a.switches[locus].includes(pair[0]));assert.ok(b.switches[locus].includes(pair[1]));});
+    for(const side of [0,1]) { const parent=side?b:a; assert.ok([0,1].some(copy=>child.switches.every((pair,i)=>pair[side]===parent.switches[i][copy]))); }
     assert.equal(child.mutations, 0); assert.equal(child.colorMutations, 0);
     assert.deepEqual(child.color, phenotype(child.genes, child.switches));
   }
 });
-test('similar green parents can produce rare contrasting offspring at zero mutation', () => {
-  const lab = trial(42), [a,b] = lab.population;
+test('green parents can produce contrasting offspring without mutation from real hidden recipes', () => {
+  const lab=trial(42),[a,b]=lab.population;
+  a.switches=recipes(0,2); b.switches=recipes(0,2);
   assert.equal(colorInfo(a.switches).visible,'green');
-  assert.equal(colorInfo(b.switches).visible,'green');
+  assert.deepEqual(colorInfo(a.switches).alleles,['green','red']);
   const prediction=cross(a,b);
-  prediction.pathwayChances.forEach(p=>assert.equal(p.probability,1/16));
-  assert.equal(prediction.pigmentChances.find(p=>p.pigment==='red').probability,225/4096);
+  assert.deepEqual(prediction.pigmentChances,[{pigment:'green',probability:.75},{pigment:'red',probability:.25}]);
   const children=Array.from({length:12000},()=>lab.offspring(a,b,0));
-  for(const family of ['yellow','red','blue']) {
-    const count=children.filter(c=>colorInfo(c.switches).visible===family).length;
-    assert.ok(count>540&&count<780,`${family} offspring: ${count}/12000`);
-  }
+  const count=children.filter(c=>colorInfo(c.switches).visible==='red').length;
+  assert.ok(count>2800&&count<3200,`red offspring: ${count}/12000`);
   assert.ok(children.every(c=>c.mutations===0));
 });
-test('inherited copies can pass through a green descendant and produce contrasting grandchildren',()=>{
+test('hidden recipes can pass through green descendants and reappear in grandchildren',()=>{
   const lab=trial(75),[a,b]=lab.population;
-  const child=Array.from({length:100},()=>lab.offspring(a,b,0)).find(c=>colorInfo(c.switches).visible==='green'&&c.switches.every(pair=>pair[0]!==pair[1]));
+  a.switches=b.switches=recipes(0,2);
+  const child=Array.from({length:100},()=>lab.offspring(a,b,0)).find(c=>colorInfo(c.switches).visible==='green'&&colorInfo(c.switches).alleles.includes('red'));
   assert.ok(child);
   const grandchildren=Array.from({length:1000},()=>lab.offspring(child,a,0));
   assert.ok(grandchildren.some(c=>colorInfo(c.switches).visible==='red'));
-  assert.ok(grandchildren.some(c=>colorInfo(c.switches).visible==='yellow'));
   grandchildren.forEach(c=>c.switches.forEach((pair,i)=>{assert.ok(child.switches[i].includes(pair[0]));assert.ok(a.switches[i].includes(pair[1]));}));
 });
-test('teacher probabilities match exhaustive inheritance of all six interacting genes',()=>{
+test('teacher probabilities match the four linked recipe crosses and all shade transmissions',()=>{
   const lab=trial(7),[a,b]=lab.population;
-  a.switches=[[0,1],[1,1],[0,1],[1,0],[0,0],[1,1]];
-  b.switches=[[1,1],[0,1],[1,0],[0,1],[1,1],[0,1]];
+  a.switches=recipes(2,4,6,3);b.switches=recipes(1,6,2,7);
   const counts={};
-  const visit=(locus,switches)=>{
-    if(locus===6){const family=colorInfo(switches).visible;counts[family]=(counts[family]||0)+1;return;}
-    for(const av of a.switches[locus])for(const bv of b.switches[locus])visit(locus+1,[...switches,[av,bv]]);
-  };
-  visit(0,[]);
+  for(const av of [0,1])for(const bv of [0,1]){
+    const switches=a.switches.map((pair,i)=>[pair[av],b.switches[i][bv]]);
+    const family=colorInfo(switches).visible;counts[family]=(counts[family]||0)+1;
+  }
   const prediction=cross(a,b);
-  assert.equal(prediction.totalTransmissions,262144);
+  assert.equal(prediction.totalTransmissions,256);
   assert.equal(prediction.pigmentChances.reduce((sum,c)=>sum+c.probability,0),1);
-  prediction.pigmentChances.forEach(p=>assert.equal(p.probability,counts[p.pigment]/4096));
+  prediction.pigmentChances.forEach(p=>assert.equal(p.probability,counts[p.pigment]/4));
   assert.ok(Math.abs(prediction.colors.reduce((sum,c)=>sum+c.probability,0)-1)<1e-12);
   prediction.mean.forEach((v,i)=>assert.ok(Math.abs(v-prediction.outcomes.reduce((sum,o)=>sum+o.color[i]*o.probability,0))<1e-12));
+  for(let i=0;i<500;i++){ const child=lab.offspring(a,b,0);assert.ok(prediction.colors.some(o=>o.color===hex(child.color))); }
 });
-test('pathways combine without a fixed dominance ranking',()=>{
-  const switches=Array.from({length:6},()=>[1,1]);
-  assert.equal(colorInfo(switches).visible,'mixed');
-  assert.deepEqual(colorInfo(switches).active,[true,true,true]);
-  switches[4]=[0,0];
-  assert.equal(colorInfo(switches).visible,'orange');
-  switches[0]=[0,0];switches[4]=[1,1];
-  assert.equal(colorInfo(switches).visible,'purple');
+test('every color can be hidden or expressed, and no family has fixed dominance',()=>{
+  const families=Object.keys(PIGMENTS);
+  for(let a=0;a<8;a++)for(let b=0;b<8;b++){
+    const highA=colorInfo(recipes(a,b,7,0)),highB=colorInfo(recipes(a,b,0,7));
+    assert.equal(highA.visible,families[a]);assert.equal(highB.visible,families[b]);
+    assert.deepEqual(highA.alleles,[families[a],families[b]]);
+    assert.equal(colorInfo(recipes(a,b,3,3)).visible,families[a],'equal expression uses parent A copy');
+  }
+  const counts=Array(8).fill(0);
+  for(let a=0;a<8;a++)for(let b=0;b<8;b++)for(let sa=0;sa<8;sa++)for(let sb=0;sb<8;sb++)counts[families.indexOf(colorInfo(recipes(a,b,sa,sb)).visible)]++;
+  assert.ok(counts.every(n=>n===512),'uniform recipes and strengths give every family exactly equal representation');
 });
 test('lost copies do not reappear without mutation, while mutation changes transmitted copies',()=>{
   const lab=trial(3),[a,b]=lab.population;
@@ -255,7 +258,7 @@ test('classroom scenarios carry inherited possibilities while initially looking 
     assert.equal(lab.population.length,rows*8);
     assert.ok(lab.population.every(b=>colorInfo(b.switches).visible==='green'));
     const chances=cross(lab.population[0],lab.population[1]).pigmentChances;
-    assert.ok(chances.some(c=>c.pigment===(scenario==='blue'?'blue':'red')&&c.probability>0));
+    assert.ok(chances.some(c=>(scenario==='blue'?c.pigment==='blue':['red','yellow'].includes(c.pigment))&&c.probability>0));
     assert.equal(chances.some(c=>c.pigment===(scenario==='blue'?'red':'blue')),false);
   }
 });
@@ -302,4 +305,162 @@ test('red backgrounds give red beetles a meaningful advantage and favor red over
   }
   assert.ok(red>green+4,`red=${red/40}, green=${green/40}`);
   assert.ok(red>neutralRed+10,`selected red=${red/40}, neutral red=${neutralRed/40}`);
+});
+
+
+test('neighbor protection grows with contrast and fades as neighbors become alike',()=>{
+  const hidden=[0,0,0],mild=[80,80,80],obvious=[255,255,255];
+  const alone=localSurvival(hidden,hidden,1),uniform=localSurvival(hidden,hidden,1,[hidden,hidden,hidden,hidden]);
+  assert.equal(alone.neighborBoost,0);assert.equal(uniform.neighborBoost,0);
+  assert.ok(Math.abs(uniform.chance-.9)<1e-12,'ordinary camouflage remains when the extra boost disappears');
+  const subtle=localSurvival(hidden,hidden,1,[mild]);
+  const one=localSurvival(hidden,hidden,1,[obvious,hidden,hidden,hidden]);
+  const two=localSurvival(hidden,hidden,1,[obvious,obvious,hidden,hidden]);
+  const all=localSurvival(hidden,hidden,1,[obvious,obvious,obvious,obvious]);
+  assert.ok(all.neighborBoost>subtle.neighborBoost);
+  assert.ok(all.neighborBoost>two.neighborBoost&&two.neighborBoost>one.neighborBoost&&one.neighborBoost>uniform.neighborBoost);
+  assert.ok(all.chance>.95&&all.chance<.96,'even maximum local protection still permits a beetle to be eaten');
+  const poor=localSurvival(obvious,hidden,1,[obvious,obvious]);
+  assert.equal(poor.neighborBoost,0);assert.ok(poor.chance<.101,'a uniform but contrasting population remains exposed');
+});
+test('neighbor protection vanishes with selection off and never guarantees survival',()=>{
+  for(const color of [[0,0,0],[128,128,128],[255,255,255]])for(const pressure of [0,.25,.8,1]){
+    const odds=localSurvival(color,[0,0,0],pressure,[[255,0,0],[255,255,255]]);
+    assert.ok(odds.neighborBoost>=0);assert.ok(odds.chance>=odds.baseChance&&odds.chance<1);
+    assert.ok(odds.neighborBoost<=(1-odds.baseChance)*.6+1e-12);
+    if(!pressure){assert.equal(odds.chance,.7);assert.equal(odds.neighborBoost,0);}
+  }
+});
+test('local protection uses all eight adjacent living leaves, including diagonals, without row wrapping',()=>{
+  const lab=trial(42,24);lab.population.forEach(b=>b.color=[0,0,0]);
+  const center=lab.population[11];assert.equal(lab.survivalDetails(center,[0,0,0],1).neighborCount,8);
+  lab.population[23].color=[255,255,255];
+  assert.equal(lab.survivalDetails(center,[0,0,0],1).neighborBoost,0,'distant leaves do not count');
+  lab.population[2].color=[255,255,255];assert.ok(lab.survivalDetails(center,[0,0,0],1).neighborBoost>0,'diagonal neighbors count');
+  lab.population[2]=null;const empty=lab.survivalDetails(center,[0,0,0],1);
+  assert.equal(empty.neighborCount,7);assert.equal(empty.neighborBoost,0,'empty leaves cannot offer protection');
+  lab.population[8].color=[255,255,255];const edge=lab.survivalDetails(lab.population[7],[0,0,0],1);
+  assert.equal(edge.neighborCount,3);assert.equal(edge.neighborBoost,0,'the next row is not the right-hand neighbor');
+  lab.population[14].color=[255,255,255];assert.ok(lab.survivalDetails(lab.population[7],[0,0,0],1).neighborBoost>0);
+});
+test('Neapolitan neighbor comparisons stay on the same habitat color',()=>{
+  const habitats=[[0,0,0],[255,255,255],[255,0,255]],lab=trial(42,8);
+  lab.population.forEach((b,i)=>b.color=habitatAt(habitats,i));
+  for(const b of lab.living()){const odds=lab.survivalDetails(b,habitats,1);assert.equal(odds.neighborBoost,0);assert.ok(Math.abs(odds.chance-.9)<1e-12);}
+  assert.equal(lab.survivalDetails(lab.population[2],habitats,1).neighborCount,1);
+  assert.equal(lab.survivalDetails(lab.population[3],habitats,1).neighborCount,1);
+  lab.population[1].color=[255,255,255];
+  assert.ok(lab.survivalDetails(lab.population[2],habitats,1).neighborBoost>0);
+  assert.equal(lab.survivalDetails(lab.population[3],habitats,1).neighborBoost,0);
+  lab.population.forEach(b=>b.color=[0,0,0]);
+  lab.living().forEach(b=>assert.equal(lab.survivalDetails(b,habitats,1).neighborBoost,0));
+});
+test('actual rolls include local protection without forecasting outcomes or changing odds during a hunt',()=>{
+  const lab=trial(42,8);lab.population.forEach(b=>b.color=[255,255,255]);lab.population[3].color=[0,0,0];let calls=0;
+  lab.survivalRng=()=>{calls++;return .93;};
+  const odds=lab.living().map(b=>lab.survivalDetails(b,[0,0,0],1));
+  assert.equal(calls,0,'inspecting probabilities must not roll any outcomes');
+  assert.ok(odds[3].baseChance<.93&&odds[3].chance>.93);
+  assert.deepEqual(lab.select([0,0,0],1).map(b=>b.id),[lab.population[3].id]);
+  assert.equal(calls,8,'every insect gets one draw');
+  assert.deepEqual(lab.living().map(b=>lab.survivalDetails(b,[0,0,0],1)),odds);
+  assert.deepEqual(lab.select([0,0,0],1,lab.living().reverse()).map(b=>b.id),[lab.population[3].id]);
+  assert.equal(calls,16);
+});
+
+
+test('camouflage treats every hue symmetrically and handles neutral colors',()=>{
+  const colors=[[0,0,0],[255,255,255],[128,128,128],[127,128,128],...Object.values(PIGMENTS).map(p=>p.color)];
+  const permutations=[[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]];
+  for(const color of colors){
+    assert.equal(match(color,color),1);assert.ok(Math.abs(survivalChance(color,color,1)-.9)<1e-12);
+    for(const habitat of colors){
+      const score=match(color,habitat);assert.ok(Number.isFinite(score)&&score>0&&score<=1);
+      assert.ok(Math.abs(score-match(habitat,color))<1e-12);
+      const neighbors=[[30,60,200],[240,90,20]],odds=localSurvival(color,habitat,.8,neighbors);
+      for(const order of permutations){
+        const turn=c=>order.map(i=>c[i]);
+        assert.ok(Math.abs(match(turn(color),turn(habitat))-score)<1e-12);
+        assert.ok(Math.abs(localSurvival(turn(color),turn(habitat),.8,neighbors.map(turn)).chance-odds.chance)<1e-12);
+      }
+    }
+  }
+});
+test('the nearest reference family wins across primary and secondary background colors',()=>{
+  const targets={red:[255,0,0],yellow:[255,255,0],green:[0,255,0],teal:[0,255,255],blue:[0,0,255],purple:[255,0,255]};
+  for(const [family,background] of Object.entries(targets)){
+    const ranked=Object.keys(PIGMENTS).sort((a,b)=>match(PIGMENTS[b].color,background)-match(PIGMENTS[a].color,background));
+    assert.equal(ranked[0],family,`${family} background favored ${ranked[0]}`);
+  }
+  assert.ok(PIGMENTS.teal.color[1]>PIGMENTS.teal.color[0]+80&&PIGMENTS.teal.color[2]>PIGMENTS.teal.color[0]+80);
+});
+test('Dry leaves gives matching warm colors a clear advantage over green at normal strength',()=>{
+  const habitat=fromHex('#b17b56'),green=survivalChance(PIGMENTS.green.color,habitat,.8);
+  assert.ok(green<.5);
+  assert.ok(survivalChance(PIGMENTS.red.color,habitat,.8)>green+.3);
+  assert.ok(survivalChance(PIGMENTS.orange.color,habitat,.8)>green+.25);
+  let greenCount=0,warmCount=0;
+  for(let seed=1;seed<=20;seed++){
+    const lab=trial(seed);for(let g=0;g<50;g++)lab.commit(lab.plan({habitat,pressure:.8,mutationRate:.03}));
+    assert.ok(lab.size);
+    greenCount+=lab.living().filter(b=>colorInfo(b.switches).visible==='green').length/lab.size;
+    warmCount+=lab.living().filter(b=>['red','orange'].includes(colorInfo(b.switches).visible)).length/lab.size;
+  }
+  assert.ok(warmCount>greenCount+2,`warm=${warmCount/20}, green=${greenCount/20}`);
+});
+test('selection improves matching over neutral drift for all eight reference color environments',()=>{
+  for(const [family,{color:habitat}] of Object.entries(PIGMENTS)){
+    let selected=0,neutral=0;
+    for(let seed=1;seed<=12;seed++)for(const pressure of [0,.8]){
+      const lab=trial(seed);for(let g=0;g<40;g++)lab.commit(lab.plan({habitat,pressure,mutationRate:.03}));
+      assert.ok(lab.size,`${family} trial became empty`);
+      if(pressure)selected+=lab.stats(habitat).match;else neutral+=lab.stats(habitat).match;
+    }
+    assert.ok(selected>neutral+60,`${family}: selected=${selected/12}, neutral=${neutral/12}`);
+  }
+});
+
+
+test('mating includes diagonals, second rings, and decreasing farther-ring chances without wrapping',()=>{
+  const lab=trial(42),counts=Array(8).fill(0);
+  assert.equal(gridDistance(7,8),7);assert.equal(gridDistance(9,18),1);assert.equal(gridDistance(9,27),2);
+  for(let round=0;round<160;round++){
+    const plan=lab.plan({...config,survivors:lab.living(),mutationRate:0});
+    assert.equal(plan.nearbyBirths+plan.fartherBirths,lab.capacity);
+    plan.births.forEach((child,slot)=>{
+      assert.equal(child.parentSlots[0],slot,'a surviving parent retains its own leaf');
+      assert.equal(child.dispersalDistance,0);
+      assert.equal(child.mateDistance,gridDistance(...child.parentSlots));
+      assert.notEqual(child.parents[0],child.parents[1]);counts[child.mateDistance]++;
+    });
+  }
+  assert.ok(counts[1]>counts[2]*1.6&&counts[2]>counts[3]*1.6,JSON.stringify(counts));
+  assert.ok(counts[3]>counts[4]&&counts[4]>counts[5]&&counts[5]>counts[6]&&counts[6]>counts[7]);
+  assert.ok(counts[7]>0,'distant mates remain possible');
+});
+test('vacant leaves use nearest survivors and allow reproduction across habitat boundaries',()=>{
+  const lab=trial(2,24),survivors=[lab.population[0],lab.population[23]],habitat=['#8fa967','#b17b56','#7785a1'].map(fromHex);
+  const plan=lab.plan({...config,habitat,survivors});
+  plan.births.forEach((child,slot)=>{
+    const nearest=Math.min(...[0,23].map(parent=>gridDistance(slot,parent)));
+    assert.equal(child.dispersalDistance,nearest);assert.equal(gridDistance(slot,child.parentSlots[0]),nearest);
+    assert.deepEqual(new Set(child.parents),new Set(survivors.map(b=>b.id)));
+  });
+  assert.equal(plan.crossHabitatBirths,24);
+});
+test('Dusk and Neapolitan favor local colors without forcing a sorted board',()=>{
+  const habitat=['#8fa967','#b17b56','#7785a1'].map(fromHex);
+  assert.ok(survivalChance(PIGMENTS.blue.color,habitat[2],.8)>survivalChance(PIGMENTS.green.color,habitat[2],.8)+.4);
+  const bands=Array.from({length:3},()=>({n:0,green:0,blue:0,warm:0,match:0,shuffled:0}));
+  for(let seed=1;seed<=16;seed++){
+    const lab=trial(seed);for(let g=0;g<60;g++)lab.commit(lab.plan({habitat,pressure:.8,mutationRate:.03}));
+    lab.population.forEach((b,slot)=>{if(!b)return;const r=bands[Math.floor(((slot%8)+.5)/8*3)],family=colorInfo(b.switches).visible;
+      r.n++;r.green+=family==='green';r.blue+=family==='blue';r.warm+=['red','orange','yellow'].includes(family);r.match+=match(b.color,habitatAt(habitat,slot));r.shuffled+=habitat.reduce((n,bg)=>n+match(b.color,bg),0)/3;
+    });
+  }
+  bands.forEach(r=>{for(const key of ['green','blue','warm','match','shuffled'])r[key]/=r.n;});
+  assert.ok(bands[0].green>bands[1].green+.1&&bands[1].green>bands[2].green+.05,JSON.stringify(bands));
+  assert.ok(bands[2].blue>bands[1].blue+.15,JSON.stringify(bands));
+  assert.ok(bands[1].warm>bands[0].warm+.05&&bands[1].warm>bands[2].warm+.05,JSON.stringify(bands));
+  assert.ok(bands.reduce((n,r)=>n+r.match-r.shuffled,0)>.2,JSON.stringify(bands));
 });

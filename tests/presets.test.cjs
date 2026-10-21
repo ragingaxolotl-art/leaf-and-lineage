@@ -92,3 +92,12 @@ test('a newer class-code version gets a version message, while corrupted codes r
   assert.throws(()=>decode(code.replace('LL4.','LL5.')),/newer version/);
   assert.throws(()=>decode(code+'x'),/incomplete or mistyped/);
 });
+
+
+test('5x and 10x speeds survive classroom links in every activity and environment layout',()=>{
+  for(const speed of [5,10])for(const activities of ['bird','breeding','both'])for(const layout of ['solid','neapolitan']){
+    const p={...defaults,speed,activities,layout,mode:activities==='breeding'?'breeding':'natural',showStats:true,allowEnvironment:true};
+    assert.deepEqual(decode(encode(p)),p);
+    assert.deepEqual(decode(studentLink(p,'https://ragingaxolotl-art.github.io/leaf-and-lineage/?teacher=1')),p);
+  }
+});
