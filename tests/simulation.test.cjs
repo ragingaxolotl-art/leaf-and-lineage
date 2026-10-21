@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { Lab, phenotype, fromHex, cross, hex, colorInfo, PIGMENTS } = require('../dist/simulation.js');
+const { Lab, phenotype, fromHex, cross, hex, colorInfo, PIGMENTS, habitatAt, survivalChance, match } = require('../dist/simulation.js');
 const config = { habitat: fromHex('#8fa967'), pressure: .8, mutationRate: .03 };
 const emptyJars = lab => Array.from({ length: lab.rows }, () => []);
 
@@ -91,8 +91,8 @@ test('lost copies do not reappear without mutation, while mutation changes trans
   assert.ok(mutated.every(c=>colorInfo(c.switches).visible==='mixed'));
   assert.deepEqual([a,b],before);
   for(let g=0;g<50;g++)lab.commit(lab.plan({...config,mutationRate:1}));
-  assert.ok(lab.population.flatMap(c=>c.genes.flat()).every(v=>Number.isInteger(v)&&v>=0&&v<=255));
-  assert.ok(lab.population.flatMap(c=>c.switches.flat()).every(v=>v===0||v===1));
+  assert.ok(lab.living().flatMap(c=>c.genes.flat()).every(v=>Number.isInteger(v)&&v>=0&&v<=255));
+  assert.ok(lab.living().flatMap(c=>c.switches.flat()).every(v=>v===0||v===1));
 });
 test('one complete jar replaces exactly its row and increments only its row generation', () => {
   const lab = new Lab(42), before = lab.population.slice(), pairs = emptyJars(lab);
@@ -128,36 +128,100 @@ test('incomplete, duplicate and stale parents are rejected before any row is gen
   assert.throws(()=>a.planRows({pairs:[],mutationRate:0}));
   assert.deepEqual(a.plan(config),b.plan(config));
 });
-test('natural selection takes four survivors per row and never mixes row parentage', () => {
-  const lab = new Lab(42);
-  for(let generation=0;generation<30;generation++) {
-    const old=lab.population.slice(),plan=lab.plan(config);
-    assert.equal(plan.breeders.length,24);
-    for(let row=0;row<6;row++) {
-      const ids=new Set(old.slice(row*8,row*8+8).map(b=>b.id));
-      const survivors=plan.breeders.filter(b=>ids.has(b.id));
-      assert.equal(survivors.length,4);
-      const survivorIds=new Set(survivors.map(b=>b.id));
-      plan.children.slice(row*8,row*8+8).forEach(c=>{assert.ok(c.parents.every(id=>survivorIds.has(id)));assert.notEqual(c.parents[0],c.parents[1]);});
+test('independent selection preserves row parentage and handles any survivor count',()=>{
+  const lab=new Lab(42);
+  for(let generation=0;generation<30;generation++){
+    const old=lab.population.slice(), before=lab.rowGenerations.slice(), plan=lab.plan(config);
+    assert.equal(plan.eaten,old.filter(Boolean).length-plan.breeders.length);
+    for(let row=0;row<6;row++){
+      const oldRow=old.slice(row*8,row*8+8).filter(Boolean), ids=new Set(oldRow.map(b=>b.id));
+      const survivors=plan.breeders.filter(b=>ids.has(b.id)), survivorIds=new Set(survivors.map(b=>b.id));
+      const nextRow=plan.children.slice(row*8,row*8+8).filter(Boolean);
+      assert.equal(plan.survivorCounts[row],survivors.length);
+      if(survivors.length>=2){
+        assert.equal(nextRow.length,8);
+        nextRow.forEach(c=>{assert.ok(c.parents.every(id=>survivorIds.has(id)));assert.notEqual(c.parents[0],c.parents[1]);});
+      }else assert.deepEqual(nextRow,survivors);
+      assert.equal(plan.updatedRows.includes(row),oldRow.length>0);
     }
     lab.commit(plan);
     assert.equal(lab.population.length,48);
-    assert.equal(new Set(lab.population.map(b=>b.id)).size,48);
-    assert.deepEqual(lab.rowGenerations,Array(6).fill(generation+1));
+    assert.equal(new Set(lab.living().map(b=>b.id)).size,lab.size);
+    before.forEach((g,row)=>assert.equal(lab.rowGenerations[row],g+(plan.updatedRows.includes(row)?1:0)));
   }
 });
-test('contrast affects survival under selection while zero pressure is neutral', () => {
-  const count = pressure => {
-    let retained=0;
-    for(let seed=1;seed<=100;seed++) {
+test('each insect uses exactly one roll, with no quota or rerolls',()=>{
+  const lab=new Lab(9,8),rolls=[.1,.8,.69,.7,.5,.9,0,.99];let calls=0;
+  lab.rng=()=>rolls[calls++];
+  const survivors=lab.select([0,0,0],0);
+  assert.equal(calls,8);
+  assert.deepEqual(survivors.map(b=>b.id),[1,3,5,7]);
+  lab.rng=()=>0;assert.equal(lab.select([0,0,0],0).length,8);
+  lab.rng=()=>.999;assert.equal(lab.select([0,0,0],0).length,0);
+});
+test('survivor counts vary between trials instead of fixing how many the bird eats',()=>{
+  const counts=new Set();
+  for(let seed=1;seed<=200;seed++)counts.add(new Lab(seed,8).select(config.habitat,0).length);
+  assert.ok(counts.size>=5,`Survivor counts: ${[...counts]}`);
+});
+test('contrast changes an individual chance; zero selection gives every color 70%',()=>{
+  assert.equal(survivalChance([0,0,0],[0,0,0],0),.7);
+  assert.equal(survivalChance([255,255,255],[0,0,0],0),.7);
+  assert.ok(Math.abs(survivalChance([0,0,0],[0,0,0],1)-.9)<1e-12);
+  assert.ok(survivalChance([255,255,255],[0,0,0],1)<.101);
+  const count=pressure=>{
+    let matching=0;
+    for(let seed=1;seed<=100;seed++){
       const lab=new Lab(seed);lab.population.forEach((b,i)=>b.color=i<24?[0,0,0]:[255,255,255]);
-      retained+=lab.select([0,0,0],pressure).filter(b=>b.color[0]===0).length;
+      matching+=lab.select([0,0,0],pressure).filter(b=>b.color[0]===0).length;
     }
-    return retained;
+    return matching;
   };
-  const neutral=count(0),strong=count(1);
-  assert.ok(neutral>1050&&neutral<1350,`${neutral} neutral matching survivors`);
-  assert.ok(strong>neutral+650,`${strong} selected matching survivors`);
+  const neutral=count(0),selected=count(1);
+  assert.ok(neutral>1500&&neutral<1850,`Neutral matching survivors ${neutral}/2400`);
+  assert.ok(selected>neutral+350,`Selected matching survivors ${selected}/2400`);
+});
+test('zero survivors leaves an empty row, with no fabricated breeders or offspring',()=>{
+  const lab=new Lab(42,8);lab.rng=()=>.999;
+  const plan=lab.plan(config);
+  assert.equal(plan.breeders.length,0);assert.equal(plan.eaten,8);assert.equal(plan.births.length,0);
+  lab.commit(plan);assert.equal(lab.size,0);assert.ok(lab.population.every(b=>b===null));
+  assert.deepEqual(lab.rowGenerations,[1]);
+  assert.deepEqual(lab.stats(config.habitat),{count:0,mean:[0,0,0],match:0,diversity:0});
+  const next=lab.plan(config);assert.deepEqual(next.updatedRows,[]);lab.commit(next);assert.equal(lab.generation,1);
+});
+test('a single survivor stays on the same leaf without producing offspring',()=>{
+  const lab=new Lab(42,8),original=lab.population[5];let calls=0;
+  lab.rng=()=>calls++===5?0:.999;
+  const plan=lab.plan(config);assert.equal(calls,8);assert.equal(plan.births.length,0);
+  assert.equal(plan.children[5],original);assert.equal(plan.children.filter(Boolean).length,1);
+  lab.commit(plan);assert.equal(lab.size,1);
+});
+test('saved jar parents produce successive broods of the original pair',()=>{
+  const lab=new Lab(3,16),parents=lab.population.slice(0,2),saved=structuredClone(parents),archive=new Map(parents.map(b=>[b.id,b]));
+  const pairs=[[parents[0].id,parents[1].id],[]],otherRow=lab.population.slice(8);
+  for(let brood=0;brood<10;brood++){
+    const plan=lab.planRows({pairs,mutationRate:0,parentArchive:archive});
+    assert.equal(plan.births.length,8);assert.ok(plan.births.every(b=>JSON.stringify(b.parents)===JSON.stringify(pairs[0])));
+    lab.commit(plan);assert.deepEqual(lab.population.slice(8),otherRow);
+  }
+  assert.deepEqual(parents,saved);assert.equal(lab.generation,10);
+  assert.throws(()=>lab.planRows({pairs,mutationRate:0}));
+});
+test('a saved pair can repopulate an empty row when breeding is allowed',()=>{
+  const lab=new Lab(42,8),parents=lab.population.slice(0,2),archive=new Map(parents.map(b=>[b.id,b]));
+  lab.rng=()=>.999;lab.commit(lab.plan(config));assert.equal(lab.size,0);
+  lab.commit(lab.planRows({pairs:[parents.map(b=>b.id)],mutationRate:0,parentArchive:archive}));
+  assert.equal(lab.size,8);assert.ok(lab.living().every(b=>b.parents.every(id=>archive.has(id))));
+});
+test('Neapolitan uses the third directly behind each leaf, repeating for every row',()=>{
+  const habitats=[[0,0,0],[255,255,255],[255,0,255]];
+  const expected=[0,0,0,1,1,2,2,2];
+  for(let slot=0;slot<24;slot++)assert.equal(habitatAt(habitats,slot,8),habitats[expected[slot%8]]);
+  const lab=new Lab(7,16);lab.population.forEach(b=>b.color=[0,0,0]);lab.rng=()=>.5;
+  assert.deepEqual(lab.select(habitats,1).map(b=>b.id),[1,2,3,9,10,11]);
+  lab.population.forEach((b,i)=>b.color=habitatAt(habitats,i));
+  assert.equal(lab.stats(habitats).match,100);assert.equal(lab.select(habitats,1).length,16);
 });
 test('selection improves camouflage across trials compared with drift', () => {
   let selected=0,neutral=0;

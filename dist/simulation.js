@@ -37,6 +37,8 @@
   const fromHex = value => [1, 3, 5].map(i => parseInt(value.slice(i, i + 2), 16));
   const distance2 = (a, b) => a.reduce((sum, v, i) => sum + ((v - b[i]) / 255) ** 2, 0) / 3;
   const match = (color, habitat) => Math.exp(-10 * distance2(color, habitat));
+  const habitatAt = (habitat, slot, rowSize = 8) => Array.isArray(habitat[0]) ? habitat[Math.min(habitat.length - 1, Math.floor(((slot % rowSize) + .5) / rowSize * habitat.length))] : habitat;
+  const survivalChance = (color, habitat, pressure) => (1 - pressure) * .7 + pressure * (.1 + .8 * match(color, habitat) ** 2);
   function cross(a, b) {
     const loci = a.genes.map((pair, i) => pair.flatMap(av => b.genes[i].map(bv => ({ a: av, b: bv, value: (av + bv) / 2 }))));
     const homozygous = a.switches.map((pair, i) => (pair[0] + pair[1]) / 2 * (b.switches[i][0] + b.switches[i][1]) / 2);
@@ -58,7 +60,7 @@
   class Lab {
     constructor(seed = 42, size = 48, rowSize = 8, scenario = 'mixed') {
       if (size % rowSize || rowSize < 4) throw new Error('Rows need at least four beetles and a whole number of populations.');
-      this.seed = seed; this.size = size; this.rowSize = rowSize; this.rows = size / rowSize;
+      this.seed = seed; this.capacity = size; this.rowSize = rowSize; this.rows = size / rowSize;
       this.rng = random(seed); this.generation = 0; this.nextId = 1;
       this.rowGenerations = Array(this.rows).fill(0);
       this.population = Array.from({ length: size }, (_, index) => {
@@ -96,48 +98,56 @@
       const switches = a.switches.map((pair, i) => [inheritSwitch(pair), inheritSwitch(b.switches[i])]);
       return this.beetle(genes, switches, [a.id, b.id], mutations, colorMutations);
     }
-    select(habitat, pressure, pool = this.population) {
-      const remaining = pool.slice(), survivors = [];
-      while (survivors.length < Math.max(2, Math.floor(pool.length / 2))) {
-        const weights = remaining.map(b => (1 - pressure) + pressure * (.015 + match(b.color, habitat) ** 2));
-        let draw = this.rng() * weights.reduce((a, b) => a + b, 0), index = weights.length - 1;
-        for (let i = 0; i < weights.length; i++) { draw -= weights[i]; if (draw <= 0) { index = i; break; } }
-        survivors.push(remaining.splice(index, 1)[0]);
-      }
-      return survivors;
+    get size() { return this.living().length; }
+    living() { return this.population.filter(Boolean); }
+    row(row) { return this.population.slice(row * this.rowSize, (row + 1) * this.rowSize).filter(Boolean); }
+    select(habitat, pressure, pool = this.living()) {
+      // One independent roll per living insect. No fixed survivor quota or rerolls.
+      return pool.filter(b => this.rng() < survivalChance(b.color, habitatAt(habitat, Math.max(0, this.population.indexOf(b)), this.rowSize), pressure));
     }
     plan({ habitat, pressure, mutationRate }) {
-      const children = [], breeders = [];
+      const children = Array(this.capacity).fill(null), breeders = [], births = [], updatedRows = [], survivorCounts = [], unableRows = [];
+      let eaten = 0;
       for (let row = 0; row < this.rows; row++) {
-        const pool = this.population.slice(row * this.rowSize, (row + 1) * this.rowSize);
-        const parents = this.select(habitat, pressure, pool); breeders.push(...parents);
+        const pool = this.row(row), parents = this.select(habitat, pressure, pool);
+        survivorCounts.push(parents.length); breeders.push(...parents); eaten += pool.length - parents.length;
+        if (!pool.length) continue;
+        updatedRows.push(row);
+        if (parents.length < 2) {
+          unableRows.push(row);
+          // A lone survivor remains alive. No offspring are invented without two parents.
+          if (parents.length) children[this.population.indexOf(parents[0])] = parents[0];
+          continue;
+        }
         for (let i = 0; i < this.rowSize; i++) {
           const a = Math.floor(this.rng() * parents.length);
           let b = Math.floor(this.rng() * (parents.length - 1)); if (b >= a) b++;
-          children.push(this.offspring(parents[a], parents[b], mutationRate));
+          const child = this.offspring(parents[a], parents[b], mutationRate);
+          children[row * this.rowSize + i] = child; births.push(child);
         }
       }
-      return { breeders, children, updatedRows: Array.from({ length: this.rows }, (_, i) => i), families: [], mutations: children.reduce((n, b) => n + b.mutations, 0), mode: 'natural' };
+      return { breeders, children, births, updatedRows, survivorCounts, eaten, unableRows, families: [], mutations: births.reduce((n, b) => n + b.mutations, 0), mode: 'natural' };
     }
-    planRows({ pairs, mutationRate }) {
+    planRows({ pairs, mutationRate, parentArchive = new Map() }) {
       if (!Array.isArray(pairs) || pairs.length !== this.rows) throw new Error('Each row needs one jar.');
+      const parentById = id => this.living().find(b => b.id === id) || parentArchive.get(id);
       pairs.forEach(ids => {
         if (!Array.isArray(ids) || (ids.length !== 0 && ids.length !== 2)) throw new Error('Choose two parents or leave this row alone.');
-        if (ids.length && (ids[0] === ids[1] || ids.some(id => !this.population.some(b => b.id === id)))) throw new Error('Choose two different living beetles.');
+        if (ids.length && (ids[0] === ids[1] || ids.some(id => !parentById(id)))) throw new Error('Choose two different living beetles.');
       });
-      const children = this.population.slice(), families = [], breeders = new Map(), updatedRows = [];
+      const children = this.population.slice(), families = [], breeders = new Map(), updatedRows = [], births = [];
       let mutations = 0;
       pairs.forEach((ids, row) => {
         if (!ids.length) return; // Preserve every existing beetle and its genes in an empty row.
-        const parents = ids.map(id => this.population.find(b => b.id === id));
+        const parents = ids.map(parentById);
         parents.forEach(b => breeders.set(b.id, b)); updatedRows.push(row);
         families.push({ row, parents, generation: this.rowGenerations[row] + 1, round: this.generation + 1 });
         for (let i = 0; i < this.rowSize; i++) {
           const child = this.offspring(parents[0], parents[1], mutationRate);
-          children[row * this.rowSize + i] = child; mutations += child.mutations;
+          children[row * this.rowSize + i] = child; births.push(child); mutations += child.mutations;
         }
       });
-      return { breeders: Array.from(breeders.values()), children, families, updatedRows, mutations, mode: 'breeding' };
+      return { breeders: Array.from(breeders.values()), children, births, families, updatedRows, mutations, mode: 'breeding' };
     }
     commit(plan) {
       if (!plan.updatedRows.length) return;
@@ -145,10 +155,14 @@
       plan.updatedRows.forEach(row => this.rowGenerations[row]++);
     }
     stats(habitat) {
-      const mean = [0, 1, 2].map(i => this.population.reduce((n, b) => n + b.color[i], 0) / this.size);
-      return { mean, match: 100 * this.population.reduce((n, b) => n + match(b.color, habitat), 0) / this.size, diversity: 100 * Math.sqrt(this.population.reduce((n, b) => n + distance2(b.color, mean), 0) / this.size) };
+      const living = this.living(), count = living.length;
+      if (!count) return { count: 0, mean: [0, 0, 0], match: 0, diversity: 0 };
+      const mean = [0, 1, 2].map(i => living.reduce((n, b) => n + b.color[i], 0) / count);
+      const camouflage = this.population.reduce((n, b, slot) => n + (b ? match(b.color, habitatAt(habitat, slot, this.rowSize)) : 0), 0);
+      return { count, mean, match: 100 * camouflage / count, diversity: 100 * Math.sqrt(living.reduce((n, b) => n + distance2(b.color, mean), 0) / count) };
     }
+
   }
-  const api = { Lab, random, phenotype, shadeMean, hex, fromHex, match, distance2, cross, PIGMENTS, PATHWAYS, colorInfo, activePathways };
+  const api = { Lab, random, phenotype, shadeMean, hex, fromHex, match, distance2, cross, PIGMENTS, PATHWAYS, colorInfo, activePathways, habitatAt, survivalChance };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.BeetleSim = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
