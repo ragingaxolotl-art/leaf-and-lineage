@@ -7,10 +7,10 @@
   <meta name="description" content="Explore beetle evolution in a playful, hands-on lab. Change the habitat, breed beetles, and discover how inherited color changes across generations.">
   <title>Leaf & Lineage — Beetle Evolution Lab</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23244c39'/%3E%3Cpath d='M10 29C9 13 19 9 30 10C30 23 23 30 10 29ZM11 29L25 15' fill='none' stroke='%23e7edbd' stroke-width='2'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20261021-6">
-  <script src="simulation.js?v=20261021-6" defer></script>
-  <script src="presets.js?v=20261021-6" defer></script>
-  <script src="app.js?v=20261021-6" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20261021-7">
+  <script src="simulation.js?v=20261021-7" defer></script>
+  <script src="presets.js?v=20261021-7" defer></script>
+  <script src="app.js?v=20261021-7" defer></script>
 </head>
 <body>
   <a class="skip" href="#lab">Skip to simulation</a>
@@ -25,7 +25,7 @@
       <div class="intro-note"><svg viewBox="0 0 60 44" aria-hidden="true"><path d="M4 37Q29 36 40 14M30 17L41 12L43 24"/></svg><span>Small beetles.<br>Big questions.</span></div>
     </section>
 
-    <p id="classroom-error" class="classroom-error" role="alert" hidden></p>
+    <div id="classroom-error" class="classroom-error" role="alert" hidden><p id="classroom-error-message"></p><p>Try the latest lab. Your class link will stay in place.</p><a id="classroom-reload" class="step-button" href="#">Reload latest lab</a></div>
     <div class="workspace" id="lab">
       <aside class="controls card" aria-label="Experiment settings">
         <div class="panel-heading"><span class="step-label">01</span><h2>Set the scene</h2></div>

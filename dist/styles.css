@@ -64,3 +64,5 @@
 .student-view.bird-only .lineage-board{--field-left:3px}
 .empty-leaf{display:block;height:48px;border:1px dashed #ffffff45;border-radius:100% 0 100% 0;opacity:.45;margin:3px}.row-warning{font-size:9px;padding:6px;color:var(--habitat-ink,#203923)}.bird-report{padding:10px 23px 0;font-size:11px;color:#546e42}.survival-info{font-size:10px;line-height:1.7;margin-top:7px}.class-tri-colors{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.class-tri-colors legend{font-size:12px;margin-bottom:8px}.class-tri-colors label{font-weight:normal}
 @media(max-width:520px){.neapolitan-key{padding:0 13px 10px;gap:9px;font-size:8px}.bird-report{padding-left:13px;padding-right:13px;font-size:10px}.class-tri-colors{gap:8px}.class-tri-colors label{font-size:10px}}
+
+.classroom-error p+p{margin-top:8px}.classroom-error .step-button{display:inline-flex;margin-top:12px;background:#fffef9}

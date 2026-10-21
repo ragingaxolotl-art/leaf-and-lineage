@@ -505,10 +505,9 @@
     }
     function createLink() {
       try {
-        const preset = formPreset(), code = LeafPresets.encode(preset), url = new URL(location.href);
-        url.search = ''; url.hash = 'lab=' + code;
-        $('student-link').value = url.href; $('student-code').value = code;
-        $('student-preview').href = url.href; $('student-preview').hidden = false;
+        const preset = formPreset(), code = LeafPresets.encode(preset), url = LeafPresets.studentLink(preset, location.href);
+        $('student-link').value = url; $('student-code').value = code;
+        $('student-preview').href = url; $('student-preview').hidden = false;
         $('classroom-message').textContent = preset.showStats ? 'Ready. Students can see all stats, charts, genetic details, offspring odds for allowed breeding, and full data downloads. Activity and environment permissions still apply.' : 'Ready. Stats and genetics stay simplified. This link includes the activity choices and environment permission.';
         $('copy-student-link').disabled = false;
       } catch (error) { $('classroom-message').textContent = error.message; }
@@ -554,7 +553,11 @@
   reset();
   if (!studentMode && new URLSearchParams(location.search).get('teacher') === '1') $('classroom-open').click();
   if (presetError) {
-    $('classroom-error').textContent = presetError;
+    $('classroom-error-message').textContent = presetError;
+    const freshURL = new URL(location.href);
+    freshURL.searchParams.set('v', LeafPresets.release);
+    freshURL.searchParams.set('refresh', Date.now().toString(36));
+    $('classroom-reload').href = freshURL.href;
     $('classroom-error').hidden = false;
     $('lab').hidden = true;
     $('play').disabled = true; $('step').disabled = true;

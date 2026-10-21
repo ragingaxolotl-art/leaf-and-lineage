@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {defaults,validate,encode,decode,permits}=require('../dist/presets.js');
+const {defaults,validate,encode,decode,permits,release,studentLink}=require('../dist/presets.js');
 test('class codes round-trip every preset, preserving zero and false settings',()=>{
   for(const mode of ['natural','breeding']) for(const scenario of ['mixed','blue','warm']) for(const rows of [1,6]) for(const allowEnvironment of [true,false]) for(const showStats of [true,false]) {
     const preset={...defaults,allowEnvironment,showStats,seed:1234567,rows,habitat:'#ABCDEF',pressure:0,mutation:0,bird:false,speed:.5,mode,scenario};
@@ -68,4 +68,27 @@ test('existing LL3 full-statistics links retain full stats and a solid environme
 test('out-of-range mutation identifies the field and its allowed range',()=>{
   for(const mutation of [-1,21,30,3.2]) assert.throws(()=>encode({...defaults,mutation}),/Mutation per gene copy must be a whole number from 0 to 20%/);
   for(const mutation of [0,20]) assert.equal(decode(encode({...defaults,mutation})).mutation,mutation);
+});
+
+test('the reported four-row classroom code is valid and preserves every setting',()=>{
+  const code='LL4.WzQyLDQsIiM4ZmE5NjciLDgwLDIwLDAsMSw0LCJtaXhlZCIsMCwxLDEsMCxbIiM4ZmE5NjciLCIjYjE3YjU2IiwiIzc3ODVhMSJdXQ.51jcgp';
+  const preset={...defaults,rows:4,mutation:20,speed:4,activities:'bird',allowEnvironment:true,showStats:true};
+  assert.deepEqual(decode(code),preset);
+  assert.equal(encode(preset),code);
+});
+test('student links request the current release and preserve the complete preset',()=>{
+  const p={...defaults,rows:4,mutation:20,speed:4,activities:'bird',allowEnvironment:true,showStats:true};
+  for(const href of ['https://ragingaxolotl-art.github.io/leaf-and-lineage/?teacher=1&refresh=old#lab=old','http://127.0.0.1:8000/?teacher=1','file:///tmp/Leaf-and-Lineage.html?teacher=1']){
+    const url=new URL(studentLink(p,href));
+    assert.equal(url.origin,new URL(href).origin);
+    assert.equal(url.pathname,new URL(href).pathname);
+    assert.deepEqual(Array.from(url.searchParams.entries()),[['v',release]]);
+    assert.equal(url.hash,'#lab='+encode(p));
+    assert.deepEqual(decode(new URLSearchParams(url.hash.slice(1)).get('lab')),p);
+  }
+});
+test('a newer class-code version gets a version message, while corrupted codes remain rejected',()=>{
+  const code=encode(defaults);
+  assert.throws(()=>decode(code.replace('LL4.','LL5.')),/newer version/);
+  assert.throws(()=>decode(code+'x'),/incomplete or mistyped/);
 });
