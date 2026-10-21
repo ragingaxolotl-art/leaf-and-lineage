@@ -5,6 +5,7 @@
   function validate(p) {
     const integer = (v, min, max) => Number.isInteger(v) && v >= min && v <= max;
     const color = value => typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value);
+    if (p && !integer(p.mutation, 0, 20)) throw new Error('Mutation per gene copy must be a whole number from 0 to 20%.');
     if (!p || !integer(p.seed, 1, 2147483647) || !integer(p.rows, 1, 6) || !color(p.habitat) || !integer(p.pressure, 0, 100) || !integer(p.mutation, 0, 20) || !['natural', 'breeding'].includes(p.mode) || typeof p.bird !== 'boolean' || ![.5, 1, 2, 4].includes(p.speed) || !['mixed', 'blue', 'warm'].includes(p.scenario) || !['bird', 'breeding', 'both'].includes(p.activities) || typeof p.allowEnvironment !== 'boolean' || typeof p.showStats !== 'boolean' || !['solid','neapolitan'].includes(p.layout) || !Array.isArray(p.habitats) || p.habitats.length !== 3 || !p.habitats.every(color) || (p.activities === 'bird' && p.mode !== 'natural') || (p.activities === 'breeding' && p.mode !== 'breeding')) throw new Error('This class code has invalid starting conditions. Ask your teacher for the complete link.');
     return { seed: p.seed, rows: p.rows, habitat: p.habitat.toLowerCase(), pressure: p.pressure, mutation: p.mutation, mode: p.mode, bird: p.bird, speed: p.speed, scenario: p.scenario, activities: p.activities, allowEnvironment: p.allowEnvironment, showStats: p.showStats, layout: p.layout, habitats: p.habitats.map(c => c.toLowerCase()) };
   }

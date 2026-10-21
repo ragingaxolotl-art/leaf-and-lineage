@@ -64,3 +64,8 @@ test('existing LL3 full-statistics links retain full stats and a solid environme
   assert.equal(p.showStats,true);assert.equal(p.allowEnvironment,true);assert.equal(p.layout,'solid');
   assert.deepEqual(p.habitats,defaults.habitats);
 });
+
+test('out-of-range mutation identifies the field and its allowed range',()=>{
+  for(const mutation of [-1,21,30,3.2]) assert.throws(()=>encode({...defaults,mutation}),/Mutation per gene copy must be a whole number from 0 to 20%/);
+  for(const mutation of [0,20]) assert.equal(decode(encode({...defaults,mutation})).mutation,mutation);
+});

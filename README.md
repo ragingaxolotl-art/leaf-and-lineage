@@ -7,7 +7,7 @@ An original beetle evolution and breeding simulation for school Chromebooks and 
 ## Make a student link
 
 1. Open **Classroom setup**.
-2. Set the row count, starting population, solid or Neapolitan habitat, seed, selection strength, mutation rate, and animation speed.
+2. Set the row count, starting population, solid or Neapolitan habitat, seed, selection strength, mutation rate (a whole number from 0 to 20%), and animation speed.
 3. Choose **Bird mode only**, **Breeding mode only**, or **Both · students can switch**.
 4. Check **Students may change environments** if students should control their own backgrounds. Otherwise the assigned environment stays fixed.
 5. Check **Show students all stats and genetics** to reveal the full measurements, history chart, inherited gene copies, family parentage, offspring odds for allowed breeding, and detailed data downloads. Leave it unchecked for the simplified student view.
@@ -33,7 +33,7 @@ In bird mode, every insect gets one independent survival roll. The bird can eat 
 
 ## Neapolitan environments
 
-Neapolitan divides each row’s leaf area into three equal vertical bands, with colors set by the teacher. The defaults are Meadow, Dry leaves, and Dusk. Each insect’s camouflage and survival chance use the band directly behind its own leaf. With eight leaf columns, columns 1–3 occupy the left third, 4–5 the middle third, and 6–8 the right third. The jars sit outside these survival zones.
+Neapolitan is a fourth environment beside Meadow, Dry leaves, and Dusk. It divides the board’s leaf area into three continuous vertical bands of equal width, with colors set by the teacher. The bands span all rows and the spaces between them. The defaults are Meadow, Dry leaves, and Dusk. Each insect’s camouflage and survival chance use the band directly behind its own leaf. With eight leaf columns, columns 1–3 occupy the left third, 4–5 the middle third, and 6–8 the right third. The jars sit outside these survival zones.
 
 The teacher can share a fixed Neapolitan preset or allow students to switch environments. Changing layouts or colors never changes existing beetles or their genes. Surviving parents reproduce within their row; offspring occupy that row’s leaf positions. Full stats shows each selected insect’s actual background and survival chance.
 
