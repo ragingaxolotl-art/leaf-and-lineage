@@ -2,13 +2,17 @@
 (function (root) {
   'use strict';
   const clamp = n => Math.max(0, Math.min(255, n));
-  const PIGMENTS = {
-    green: { name: 'Green', symbol: 'G', rank: 4, color: [122, 156, 80] },
-    yellow: { name: 'Yellow', symbol: 'Y', rank: 3, color: [209, 178, 65] },
-    blue: { name: 'Blue', symbol: 'B', rank: 2, color: [103, 129, 182] },
-    red: { name: 'Red', symbol: 'R', rank: 1, color: [190, 95, 76] }
-  };
-  const pigmentKeys = Object.keys(PIGMENTS);
+  // Original teaching model: interacting inherited switches, with no color ranking.
+  const PATHWAYS = [
+    { name: 'Yellow', effect: [87, 22, -15] },
+    { name: 'Red', effect: [68, -61, -4] },
+    { name: 'Blue', effect: [-19, -27, 102] }
+  ];
+  const familyKeys = ['green', 'yellow', 'red', 'orange', 'blue', 'teal', 'purple', 'mixed'];
+  const PIGMENTS = Object.fromEntries(familyKeys.map((key, mask) => [key, {
+    name: key[0].toUpperCase() + key.slice(1),
+    color: [122, 156, 80].map((v, channel) => clamp(v + PATHWAYS.reduce((sum, pathway, i) => sum + (mask & (1 << i) ? pathway.effect[channel] : 0), 0)))
+  }]));
   function random(seed) {
     let a = seed >>> 0;
     return function () {
@@ -19,14 +23,14 @@
     };
   }
   const shadeMean = genes => genes.map(pair => (pair[0] + pair[1]) / 2);
-  function pigmentInfo(pair) {
-    const ordered = pair.slice().sort((a, b) => PIGMENTS[b].rank - PIGMENTS[a].rank);
-    return { visible: ordered[0], hidden: ordered[0] === ordered[1] ? null : ordered[1] };
+  const activePathways = switches => PATHWAYS.map((_, i) => switches.slice(i * 2, i * 2 + 2).every(pair => pair[0] === 1 && pair[1] === 1));
+  function colorInfo(switches) {
+    const active = activePathways(switches);
+    return { visible: familyKeys[active.reduce((mask, on, i) => mask | (on ? 1 << i : 0), 0)], active };
   }
-  function phenotype(genes, pigments) {
+  function phenotype(genes, switches) {
     const shade = shadeMean(genes);
-    if (!pigments) return shade;
-    const base = PIGMENTS[pigmentInfo(pigments).visible].color;
+    const base = PIGMENTS[colorInfo(switches).visible].color;
     return base.map((v, i) => clamp(v + (shade[i] - 128) * .25));
   }
   const hex = rgb => '#' + rgb.map(v => Math.round(clamp(v)).toString(16).padStart(2, '0')).join('');
@@ -35,19 +39,20 @@
   const match = (color, habitat) => Math.exp(-10 * distance2(color, habitat));
   function cross(a, b) {
     const loci = a.genes.map((pair, i) => pair.flatMap(av => b.genes[i].map(bv => ({ a: av, b: bv, value: (av + bv) / 2 }))));
-    const pigmentOutcomes = a.pigments.flatMap(av => b.pigments.map(bv => ({ a: av, b: bv, ...pigmentInfo([av, bv]) })));
-    const combinations = [], counts = new Map(), pigmentCounts = new Map();
-    pigmentOutcomes.forEach(p => pigmentCounts.set(p.visible, (pigmentCounts.get(p.visible) || 0) + 1));
-    for (const p of pigmentOutcomes) for (const r of loci[0]) for (const g of loci[1]) for (const blue of loci[2]) {
-      const color = phenotype([[r.a, r.b], [g.a, g.b], [blue.a, blue.b]], [p.a, p.b]);
-      combinations.push(color);
-      const key = hex(color); counts.set(key, (counts.get(key) || 0) + 1);
+    const homozygous = a.switches.map((pair, i) => (pair[0] + pair[1]) / 2 * (b.switches[i][0] + b.switches[i][1]) / 2);
+    const pathwayChances = PATHWAYS.map((pathway, i) => ({ name: pathway.name, probability: homozygous[i * 2] * homozygous[i * 2 + 1] }));
+    const pigmentChances = familyKeys.map((pigment, mask) => ({ pigment, probability: pathwayChances.reduce((p, pathway, i) => p * (mask & (1 << i) ? pathway.probability : 1 - pathway.probability), 1) })).filter(o => o.probability > 0);
+    const outcomes = [], counts = new Map();
+    for (const outcome of pigmentChances) for (const r of loci[0]) for (const g of loci[1]) for (const blue of loci[2]) {
+      const base = PIGMENTS[outcome.pigment].color;
+      const color = [r.value, g.value, blue.value].map((v, i) => clamp(base[i] + (v - 128) * .25));
+      const probability = outcome.probability / 64, key = hex(color);
+      outcomes.push({ color, probability }); counts.set(key, (counts.get(key) || 0) + probability);
     }
-    return {
-      loci, pigmentOutcomes, combinations,
-      colors: Array.from(counts, ([color, count]) => ({ color, count, probability: count / combinations.length })),
-      pigmentChances: Array.from(pigmentCounts, ([pigment, count]) => ({ pigment, probability: count / 4 })),
-      mean: [0, 1, 2].map(i => combinations.reduce((sum, c) => sum + c[i], 0) / combinations.length)
+    return { loci, pathwayChances, pigmentChances, outcomes,
+      totalTransmissions: 4 ** 9,
+      colors: Array.from(counts, ([color, probability]) => ({ color, probability })),
+      mean: [0, 1, 2].map(i => outcomes.reduce((sum, o) => sum + o.color[i] * o.probability, 0))
     };
   }
   class Lab {
@@ -59,19 +64,20 @@
       this.population = Array.from({ length: size }, (_, index) => {
         const base = [55 + this.rng() * 155, 65 + this.rng() * 140, 35 + this.rng() * 150];
         const genes = base.map(v => [clamp(Math.round(v + (this.rng() - .5) * 90)), clamp(Math.round(v + (this.rng() - .5) * 90))]);
-        const pigments = [0, 1].map(() => pigmentKeys[Math.floor(this.rng() * pigmentKeys.length)]);
-        // Two known carriers make the first classroom cross easy to find.
-        if (index < 2 || scenario === 'blue') pigments.splice(0, 2, 'green', 'blue');
-        if (scenario === 'warm') pigments.splice(0, 2, 'green', index % 2 ? 'red' : 'yellow');
-        return this.beetle(genes, pigments);
+        const switches = Array.from({ length: 6 }, () => [Number(this.rng() < .65), Number(this.rng() < .65)]);
+        // These presets look green, but retain different combinations of ancestral switches.
+        if (index < 2 || scenario !== 'mixed') {
+          switches.forEach((pair, i) => { const varied = scenario === 'blue' ? i >= 4 : scenario === 'warm' ? i < 4 : true; pair.splice(0, 2, 0, varied ? 1 : 0); });
+        }
+        return this.beetle(genes, switches);
       });
     }
-    beetle(genes, pigments, parents = [], mutations = 0, pigmentMutations = 0) {
-      return { id: this.nextId++, genes, pigments, color: phenotype(genes, pigments), parents, mutations, pigmentMutations };
+    beetle(genes, switches, parents = [], mutations = 0, colorMutations = 0) {
+      return { id: this.nextId++, genes, switches, color: phenotype(genes, switches), parents, mutations, colorMutations };
     }
     offspring(a, b, mutationRate) {
-      let mutations = 0, pigmentMutations = 0;
-      const inherit = pair => {
+      let mutations = 0, colorMutations = 0;
+      const inheritShade = pair => {
         let value = pair[this.rng() < .5 ? 0 : 1];
         if (this.rng() < mutationRate) {
           const offset = (1 + Math.floor(this.rng() * 36)) * (this.rng() < .5 ? -1 : 1);
@@ -81,17 +87,14 @@
         }
         return value;
       };
-      const genes = a.genes.map((pair, i) => [inherit(pair), inherit(b.genes[i])]);
-      const pigments = [a, b].map(parent => {
-        let allele = parent.pigments[this.rng() < .5 ? 0 : 1];
-        if (this.rng() < mutationRate) {
-          const alternatives = pigmentKeys.filter(key => key !== allele);
-          allele = alternatives[Math.floor(this.rng() * alternatives.length)];
-          mutations++; pigmentMutations++;
-        }
-        return allele;
-      });
-      return this.beetle(genes, pigments, [a.id, b.id], mutations, pigmentMutations);
+      const inheritSwitch = pair => {
+        let value = pair[this.rng() < .5 ? 0 : 1];
+        if (this.rng() < mutationRate) { value = 1 - value; mutations++; colorMutations++; }
+        return value;
+      };
+      const genes = a.genes.map((pair, i) => [inheritShade(pair), inheritShade(b.genes[i])]);
+      const switches = a.switches.map((pair, i) => [inheritSwitch(pair), inheritSwitch(b.switches[i])]);
+      return this.beetle(genes, switches, [a.id, b.id], mutations, colorMutations);
     }
     select(habitat, pressure, pool = this.population) {
       const remaining = pool.slice(), survivors = [];
@@ -146,6 +149,6 @@
       return { mean, match: 100 * this.population.reduce((n, b) => n + match(b.color, habitat), 0) / this.size, diversity: 100 * Math.sqrt(this.population.reduce((n, b) => n + distance2(b.color, mean), 0) / this.size) };
     }
   }
-  const api = { Lab, random, phenotype, shadeMean, hex, fromHex, match, distance2, cross, PIGMENTS, pigmentInfo };
+  const api = { Lab, random, phenotype, shadeMean, hex, fromHex, match, distance2, cross, PIGMENTS, PATHWAYS, colorInfo, activePathways };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.BeetleSim = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
