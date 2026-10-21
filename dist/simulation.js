@@ -36,7 +36,7 @@
   const hex = rgb => '#' + rgb.map(v => Math.round(clamp(v)).toString(16).padStart(2, '0')).join('');
   const fromHex = value => [1, 3, 5].map(i => parseInt(value.slice(i, i + 2), 16));
   const distance2 = (a, b) => a.reduce((sum, v, i) => sum + ((v - b[i]) / 255) ** 2, 0) / 3;
-  const match = (color, habitat) => Math.exp(-10 * distance2(color, habitat));
+  const match = (color, habitat) => Math.exp(-4 * distance2(color, habitat));
   const habitatAt = (habitat, slot, rowSize = 8) => Array.isArray(habitat[0]) ? habitat[Math.min(habitat.length - 1, Math.floor(((slot % rowSize) + .5) / rowSize * habitat.length))] : habitat;
   const survivalChance = (color, habitat, pressure) => (1 - pressure) * .7 + pressure * (.1 + .8 * match(color, habitat) ** 2);
   function cross(a, b) {
@@ -61,7 +61,7 @@
     constructor(seed = 42, size = 48, rowSize = 8, scenario = 'mixed') {
       if (size % rowSize || rowSize < 4) throw new Error('Rows need at least four beetles and a whole number of populations.');
       this.seed = seed; this.capacity = size; this.rowSize = rowSize; this.rows = size / rowSize;
-      this.rng = random(seed); this.generation = 0; this.nextId = 1;
+      this.rng = random(seed); this.survivalRng = Math.random; this.generation = 0; this.nextId = 1;
       this.rowGenerations = Array(this.rows).fill(0);
       this.population = Array.from({ length: size }, (_, index) => {
         const base = [55 + this.rng() * 155, 65 + this.rng() * 140, 35 + this.rng() * 150];
@@ -101,32 +101,45 @@
     get size() { return this.living().length; }
     living() { return this.population.filter(Boolean); }
     row(row) { return this.population.slice(row * this.rowSize, (row + 1) * this.rowSize).filter(Boolean); }
-    select(habitat, pressure, pool = this.living()) {
-      // One independent roll per living insect. No fixed survivor quota or rerolls.
-      return pool.filter(b => this.rng() < survivalChance(b.color, habitatAt(habitat, Math.max(0, this.population.indexOf(b)), this.rowSize), pressure));
+    rollSurvival(beetle, habitat, pressure) {
+      const slot = this.population.indexOf(beetle);
+      if (slot < 0) throw new Error('Only a living beetle can take a survival roll.');
+      return this.survivalRng() < survivalChance(beetle.color, habitatAt(habitat, slot, this.rowSize), pressure);
     }
-    plan({ habitat, pressure, mutationRate }) {
-      const children = Array(this.capacity).fill(null), breeders = [], births = [], updatedRows = [], survivorCounts = [], unableRows = [];
-      let eaten = 0;
-      for (let row = 0; row < this.rows; row++) {
-        const pool = this.row(row), parents = this.select(habitat, pressure, pool);
-        survivorCounts.push(parents.length); breeders.push(...parents); eaten += pool.length - parents.length;
-        if (!pool.length) continue;
-        updatedRows.push(row);
-        if (parents.length < 2) {
-          unableRows.push(row);
-          // A lone survivor remains alive. No offspring are invented without two parents.
-          if (parents.length) children[this.population.indexOf(parents[0])] = parents[0];
-          continue;
+    select(habitat, pressure, pool = this.living()) {
+      // Fresh survival randomness is separate from the seeded starting beetles.
+      // One independent roll per living insect. No fixed quota or rerolls.
+      return pool.filter(b => this.rollSurvival(b, habitat, pressure));
+    }
+    plan({ habitat, pressure, mutationRate, survivors }) {
+      const living = this.living();
+      if (survivors !== undefined && (!Array.isArray(survivors) || new Set(survivors).size !== survivors.length || survivors.some(b => !living.includes(b)))) throw new Error('Survivors must be distinct living beetles.');
+      // The animated hunt supplies its completed rolls; never roll them again.
+      const breeders = survivors === undefined ? this.select(habitat, pressure) : survivors.slice();
+      const children = Array(this.capacity).fill(null), births = [], updatedRows = [];
+      const survivorCounts = Array(this.rows).fill(0), unableRows = [];
+      const parentRows = new Map(this.population.flatMap((b, slot) => b ? [[b.id, Math.floor(slot / this.rowSize)]] : []));
+      breeders.forEach(b => survivorCounts[parentRows.get(b.id)]++);
+      let crossRowBirths = 0;
+      if (breeders.length >= 2) {
+        // All surviving beetles share one mating pool. Row and habitat position
+        // affect survival, but do not restrict which two survivors can breed.
+        for (let row = 0; row < this.rows; row++) updatedRows.push(row);
+        for (let slot = 0; slot < this.capacity; slot++) {
+          const a = Math.floor(this.rng() * breeders.length);
+          let b = Math.floor(this.rng() * (breeders.length - 1)); if (b >= a) b++;
+          const child = this.offspring(breeders[a], breeders[b], mutationRate);
+          child.parentRows = [parentRows.get(breeders[a].id), parentRows.get(breeders[b].id)];
+          if (child.parentRows[0] !== child.parentRows[1]) crossRowBirths++;
+          children[slot] = child; births.push(child);
         }
-        for (let i = 0; i < this.rowSize; i++) {
-          const a = Math.floor(this.rng() * parents.length);
-          let b = Math.floor(this.rng() * (parents.length - 1)); if (b >= a) b++;
-          const child = this.offspring(parents[a], parents[b], mutationRate);
-          children[row * this.rowSize + i] = child; births.push(child);
-        }
+      } else {
+        // Fewer than two survivors on the whole board cannot make offspring.
+        // A lone survivor keeps its original leaf; an empty board stays empty.
+        for (let row = 0; row < this.rows; row++) if (this.row(row).length) { updatedRows.push(row); unableRows.push(row); }
+        breeders.forEach(b => { children[this.population.indexOf(b)] = b; });
       }
-      return { breeders, children, births, updatedRows, survivorCounts, eaten, unableRows, families: [], mutations: births.reduce((n, b) => n + b.mutations, 0), mode: 'natural' };
+      return { breeders, children, births, updatedRows, survivorCounts, eaten: living.length - breeders.length, unableRows, crossRowBirths, families: [], mutations: births.reduce((n, b) => n + b.mutations, 0), mode: 'natural' };
     }
     planRows({ pairs, mutationRate, parentArchive = new Map() }) {
       if (!Array.isArray(pairs) || pairs.length !== this.rows) throw new Error('Each row needs one jar.');

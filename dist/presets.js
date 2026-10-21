@@ -1,7 +1,7 @@
 /* Portable classroom starting conditions. These codes contain no student data. */
 (function (root) {
   'use strict';
-  const release = '20261021-7';
+  const release = '20261021-8';
   const defaults = { seed: 42, rows: 6, habitat: '#8fa967', pressure: 80, mutation: 3, mode: 'natural', bird: true, speed: 1, scenario: 'mixed', activities: 'both', allowEnvironment: false, showStats: false, layout: 'solid', habitats: ['#8fa967', '#b17b56', '#7785a1'] };
   function validate(p) {
     const integer = (v, min, max) => Number.isInteger(v) && v >= min && v <= max;
