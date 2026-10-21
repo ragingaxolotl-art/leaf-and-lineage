@@ -27,7 +27,22 @@
 @media(max-width:520px){.controls>*{grid-column:1!important;grid-row:auto!important}.lineage-board{min-width:620px}.jar-toolbar{padding:0 13px 12px}.jar-toolbar p{font-size:9px}.jar-toolbar strong{font-size:11px}.jar-status{padding:10px 13px 0;font-size:9px;line-height:1.7}.jar-rail{gap:9px;padding-top:10px}.jar-glass{height:63px}.genetics{padding:18px}.genetics .section-top h2{font-size:15px}.genetics-jar{font-size:9px}.possibility-layout{grid-template-columns:1fr;gap:20px}.cross-parents{gap:12px}.cross-parents>div{gap:6px}.cross-parents svg{width:29px}.cross-parents p{font-size:9px}.cross-parents strong{font-size:10px}.punnett td{padding:9px}.punnett td small{font-size:10px}.punnett-block label,.possibility-heading{font-size:11px}.punnett caption,.genetics-footnote{font-size:10px}.possibility-dots{gap:5px}.color-odds span{font-size:9px}.expected-color p{font-size:10px}.expected-color strong{font-size:11px}.bird-option{font-size:11px}.controls .tip{margin:0}.beetle-grid .beetle{height:48px}}
 @media(prefers-reduced-motion:reduce){.newborn svg,.bird-head *{animation:none!important}.beetle.eaten svg{transform:none!important}}
 
+/* Independent horizontal populations. A jar is aligned with its own row. */
+.population-rows.beetle-grid{display:block;padding:8px 0}.lineage-board{min-width:740px}.population-row{display:grid;grid-template-columns:94px minmax(0,1fr);gap:15px;padding:10px 3px;border-bottom:1px solid #ffffff35;align-items:center;position:relative}.population-row:last-child{border-bottom:0}.population-row.active-population{background:#ffffff0e;border-radius:9px}.jar-holder{position:sticky;left:0;z-index:4;background:var(--habitat);border-radius:9px}.jar-row.jar-column{padding:0 3px}.jar-row .jar-title{font-size:8px;padding:0 0 4px;letter-spacing:.6px}.jar-row .jar-glass{height:48px;padding-bottom:4px}.jar-row .parent-drop{height:35px;padding-bottom:8px}.jar-row .parent-drop svg{width:22px;height:28px}.jar-row .jar-odds{display:block;width:100%;font-size:7px;padding-top:2px}.row-breed{font-size:9px;line-height:1.4;padding:4px 5px;margin-top:4px;width:100%;background:#faf2c2;border:1px solid #f4e5a0;color:#53643c;border-radius:4px}.row-breed:disabled{opacity:.4}.row-population{min-width:0}.row-meta{display:flex;align-items:center;gap:10px;font-size:8px;color:var(--habitat-ink,#203923);opacity:.8;padding:0 8px 6px}.row-meta strong{font-weight:600}.row-meta>span:last-child{margin-left:auto;font-size:7px;opacity:.7}.row-generation{font-size:8px;border:1px solid #ffffed55;border-radius:9px;padding:2px 6px}.row-beetles{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:5px}.row-beetles .beetle{height:53px;aspect-ratio:auto}.row-beetles .beetle svg{width:auto;height:91%;max-width:70%}.row-updated .row-meta strong:after{content:' · new';font-size:7px;font-weight:normal;color:var(--habitat-ink)}.palette-legend{display:flex;align-items:center;gap:15px;padding:0 23px 13px;font-size:9px;color:#7e8a70;flex-wrap:wrap}.palette-legend>span{display:flex;align-items:center;gap:4px}.palette-legend i{width:8px;height:8px;border-radius:50%;border:1px solid #00000010}.palette-legend small{font-size:8px;margin-left:auto;color:#96a087}.jar-toolbar{align-items:flex-start;flex-wrap:wrap;padding-bottom:2px}.jar-toolbar>div{flex-wrap:wrap}.simulation>.transport{padding-top:12px;padding-bottom:13px}.pigment-chances>div{display:grid;grid-template-columns:17px 1fr auto;gap:6px 8px;align-items:center;font-size:11px;color:#6a7b5a;margin-bottom:11px}.pigment-chances>div>i{width:16px;height:16px;border-radius:50%;border:1px solid #0000000b}.pigment-chances strong{font-size:15px;font-family:Georgia,serif;font-weight:normal}.chance-bar{grid-column:2/4;height:5px;border-radius:3px;background:linear-gradient(to right,var(--pigment) 0 var(--chance),#eef1e3 var(--chance) 100%)}.hidden-explanation{font-size:10px;color:#859176;line-height:1.7;margin:13px 0}.shade-options{font-size:9px;color:#91a07d}.shade-options summary{cursor:pointer}.shade-options .possibility-dots{grid-template-columns:repeat(32,1fr);gap:2px;margin-top:10px}.punnett-color{width:13px;height:13px;border-radius:50%;display:inline-block;border:1px solid #0000000e}.punnett td strong{font-size:14px;margin:2px 0}.punnett td small{white-space:normal;font-size:8px;line-height:1.6}.punnett th{font-size:9px}.carrier-detail{margin:6px 0;color:#7b8b69;font-size:10px;line-height:1.7}.carrier-detail strong{font-size:11px!important}.carrier-detail span{display:block}.gene-details details{font-size:9px;color:#8c987c;margin:7px 0}.gene-details summary{cursor:pointer}.gene-card{align-items:flex-start}.stats small{white-space:normal}.genetics-footnote{line-height:1.8}.guide-end a,dialog a{text-decoration:underline}.board-scroll-hint{display:block}
+@media(max-width:800px){.lineage-board{min-width:740px}.row-beetles .beetle{height:52px}.row-beetles .beetle svg{height:93%;max-width:72%}.palette-legend{padding-left:18px;padding-right:18px;gap:12px}.palette-legend small{margin-left:0}.jar-toolbar{display:block}.jar-toolbar>div{display:flex}.row-meta{font-size:8px}.jar-row .jar-title{font-size:8px}.jar-row .jar-odds{font-size:7px}}
+@media(max-width:520px){.population-row{grid-template-columns:91px minmax(0,1fr);gap:11px}.jar-toolbar button{font-size:9px}.palette-legend{gap:10px;padding:0 13px 11px;font-size:9px}.palette-legend small{width:100%;font-size:8px}.row-breed{font-size:9px;min-height:24px}.population-rows.beetle-grid{padding-top:3px}.genetics .section-top h2{font-size:15px}.punnett td strong{font-size:15px}.punnett td small{font-size:9px}.punnett th{font-size:10px}.carrier-detail{font-size:11px}.hidden-explanation{font-size:11px}.shade-options{font-size:10px}}
+
+/* Classroom sharing keeps all experiment setup and predictions in the teacher view. */
+.student-only{display:none!important}.student-view .student-only:not([hidden]){display:inline-flex!important}
+.student-view .teacher-only,.student-view .controls,.student-view .genetics,.student-view .history,.student-view .stats>div:nth-child(2),.student-view .stats>div:nth-child(4){display:none!important}
+.student-view .workspace{display:block}.student-view .simulation{margin-bottom:22px}.student-view .stats{grid-template-columns:1fr 1fr}.student-view .stats>div:nth-child(3){border:0}.student-view .transport-main{flex-wrap:wrap}.student-view .notebook{margin-top:22px}.student-view .jar-toolbar>div{margin-left:auto}
+.classroom-badge{font-size:9px;letter-spacing:1.3px;color:#5e7950}.header-right{gap:22px}.classroom-error{padding:20px;border:1px solid #d0aa75;background:#fff0d2;border-radius:10px;margin-bottom:24px}
+#classroom-dialog{width:min(760px,calc(100% - 28px))}.classroom-fields{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;margin:23px 0}.classroom-fields label,.classroom-output>label,.classroom-import label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:bold}.classroom-fields input,.classroom-fields select,.classroom-output textarea,.classroom-output>input,.classroom-import input{min-width:0;width:100%;background:#f7f8ef;border:1px solid #d7dfca;border-radius:6px;padding:9px;color:var(--ink)}.classroom-fields input[type=color]{height:41px;padding:4px}.classroom-fields small{font-size:10px;font-weight:normal;color:#839176}.classroom-fields .classroom-check{flex-direction:row;align-items:center}.classroom-check input{width:16px;height:16px;accent-color:#4c7040}.classroom-actions{display:flex;gap:12px;flex-wrap:wrap;margin:13px 0}.classroom-output{margin-top:25px;border-top:1px solid var(--line);padding-top:20px}.classroom-output textarea,.classroom-output>input{margin:7px 0;font-size:11px;resize:vertical;overflow-wrap:anywhere}.classroom-output #classroom-message{font-size:12px;min-height:44px}.classroom-import{border-top:1px solid var(--line);padding-top:16px;margin-top:10px;font-size:12px;color:#718263}.classroom-import summary{cursor:pointer}.classroom-import label{margin-top:14px}.classroom-import input{margin:8px 0}.classroom-footnote{font-size:11px!important;margin-top:18px!important}
+@media(max-width:800px){.classroom-badge{display:none}.header-right{gap:14px}.site-header{height:auto;min-height:86px;gap:12px}.header-right{flex-wrap:wrap;justify-content:flex-end}.student-view .population-tag{display:inline}}
+@media(max-width:520px){.header-right{gap:0;flex-direction:column;align-items:flex-end}.header-right .text-button{padding:4px 0;font-size:9px}.classroom-fields{grid-template-columns:1fr;gap:13px}.classroom-actions{gap:8px}.student-view .transport-main{gap:7px}.student-view .primary-button,.student-view .step-button{font-size:10px;padding:9px}.student-view .notebook .section-top{gap:8px}.student-view #download-student{font-size:9px}}
+
 </style>
+  
   
   
 </head>
@@ -35,7 +50,7 @@
   <a class="skip" href="#lab">Skip to simulation</a>
   <header class="site-header wrap">
     <a href="./" class="brand" aria-label="Leaf and Lineage home"><span class="brand-icon"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M10 29C9 13 19 9 30 10C30 23 23 30 10 29ZM11 29L25 15M16 24L16 17M21 19L27 19"/></svg></span><span>Leaf <i>&</i> Lineage<small>A LITTLE WORLD OF DISCOVERY</small></span></a>
-    <div class="header-right"><span class="lab-badge"><span></span> INTERACTIVE SCIENCE LAB</span><button class="text-button" id="help-open"><span class="circle-help">?</span> Field guide</button></div>
+    <div class="header-right"><span id="classroom-badge" class="classroom-badge" hidden></span><button class="text-button teacher-only" id="classroom-open">Classroom setup</button><span class="lab-badge teacher-only"><span></span> INTERACTIVE SCIENCE LAB</span><button class="text-button" id="help-open"><span class="circle-help">?</span> Field guide</button></div>
   </header>
 
   <main class="wrap">
@@ -44,6 +59,7 @@
       <div class="intro-note"><svg viewBox="0 0 60 44" aria-hidden="true"><path d="M4 37Q29 36 40 14M30 17L41 12L43 24"/></svg><span>Small beetles.<br>Big questions.</span></div>
     </section>
 
+    <p id="classroom-error" class="classroom-error" role="alert" hidden></p>
     <div class="workspace" id="lab">
       <aside class="controls card" aria-label="Experiment settings">
         <div class="panel-heading"><span class="step-label">01</span><h2>Set the scene</h2></div>
@@ -66,40 +82,77 @@
 
       <section class="simulation card" aria-labelledby="population-title">
         <div class="population-header"><div><p class="eyebrow">YOUR LIVING POPULATION</p><h2 id="population-title"><span id="habitat-name">Meadow</span> habitat <span class="population-tag">48 beetles</span></h2></div><span class="state-pill" id="state-pill"><i></i> Ready to explore</span></div>
-        <div class="jar-toolbar"><p><strong>Eight jars. Eight families.</strong><span>Drag two parents into a jar. Their six babies fill the column below.</span></p><div><button id="fill-jars" disabled>Use pair in all jars</button><button id="clear-jars" disabled>Clear jars</button></div></div>
+        <div class="jar-toolbar"><p><strong>One jar. One row population.</strong><span>Each jar fills only its own row with eight offspring. Other rows stay unchanged.</span></p><div><button class="teacher-only" id="carrier-demo">Try a carrier cross</button><button id="fill-jars" disabled>Use pair in all jars</button><button id="clear-jars" disabled>Clear jars</button></div></div>
+        <div class="transport"><div class="transport-main"><button class="primary-button" id="play"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 3 11 7-11 7Z" fill="currentColor" stroke="none"/></svg><span>Start evolving</span></button><button class="step-button" id="step"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 4 9 6-9 6ZM15 4v12"/></svg><span>Next generation</span></button><button class="step-button student-only" id="student-natural" hidden>Let bird choose</button><button class="step-button student-only" id="reset-student">Start over</button></div><label class="speed-label teacher-only" for="speed">Speed <select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></label></div>
+<div class="palette-legend" aria-label="Four inherited color families"><span><i style="background:#7a9c50"></i>Green</span><span><i style="background:#d1b241"></i>Yellow</span><span><i style="background:#6781b6"></i>Blue</span><span><i style="background:#be5f4c"></i>Red</span><small class="teacher-only">Some colors can be carried without showing.</small></div>
         <div class="habitat" id="habitat">
-          <div class="habitat-top"><span><span class="tiny-dot"></span> <span id="board-label">GENERATION 0</span></span><span id="board-instruction">Select a beetle to inspect its genes</span></div>
+          <div class="habitat-top"><span><span class="tiny-dot"></span> <span id="board-label">ROUND 0</span></span><span id="board-instruction">Select a beetle to inspect its genes</span></div>
           <div class="board-scroll" id="board-scroll"><div class="lineage-board" id="lineage-board">
-            <div class="jar-rail" id="jar-rail" aria-label="Eight breeding jars, one above each column"></div>
-            <div class="beetle-grid" id="beetle-grid" aria-label="48 beetles in eight columns, six beetles per column"></div>
+            
+            <div class="beetle-grid population-rows" id="beetle-grid" aria-label="Independent row populations with eight beetles and one parent jar per row"></div>
             <div class="bird-head" id="bird-head" hidden aria-hidden="true"><svg viewBox="0 0 180 130"><path d="M0 45Q30 6 82 12C122 16 140 43 131 80L100 120L0 130Z" fill="#52686b" stroke="#304b4b" stroke-width="2"/><path d="M0 92Q47 69 82 65Q105 78 106 118L0 130Z" fill="#eddfb8"/><path d="M34 32Q74 5 105 31Q82 23 63 46Z" fill="#789094"/><path d="M88 63Q105 50 130 55L179 70L130 75Z" fill="#e4b351" stroke="#8b6c34" stroke-width="1.5"/><g class="lower-beak"><path d="M129 73L179 70L140 88L122 80Z" fill="#c78d38" stroke="#8b6c34" stroke-width="1.5"/></g><ellipse cx="102" cy="46" rx="17" ry="19" fill="#f6eaca"/><circle cx="106" cy="46" r="9" fill="#203b39"/><circle cx="109" cy="42" r="3" fill="#fffef5"/><path d="M78 77Q93 94 105 84M14 54L31 45M23 68L43 56M13 83L35 72" fill="none" stroke="#344f50" stroke-width="2" stroke-linecap="round"/></svg></div>
           </div></div>
-          <p class="board-scroll-hint">Swipe sideways to follow all eight families ↔</p>
+          <p class="board-scroll-hint">Swipe sideways along a row to see all eight beetles ↔</p>
           <div class="habitat-bottom"><span id="habitat-caption">A little variation is where the story begins.</span><span class="leaf-mark" aria-hidden="true">⌁</span></div>
         </div>
         <p class="jar-status" id="jar-status">Tip: you can also select a beetle, then click an empty jar slot.</p>
-        <div class="transport"><div class="transport-main"><button class="primary-button" id="play"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 3 11 7-11 7Z" fill="currentColor" stroke="none"/></svg><span>Start evolving</span></button><button class="step-button" id="step"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 4 9 6-9 6ZM15 4v12"/></svg><span>Next generation</span></button></div><label class="speed-label" for="speed">Speed <select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></label></div>
-        <div class="stats" aria-label="Current population measurements"><div><span>Generation</span><strong id="generation">00</strong><small>and counting</small></div><div><span>Average camouflage <button class="info-button" id="match-help" aria-label="Explain average camouflage">i</button></span><strong id="match">—</strong><small id="match-change">Our starting point</small></div><div><span>Average color</span><strong class="average-color"><i id="average-swatch"></i><span id="average-hex">—</span></strong><small>From inherited genes</small></div><div><span>Color diversity</span><strong id="diversity">—</strong><small>Variation in this population</small></div></div>
+
+        <div class="stats" aria-label="Current population measurements"><div><span>Round</span><strong id="generation">00</strong><small>Each row tracks its generation</small></div><div><span>Average camouflage <button class="info-button" id="match-help" aria-label="Explain average camouflage">i</button></span><strong id="match">—</strong><small id="match-change">Our starting point</small></div><div><span>Average color</span><strong class="average-color"><i id="average-swatch"></i><span id="average-hex">—</span></strong><small>Across the population</small></div><div><span>Color diversity</span><strong id="diversity">—</strong><small>Variation in this population</small></div></div>
       </section>
 
       <section class="genetics card" id="genetics" aria-labelledby="genetics-title"><div class="section-top"><div><p class="eyebrow">PREDICT BEFORE YOU BREED</p><h2 id="genetics-title">What could their babies look like?</h2></div><span class="genetics-jar" id="genetics-jar">Jar 1</span></div><div id="genetics-content"><p class="genetics-empty">Put two beetles in a jar to reveal their possible offspring colors and a live Punnett square.</p></div></section>
 
-      <section class="history card" aria-labelledby="history-title"><div class="section-top"><div><p class="eyebrow">THE BIGGER PICTURE</p><h2 id="history-title">A story across generations</h2></div><button class="text-button small" id="download"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11m-4-4 4 4 4-4M3 13v4h14v-4"/></svg>Save data</button></div><div class="chart-key"><span><i></i>Average camouflage</span><span>0–100% match</span></div><div class="chart-wrap"><svg id="history-chart" viewBox="0 0 700 140" role="img" aria-label="Camouflage across generations"></svg></div><div class="color-timeline" id="color-timeline" aria-label="Average color across generations"></div><p class="chart-note">Match is measured at birth. Dashed markers show habitat changes.</p></section>
+      <section class="history card" aria-labelledby="history-title"><div class="section-top"><div><p class="eyebrow">THE BIGGER PICTURE</p><h2 id="history-title">A story across rounds</h2></div><button class="text-button small" id="download"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11m-4-4 4 4 4-4M3 13v4h14v-4"/></svg>Save data</button></div><div class="chart-key"><span><i></i>Average camouflage</span><span>0–100% match</span></div><div class="chart-wrap"><svg id="history-chart" viewBox="0 0 700 140" role="img" aria-label="Camouflage across generations"></svg></div><div class="color-timeline" id="color-timeline" aria-label="Average color across generations"></div><p class="chart-note">All rows combined after each round. Each row has its own generation counter.</p></section>
 
-      <section class="notebook card" aria-labelledby="notebook-title"><div class="section-top"><div><p class="eyebrow">LOOK A LITTLE CLOSER</p><h2 id="notebook-title">Field notes</h2></div><span class="notebook-icon" aria-hidden="true">✎</span></div><div id="inspector" class="inspector"><span class="inspect-icon" aria-hidden="true">⌕</span><p><strong>Every beetle has a story.</strong><span>Click one on a leaf to explore its color genes.</span></p></div><div class="parent-tray" id="parent-tray" hidden></div><ul class="observations" id="observations" aria-label="Experiment observations"></ul><label class="notes-label" for="notes">What do you notice?</label><textarea id="notes" rows="2" placeholder="I predict… I noticed… I wonder…"></textarea><p class="notes-hint">Your notes stay here until you close this page. Save data to keep them.</p></section>
+      <section class="notebook card" aria-labelledby="notebook-title"><div class="section-top"><div><p class="eyebrow">LOOK A LITTLE CLOSER</p><h2 id="notebook-title">Field notes</h2></div><button class="text-button student-only" id="download-student">Save observations</button><span class="notebook-icon teacher-only" aria-hidden="true">✎</span></div><div id="inspector" class="inspector"><span class="inspect-icon" aria-hidden="true">⌕</span><p><strong>Every beetle has a story.</strong><span>Click one on a leaf to explore its color genes.</span></p></div><div class="parent-tray" id="parent-tray" hidden></div><ul class="observations" id="observations" aria-label="Experiment observations"></ul><label class="notes-label" for="notes">What do you notice?</label><textarea id="notes" rows="2" placeholder="I predict… I noticed… I wonder…"></textarea><p class="notes-hint">Your notes stay here until you close this page. Save data to keep them.</p></section>
     </div>
     <section class="learning-strip" aria-label="How evolution works"><div><span>01</span><p><strong>Variation</strong>Beetles begin with different color genes.</p></div><span class="learning-arrow" aria-hidden="true">→</span><div><span>02</span><p><strong>Selection</strong>Blending in can help a beetle survive.</p></div><span class="learning-arrow" aria-hidden="true">→</span><div><span>03</span><p><strong>Inheritance</strong>Survivors pass color genes to offspring.</p></div></section>
     <footer><span>Leaf & Lineage <i>·</i> A hands-on exploration of evolution</span><span>A simplified model. An endless supply of questions.</span></footer>
   </main>
   <div class="sr-only" role="status" aria-live="polite" id="announcement"></div>
   <noscript><p class="noscript">This interactive lab needs JavaScript enabled in your browser.</p></noscript>
-  <dialog id="guide" aria-labelledby="guide-title"><button id="help-close" class="dialog-close" aria-label="Close field guide">×</button><p class="eyebrow">YOUR POCKET FIELD GUIDE</p><h2 id="guide-title">A small world. Real science ideas.</h2><p>Change the habitat color, then press <strong>Start evolving</strong>. Or use <strong>Next generation</strong> to take one step at a time. Click any beetle to pause and inspect it.</p><h3>Try a little experiment</h3><ol><li>Predict which colors will blend into the meadow.</li><li>Run 10–20 generations. Watch the average color and camouflage.</li><li>Switch to dry leaves. Did the beetles change immediately? What changes after several more generations?</li><li>Reset. Set selection to 0%. Compare random survival with selection.</li><li>Drag two beetles into a jar, inspect their possible offspring, and press <strong>Breed jar families</strong>. Mutation at 0% makes inheritance easier to follow.</li></ol><h3>What is happening?</h3><p><strong>Genes are inherited.</strong> Each beetle has two copies of three color genes: red, green, and blue. Its visible color uses the average of each pair. An offspring gets one randomly chosen copy per gene from each parent.</p><p><strong>Selection changes who reproduces.</strong> In natural mode, 24 of the 48 beetles become breeders. Camouflage increases their chance of being selected, but chance still matters. The bird eats the other 24 beetles, then the surviving breeders produce 48 offspring. Turn off <strong>Show the bird eating</strong> to shorten the transition; the selection rule stays the same. Reduced-motion settings also shorten the transition.</p><h3>Eight jars, eight families</h3><p>Drag a beetle into each of a jar’s two slots. You can also select a beetle on a leaf and click an empty slot. The same beetle can be used in different jars, but a pair must contain two different beetles. Drag onto a filled slot to replace a parent, or click it to remove the parent.</p><p>Each jar produces six siblings in its column. Empty jars choose two random parents from their own column; a jar with only one parent must be completed or cleared. Use <strong>Use pair in all jars</strong> to compare eight families from the same pair. The bird does not eat beetles in jar mode. Jars clear after breeding so that you can choose parents from the new generation. Click a jar’s family label to review the cross that made its current column.</p><h3>How do the possibilities work?</h3><p>For each color gene, either copy from parent A can combine with either copy from parent B: four equally likely possibilities. The Punnett square shows these four cells. Three independently inherited color genes give 4 × 4 × 4 = <strong>64 equally likely gene combinations</strong> before mutation. Some combinations produce the same visible color, so their probabilities add together.</p><p>For example, if both parents have red copies 100 and 200, their babies can have red values 100 (25%), 150 (50%), or 200 (25%). Each baby draws independently. Six siblings may not match these proportions exactly. These RGB genes use additive inheritance; they are a simple teaching model, rather than the actual genetics of beetles.</p><p><strong>Mutations are random.</strong> The rate applies independently to each of the six inherited gene copies. A mutation shifts a value up or down by 1–36 (within 0–255). Mutations do not aim for the habitat color.</p><p><strong>Populations evolve.</strong> A beetle’s inherited color stays fixed during its lifetime. A habitat change can change its camouflage score immediately, but its genes stay the same. New generations can have different gene frequencies.</p><h3>Reading your results</h3><p><strong>Average camouflage</strong> is a 0–100% color similarity score, not a survival probability. <strong>Color diversity</strong> measures spread around the population’s average RGB color. The chart records camouflage at each generation’s birth, so habitat switches can cause jumps.</p><h3>A useful model, with limits</h3><p>Real beetle coloration involves more complex biology. RGB genes, additive inheritance, fixed population size, equal fertility, and camouflage-only selection are teaching simplifications. This model omits dominance, migration, age, sex, and changing population size. Random survival can change gene frequencies even with selection turned off (genetic drift).</p><p class="guide-end">Keyboard friendly: Tab to a beetle and press Enter or Space to select it, then activate an empty jar slot. You can also drag with a mouse, trackpad, pen, or touch. On small screens, swipe the board sideways to see all eight columns. Notes and results can be downloaded as CSV. No accounts, uploads, or internet connection are needed for the downloaded lab.</p></dialog>
+  <dialog id="guide" aria-labelledby="guide-title"><button id="help-close" class="dialog-close" aria-label="Close field guide">×</button><p class="eyebrow">YOUR POCKET FIELD GUIDE</p><h2 id="guide-title">Rows, hidden colors, and surprises.</h2>
+  <h3>One jar fills one row</h3><p>There are six separate populations of eight beetles. Drag two living beetles into a row’s jar, or select a beetle and click an empty slot. Press that jar’s <strong>Breed row</strong> button to replace only its eight beetles. Empty and unfinished jars leave their rows unchanged. <strong>Breed ready rows</strong> breeds all complete jars together. Each row has its own generation count; the round counter counts steps in the experiment.</p><p>Parents may come from any row. You may reuse a parent across jars, but a pair needs two different beetles. After breeding, references to parents no longer living on the board are cleared. <strong>Use pair in all jars</strong> explicitly prepares all six rows.</p>
+  <h3>Visible colors and hidden alleles</h3><p>Each beetle carries two versions (alleles) of a color gene, one from each parent. In this teaching model, Green (G) masks Yellow (Y), Blue (B), and Red (R); Yellow masks Blue and Red; Blue masks Red. The masked allele is still present and can be passed on. Dominance decides which color shows; it does not make that color better at surviving.</p><p>For example, a G/B beetle looks green but carries blue. Crossing G/B × G/B gives four equally likely combinations: G/G, G/B, B/G, B/B. Each baby has a <strong>75% chance to show green and 25% to show blue</strong>, before mutation. Eight babies are independent draws, so exactly two blue babies are not guaranteed. Use <strong>Try a carrier cross</strong> to select two living green/blue carriers and set mutation to 0%.</p>
+  <h3>Can yellow or red appear randomly?</h3><p>Yes. Offspring randomly inherit existing color alleles, so hidden yellow or red may reappear. Mutations are a separate source of surprises: a transmitted color allele may randomly change to any of the other three colors. The change can be visible immediately or carried hidden. Mutations do not aim for the background color. With mutation at 0%, offspring can only inherit alleles already carried by their parents.</p><p>Three additional shade genes make beetles slightly lighter, darker, or different in tone. Each has two numeric copies, and a baby gets one copy per parent. The advanced preview enumerates 4 color transmissions × 4 × 4 × 4 shade transmissions = <strong>256 equally likely combinations</strong> before mutation. Color probabilities are grouped by the visible color family; shades may differ.</p><p>The mutation slider applies independently to eight inherited copies: two color alleles and six shade copies. A color mutation changes to another color allele. A shade mutation shifts a value up or down by 1–36, within 0–255. Pale dots mark offspring with any mutation; the inspector and data export distinguish color-allele mutations.</p>
+  <h3>The bird and natural selection</h3><p>In natural mode, the bird eats four non-survivors in each row. Camouflaged beetles have better survival odds, but chance still matters. That row’s four survivors produce its next eight beetles. There is no automatic mixing between rows. At 0% selection, survival is random. The bird displays the already-selected outcome. Turn off its animation to shorten the transition; reduced-motion settings also skip the moving bird.</p>
+  <h3>Try an experiment</h3><ol><li>Try the carrier cross at 0% mutation and predict the babies.</li><li>Breed just row 1. Check that rows 2–6 keep their beetles and generation counters.</li><li>Inspect a green, yellow, blue, or red beetle to discover the allele it carries.</li><li>Raise mutation and compare inherited surprises with new color-allele mutations.</li><li>Try natural selection in a new habitat and compare the separate rows.</li></ol>
+  <h3>Reading the results</h3><p>Average camouflage is a 0–100% similarity score, not a survival probability. Diversity measures color spread. The chart summarizes all six rows after each round; row generations can differ. Changing the habitat immediately changes camouflage, but never recolors existing beetles.</p>
+  <h3>A teaching model</h3><p>Real beetle coloration is more complex. This invented four-allele hierarchy, independent shade genes, fixed row sizes, and camouflage-only selection illustrate inheritance, dominance, recessive carriers, mutation, and genetic drift. They are not a claim about actual beetle color genetics. Learn more about <a href="https://www.genome.gov/genetics-glossary/Recessive-Traits-Alleles" target="_blank" rel="noopener">recessive alleles</a> and <a href="https://www.genome.gov/genetics-glossary/Dominant-Traits-and-Alleles" target="_blank" rel="noopener">dominant alleles</a> from NHGRI.</p><p class="guide-end">Use a mouse, trackpad, pen, or touch to drag. With a keyboard, select a beetle then activate an empty jar slot. On small screens, swipe along a row. Save data downloads row generations, carried alleles, parentage, mutation counts, and your notes. No account is needed to play.</p></dialog>
+
+  <dialog id="classroom-dialog" class="teacher-only" aria-labelledby="classroom-title">
+    <button id="classroom-close" class="dialog-close" aria-label="Close classroom setup">×</button>
+    <p class="eyebrow">FOR THE TEACHER</p><h2 id="classroom-title">Set it up. Share the link.</h2>
+    <p>Choose the starting conditions, then copy the student link. It opens the investigation with these presets applied and hides the odds, carried genes, dominance levels, and settings.</p>
+    <div class="classroom-fields">
+      <label>Row populations<select id="class-rows"><option value="1">1 row · 8 beetles</option><option value="2">2 rows · 16 beetles</option><option value="3">3 rows · 24 beetles</option><option value="4">4 rows · 32 beetles</option><option value="5">5 rows · 40 beetles</option><option value="6">6 rows · 48 beetles</option></select></label>
+      <label>Starting population<select id="class-scenario"><option value="mixed">Mixed visible colors</option><option value="blue">Green parents carrying hidden blue</option><option value="warm">Green parents carrying hidden yellow or red</option></select></label>
+      <label>Habitat color<input type="color" id="class-habitat" value="#8fa967"></label>
+      <label>Population seed<input type="number" id="class-seed" min="1" max="2147483647" step="1" value="42"><small>Same seed + presets gives the same starting beetles.</small></label>
+      <label>Selection strength (%)<input type="number" id="class-pressure" min="0" max="100" step="1" value="80"></label>
+      <label>Mutation per gene copy (%)<input type="number" id="class-mutation" min="0" max="20" step="1" value="3"></label>
+      <label>Start in<select id="class-mode"><option value="natural">Natural selection</option><option value="breeding">Breeding jars</option></select></label>
+      <label>Animation speed<select id="class-speed"><option value="0.5">0.5×</option><option value="1">1×</option><option value="2">2×</option><option value="4">4×</option></select></label>
+      <label class="classroom-check"><input type="checkbox" id="class-bird" checked> Show the bird eating</label>
+    </div>
+    <div class="classroom-actions"><button class="primary-button" id="create-student-link">Create student link</button><button class="step-button" id="apply-classroom">Try presets in teacher lab</button></div>
+    <div class="classroom-output"><label for="student-link">Ready-to-share student link</label><textarea id="student-link" rows="3" readonly spellcheck="false"></textarea><div class="classroom-actions"><button class="primary-button" id="copy-student-link" disabled>Copy student link</button><a class="step-button" id="student-preview" target="_blank" rel="noopener" hidden>Preview student view ↗</a></div><label for="student-code">Preset code included in the link</label><input id="student-code" readonly spellcheck="false"><p id="classroom-message" role="status" aria-live="polite"></p></div>
+    <details class="classroom-import"><summary>Reuse an existing class code</summary><label for="import-class-code">Paste a code or student link</label><input id="import-class-code" spellcheck="false"><button class="step-button" id="load-class-code">Load presets</button></details>
+    <p class="classroom-footnote">Links start a fresh investigation. Start over keeps these presets. Codes contain starting conditions, with no names or student work.</p>
+  </dialog>
 
 <script>
-/* Leaf & Lineage — original, dependency-free educational model. */
+/* Leaf & Lineage — original, dependency-free teaching model. */
 (function (root) {
   'use strict';
   const clamp = n => Math.max(0, Math.min(255, n));
+  const PIGMENTS = {
+    green: { name: 'Green', symbol: 'G', rank: 4, color: [122, 156, 80] },
+    yellow: { name: 'Yellow', symbol: 'Y', rank: 3, color: [209, 178, 65] },
+    blue: { name: 'Blue', symbol: 'B', rank: 2, color: [103, 129, 182] },
+    red: { name: 'Red', symbol: 'R', rank: 1, color: [190, 95, 76] }
+  };
+  const pigmentKeys = Object.keys(PIGMENTS);
   function random(seed) {
     let a = seed >>> 0;
     return function () {
@@ -109,40 +162,62 @@
       return ((t ^ t >>> 14) >>> 0) / 4294967296;
     };
   }
-  const phenotype = genes => genes.map(pair => (pair[0] + pair[1]) / 2);
+  const shadeMean = genes => genes.map(pair => (pair[0] + pair[1]) / 2);
+  function pigmentInfo(pair) {
+    const ordered = pair.slice().sort((a, b) => PIGMENTS[b].rank - PIGMENTS[a].rank);
+    return { visible: ordered[0], hidden: ordered[0] === ordered[1] ? null : ordered[1] };
+  }
+  function phenotype(genes, pigments) {
+    const shade = shadeMean(genes);
+    if (!pigments) return shade;
+    const base = PIGMENTS[pigmentInfo(pigments).visible].color;
+    return base.map((v, i) => clamp(v + (shade[i] - 128) * .25));
+  }
   const hex = rgb => '#' + rgb.map(v => Math.round(clamp(v)).toString(16).padStart(2, '0')).join('');
   const fromHex = value => [1, 3, 5].map(i => parseInt(value.slice(i, i + 2), 16));
   const distance2 = (a, b) => a.reduce((sum, v, i) => sum + ((v - b[i]) / 255) ** 2, 0) / 3;
   const match = (color, habitat) => Math.exp(-10 * distance2(color, habitat));
-  // Enumerate transmissions, including duplicate outcomes. Each combination is 1/64.
   function cross(a, b) {
     const loci = a.genes.map((pair, i) => pair.flatMap(av => b.genes[i].map(bv => ({ a: av, b: bv, value: (av + bv) / 2 }))));
-    const combinations = [];
-    for (const r of loci[0]) for (const g of loci[1]) for (const blue of loci[2]) combinations.push([r.value, g.value, blue.value]);
-    const colors = new Map();
-    combinations.forEach(color => { const key = hex(color); colors.set(key, (colors.get(key) || 0) + 1); });
-    return { loci, combinations, colors: Array.from(colors, ([color, count]) => ({ color, count, probability: count / 64 })), mean: a.color.map((v, i) => (v + b.color[i]) / 2) };
+    const pigmentOutcomes = a.pigments.flatMap(av => b.pigments.map(bv => ({ a: av, b: bv, ...pigmentInfo([av, bv]) })));
+    const combinations = [], counts = new Map(), pigmentCounts = new Map();
+    pigmentOutcomes.forEach(p => pigmentCounts.set(p.visible, (pigmentCounts.get(p.visible) || 0) + 1));
+    for (const p of pigmentOutcomes) for (const r of loci[0]) for (const g of loci[1]) for (const blue of loci[2]) {
+      const color = phenotype([[r.a, r.b], [g.a, g.b], [blue.a, blue.b]], [p.a, p.b]);
+      combinations.push(color);
+      const key = hex(color); counts.set(key, (counts.get(key) || 0) + 1);
+    }
+    return {
+      loci, pigmentOutcomes, combinations,
+      colors: Array.from(counts, ([color, count]) => ({ color, count, probability: count / combinations.length })),
+      pigmentChances: Array.from(pigmentCounts, ([pigment, count]) => ({ pigment, probability: count / 4 })),
+      mean: [0, 1, 2].map(i => combinations.reduce((sum, c) => sum + c[i], 0) / combinations.length)
+    };
   }
   class Lab {
-    constructor(seed = 42, size = 48) {
-      this.seed = seed; this.size = size; this.rng = random(seed);
-      this.generation = 0; this.nextId = 1;
-      // A diverse starting population. Each channel has two inherited alleles.
-      this.population = Array.from({ length: size }, () => {
+    constructor(seed = 42, size = 48, rowSize = 8, scenario = 'mixed') {
+      if (size % rowSize || rowSize < 4) throw new Error('Rows need at least four beetles and a whole number of populations.');
+      this.seed = seed; this.size = size; this.rowSize = rowSize; this.rows = size / rowSize;
+      this.rng = random(seed); this.generation = 0; this.nextId = 1;
+      this.rowGenerations = Array(this.rows).fill(0);
+      this.population = Array.from({ length: size }, (_, index) => {
         const base = [55 + this.rng() * 155, 65 + this.rng() * 140, 35 + this.rng() * 150];
         const genes = base.map(v => [clamp(Math.round(v + (this.rng() - .5) * 90)), clamp(Math.round(v + (this.rng() - .5) * 90))]);
-        return this.beetle(genes, [], 0);
+        const pigments = [0, 1].map(() => pigmentKeys[Math.floor(this.rng() * pigmentKeys.length)]);
+        // Two known carriers make the first classroom cross easy to find.
+        if (index < 2 || scenario === 'blue') pigments.splice(0, 2, 'green', 'blue');
+        if (scenario === 'warm') pigments.splice(0, 2, 'green', index % 2 ? 'red' : 'yellow');
+        return this.beetle(genes, pigments);
       });
     }
-    beetle(genes, parents, mutations) {
-      return { id: this.nextId++, genes, color: phenotype(genes), parents, mutations };
+    beetle(genes, pigments, parents = [], mutations = 0, pigmentMutations = 0) {
+      return { id: this.nextId++, genes, pigments, color: phenotype(genes, pigments), parents, mutations, pigmentMutations };
     }
     offspring(a, b, mutationRate) {
-      let mutations = 0;
+      let mutations = 0, pigmentMutations = 0;
       const inherit = pair => {
         let value = pair[this.rng() < .5 ? 0 : 1];
         if (this.rng() < mutationRate) {
-          // Mutation direction is random, independent of the habitat.
           const offset = (1 + Math.floor(this.rng() * 36)) * (this.rng() < .5 ? -1 : 1);
           const changed = clamp(value + offset);
           if (changed !== value) mutations++;
@@ -151,95 +226,127 @@
         return value;
       };
       const genes = a.genes.map((pair, i) => [inherit(pair), inherit(b.genes[i])]);
-      return this.beetle(genes, [a.id, b.id], mutations);
-    }
-    select(habitat, pressure) {
-      const remaining = this.population.slice();
-      const survivors = [];
-      // Weighted sampling without replacement: camouflage helps but is no guarantee.
-      while (survivors.length < Math.max(2, Math.floor(this.size / 2))) {
-        const weights = remaining.map(b => (1 - pressure) + pressure * (.015 + match(b.color, habitat) ** 2));
-        let draw = this.rng() * weights.reduce((a, b) => a + b, 0);
-        let index = weights.length - 1;
-        for (let i = 0; i < weights.length; i++) {
-          draw -= weights[i];
-          if (draw <= 0) { index = i; break; }
+      const pigments = [a, b].map(parent => {
+        let allele = parent.pigments[this.rng() < .5 ? 0 : 1];
+        if (this.rng() < mutationRate) {
+          const alternatives = pigmentKeys.filter(key => key !== allele);
+          allele = alternatives[Math.floor(this.rng() * alternatives.length)];
+          mutations++; pigmentMutations++;
         }
+        return allele;
+      });
+      return this.beetle(genes, pigments, [a.id, b.id], mutations, pigmentMutations);
+    }
+    select(habitat, pressure, pool = this.population) {
+      const remaining = pool.slice(), survivors = [];
+      while (survivors.length < Math.max(2, Math.floor(pool.length / 2))) {
+        const weights = remaining.map(b => (1 - pressure) + pressure * (.015 + match(b.color, habitat) ** 2));
+        let draw = this.rng() * weights.reduce((a, b) => a + b, 0), index = weights.length - 1;
+        for (let i = 0; i < weights.length; i++) { draw -= weights[i]; if (draw <= 0) { index = i; break; } }
         survivors.push(remaining.splice(index, 1)[0]);
       }
       return survivors;
     }
-    plan({ habitat, pressure, mutationRate, parentIds = null }) {
-      let breeders;
-      if (parentIds) {
-        breeders = parentIds.map(id => this.population.find(b => b.id === id));
-        if (breeders.length !== 2 || !breeders[0] || !breeders[1] || breeders[0].id === breeders[1].id) {
-          throw new Error('Choose two different beetles from this generation.');
-        }
-      } else breeders = this.select(habitat, pressure);
-      const children = Array.from({ length: this.size }, () => {
-        const a = Math.floor(this.rng() * breeders.length);
-        let b = Math.floor(this.rng() * (breeders.length - 1));
-        if (b >= a) b++;
-        return this.offspring(breeders[a], breeders[b], mutationRate);
-      });
-      return { breeders, children, mutations: children.reduce((n, b) => n + b.mutations, 0), mode: parentIds ? 'breeding' : 'natural' };
-    }
-    planColumns({ pairs, mutationRate, columns = 8 }) {
-      if (!Number.isInteger(columns) || columns < 1 || this.size % columns !== 0 || this.size / columns < 2 || !Array.isArray(pairs) || pairs.length !== columns) throw new Error('Each column needs one jar and at least two beetles.');
-      // Validate every draft before drawing random numbers or creating children.
-      pairs.forEach(ids => {
-        if (!Array.isArray(ids) || (ids.length !== 0 && ids.length !== 2)) throw new Error('Put two parents in a jar, or leave it empty.');
-        if (ids.length && (ids[0] === ids[1] || ids.some(id => !this.population.some(b => b.id === id)))) throw new Error('Choose two different beetles from this generation.');
-      });
-      const children = new Array(this.size), families = [], breeders = new Map();
-      for (let column = 0; column < columns; column++) {
-        const ownColumn = this.population.filter((_, i) => i % columns === column);
-        let parents;
-        if (pairs[column].length) parents = pairs[column].map(id => this.population.find(b => b.id === id));
-        else {
-          const first = Math.floor(this.rng() * ownColumn.length);
-          let second = Math.floor(this.rng() * (ownColumn.length - 1));
-          if (second >= first) second++;
-          parents = [ownColumn[first], ownColumn[second]];
-        }
-        parents.forEach(b => breeders.set(b.id, b));
-        families.push({ column, parents, chosen: pairs[column].length === 2, sourceGeneration: this.generation });
-        for (let row = 0; row < this.size / columns; row++) {
-          const child = this.offspring(parents[0], parents[1], mutationRate);
-          child.column = column;
-          children[row * columns + column] = child;
+    plan({ habitat, pressure, mutationRate }) {
+      const children = [], breeders = [];
+      for (let row = 0; row < this.rows; row++) {
+        const pool = this.population.slice(row * this.rowSize, (row + 1) * this.rowSize);
+        const parents = this.select(habitat, pressure, pool); breeders.push(...parents);
+        for (let i = 0; i < this.rowSize; i++) {
+          const a = Math.floor(this.rng() * parents.length);
+          let b = Math.floor(this.rng() * (parents.length - 1)); if (b >= a) b++;
+          children.push(this.offspring(parents[a], parents[b], mutationRate));
         }
       }
-      return { breeders: Array.from(breeders.values()), children, families, mutations: children.reduce((n, b) => n + b.mutations, 0), mode: 'breeding' };
+      return { breeders, children, updatedRows: Array.from({ length: this.rows }, (_, i) => i), families: [], mutations: children.reduce((n, b) => n + b.mutations, 0), mode: 'natural' };
     }
-    commit(plan) { this.population = plan.children; this.generation++; }
+    planRows({ pairs, mutationRate }) {
+      if (!Array.isArray(pairs) || pairs.length !== this.rows) throw new Error('Each row needs one jar.');
+      pairs.forEach(ids => {
+        if (!Array.isArray(ids) || (ids.length !== 0 && ids.length !== 2)) throw new Error('Choose two parents or leave this row alone.');
+        if (ids.length && (ids[0] === ids[1] || ids.some(id => !this.population.some(b => b.id === id)))) throw new Error('Choose two different living beetles.');
+      });
+      const children = this.population.slice(), families = [], breeders = new Map(), updatedRows = [];
+      let mutations = 0;
+      pairs.forEach((ids, row) => {
+        if (!ids.length) return; // Preserve every existing beetle and its genes in an empty row.
+        const parents = ids.map(id => this.population.find(b => b.id === id));
+        parents.forEach(b => breeders.set(b.id, b)); updatedRows.push(row);
+        families.push({ row, parents, generation: this.rowGenerations[row] + 1, round: this.generation + 1 });
+        for (let i = 0; i < this.rowSize; i++) {
+          const child = this.offspring(parents[0], parents[1], mutationRate);
+          children[row * this.rowSize + i] = child; mutations += child.mutations;
+        }
+      });
+      return { breeders: Array.from(breeders.values()), children, families, updatedRows, mutations, mode: 'breeding' };
+    }
+    commit(plan) {
+      if (!plan.updatedRows.length) return;
+      this.population = plan.children; this.generation++;
+      plan.updatedRows.forEach(row => this.rowGenerations[row]++);
+    }
     stats(habitat) {
       const mean = [0, 1, 2].map(i => this.population.reduce((n, b) => n + b.color[i], 0) / this.size);
-      return {
-        mean,
-        match: 100 * this.population.reduce((n, b) => n + match(b.color, habitat), 0) / this.size,
-        diversity: 100 * Math.sqrt(this.population.reduce((n, b) => n + distance2(b.color, mean), 0) / this.size)
-      };
+      return { mean, match: 100 * this.population.reduce((n, b) => n + match(b.color, habitat), 0) / this.size, diversity: 100 * Math.sqrt(this.population.reduce((n, b) => n + distance2(b.color, mean), 0) / this.size) };
     }
   }
-  const api = { Lab, random, phenotype, hex, fromHex, match, distance2, cross };
-  if (typeof module !== 'undefined' && module.exports) module.exports = api;
-  else root.BeetleSim = api;
+  const api = { Lab, random, phenotype, shadeMean, hex, fromHex, match, distance2, cross, PIGMENTS, pigmentInfo };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.BeetleSim = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+
+/* Portable classroom starting conditions. These codes contain no student data. */
+(function (root) {
+  'use strict';
+  const defaults = { seed: 42, rows: 6, habitat: '#8fa967', pressure: 80, mutation: 3, mode: 'natural', bird: true, speed: 1, scenario: 'mixed' };
+  function validate(p) {
+    const integer = (v, min, max) => Number.isInteger(v) && v >= min && v <= max;
+    if (!p || !integer(p.seed, 1, 2147483647) || !integer(p.rows, 1, 6) || !/^#[0-9a-f]{6}$/i.test(p.habitat) || !integer(p.pressure, 0, 100) || !integer(p.mutation, 0, 20) || !['natural', 'breeding'].includes(p.mode) || typeof p.bird !== 'boolean' || ![.5, 1, 2, 4].includes(p.speed) || !['mixed', 'blue', 'warm'].includes(p.scenario)) throw new Error('This class code has invalid starting conditions. Ask your teacher for the complete link.');
+    return { seed: p.seed, rows: p.rows, habitat: p.habitat.toLowerCase(), pressure: p.pressure, mutation: p.mutation, mode: p.mode, bird: p.bird, speed: p.speed, scenario: p.scenario };
+  }
+  function checksum(s) { let n = 2166136261; for (const c of s) { n ^= c.charCodeAt(0); n = Math.imul(n, 16777619); } return (n >>> 0).toString(36); }
+  function encode(p) {
+    const v = validate(p), a = [v.seed, v.rows, v.habitat, v.pressure, v.mutation, v.mode === 'breeding' ? 1 : 0, v.bird ? 1 : 0, v.speed, v.scenario];
+    const payload = btoa(JSON.stringify(a)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    return 'LL1.' + payload + '.' + checksum(payload);
+  }
+  function decode(input) {
+    let code = String(input).trim();
+    if (/^https?:\/\//i.test(code)) { const url = new URL(code); code = new URLSearchParams(url.hash.slice(1)).get('lab') || ''; }
+    if (code.length > 400) throw new Error('The class code is too long.');
+    const parts = code.split('.');
+    if (parts.length !== 3 || parts[0] !== 'LL1' || checksum(parts[1]) !== parts[2]) throw new Error('This class code is incomplete or mistyped. Ask your teacher for the complete link.');
+    let a; try { a = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'))); } catch { throw new Error('This class code could not be read.'); }
+    if (!Array.isArray(a) || a.length !== 9 || ![0, 1].includes(a[5]) || ![0, 1].includes(a[6])) throw new Error('This class code has an unsupported format.');
+    return validate({ seed: a[0], rows: a[1], habitat: a[2], pressure: a[3], mutation: a[4], mode: a[5] ? 'breeding' : 'natural', bird: !!a[6], speed: a[7], scenario: a[8] });
+  }
+  const api = { defaults, validate, encode, decode };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.LeafPresets = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
 
 /* All state stays in this tab. No external libraries, fonts, or services. */
 (() => {
   'use strict';
-  const { Lab, hex, fromHex, match, cross } = BeetleSim;
+  const { Lab, hex, fromHex, match, cross, PIGMENTS, pigmentInfo } = BeetleSim;
   const $ = id => document.getElementById(id);
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let lab, habitat = '#8fa967', habitatName = 'Meadow', mode = 'natural';
   let selected = [], inspected = null, playing = false, busy = false;
   let stageTimer, playTimer, history = [], observations = [], events = [];
-  const COLUMNS = 8;
-  let jarParents = Array.from({ length: COLUMNS }, () => [null, null]);
-  let activeJar = 0, crossChannel = 0, lastFamilies = [], familyRecords = [];
+  let startPreset = { ...LeafPresets.defaults }, studentMode = false, presetError = '';
+  const incomingParams = new URLSearchParams(location.hash.slice(1));
+  const incomingCode = incomingParams.get('lab');
+  if (location.hash.startsWith('#lab=')) {
+    studentMode = true;
+    try { startPreset = LeafPresets.decode(incomingCode); } catch (error) { presetError = error.message; }
+  }
+  window.addEventListener('hashchange', () => {
+    if (studentMode || location.hash.startsWith('#lab=')) location.reload();
+  });
+  let ROWS = startPreset.rows;
+  const ROW_SIZE = 8;
+  document.documentElement.classList.toggle('student-view', studentMode);
+  let jarParents = Array.from({ length: ROWS }, () => [null, null]);
+  let activeJar = 0, crossChannel = -1, lastFamilies = Array(ROWS).fill(null), familyRecords = [], lastUpdatedRows = [];
   let suppressClickUntil = 0, touchDrag = null;
   const settings = () => ({ habitat: fromHex(habitat), pressure: Number($('pressure').value) / 100, mutationRate: Number($('mutation').value) / 100 });
   const announce = message => { $('announcement').textContent = message; };
@@ -247,37 +354,62 @@
   function beetleSVG(color, label = '') {
     return `<svg viewBox="0 0 60 76" ${label ? `role="img" aria-label="${label}"` : 'aria-hidden="true"'}><g fill="none" stroke="#29382b" stroke-width="2.1" stroke-linecap="round"><path d="M18 28 10 21 5 23M16 39 6 37 2 42M19 50 10 57 5 55M42 28 50 21 55 23M44 39 54 37 58 42M41 50 50 57 55 55M24 13 19 5 14 3M36 13 41 5 46 3"/></g><ellipse cx="30" cy="18" rx="9" ry="10" fill="#344334"/><path d="M18 23Q30 15 42 23L43 30H17Z" fill="${hex(color.map(v => v * .7))}" stroke="#29382b" stroke-width="1.2"/><path d="M30 26C15 22 11 32 13 45C14 58 23 66 30 68C38 65 46 58 47 44C49 31 44 23 30 26Z" fill="${hex(color)}" stroke="#344334" stroke-width="1.4"/><path d="M30 27V66" fill="none" stroke="#283c2c" stroke-opacity=".55" stroke-width="1.2"/><path d="M20 31Q15 38 18 46" fill="none" stroke="#fff" stroke-opacity=".28" stroke-linecap="round" stroke-width="3"/><circle cx="26" cy="16" r="1.2" fill="#dddcc0"/><circle cx="34" cy="16" r="1.2" fill="#dddcc0"/><path d="M37 49Q40 44 39 36" fill="none" stroke="#192d24" stroke-opacity=".1" stroke-width="4" stroke-linecap="round"/></svg>`;
   }
+
+  function alleleLabel(pair) { return pair.map(key => PIGMENTS[key].symbol).join('/'); }
+  function carrierDescription(b) {
+    const info = pigmentInfo(b.pigments);
+    if (studentMode) return PIGMENTS[info.visible].name + ' beetle';
+    return `${PIGMENTS[info.visible].name}${info.hidden ? `; carries hidden ${PIGMENTS[info.hidden].name.toLowerCase()}` : '; two matching color alleles'}`;
+  }
+  function jarMarkup(pair, row) {
+    return `<div class="jar-column jar-row ${row === activeJar ? 'active' : ''} ${pair.every(Boolean) ? 'ready' : ''}" data-jar="${row}"><button class="jar-title" data-action="inspect" aria-label="Inspect row ${row + 1} jar" aria-pressed="${row === activeJar}">ROW ${row + 1} · JAR</button><div class="jar-vessel"><div class="jar-lid"></div><div class="jar-glass">${pair.map((id, slot) => {
+      const b = lab.population.find(item => item.id === id);
+      return `<button class="parent-drop ${b ? 'occupied' : ''}" data-slot="${slot}" aria-label="Row ${row + 1} parent ${slot ? 'B' : 'A'}${b ? `, beetle ${lab.population.indexOf(b) + 1}, ${carrierDescription(b)}, click to remove` : ', drop a beetle or click to add the selected beetle'}">${b ? beetleSVG(b.color) : '<span class="slot-plus">+</span>'}<span class="slot-letter">${b && !studentMode ? alleleLabel(b.pigments) : slot ? 'B' : 'A'}</span></button>`;
+    }).join('')}</div></div><button class="row-breed" data-action="breed-row" ${pair.every(Boolean) ? '' : 'disabled'}>Breed row ${row + 1} →</button><button class="jar-odds teacher-only" data-action="inspect">${lastFamilies[row] ? `Review gen ${lastFamilies[row].generation} cross` : 'See offspring odds'}</button></div>`;
+  }
   function createGrid() {
-    $('beetle-grid').innerHTML = lab.population.map((b, i) => `<button class="beetle ${lastFamilies.length ? 'family-child newborn' : ''}" draggable="false" style="--tilt:${[-8, 5, -3, 9, -6, 4, 7, -4][i % 8]}deg" data-id="${b.id}" data-column="${i % COLUMNS}" aria-pressed="false" aria-label="Beetle ${i + 1}, column ${i % COLUMNS + 1}, color ${hex(b.color)}, camouflage ${format(match(b.color, fromHex(habitat)) * 100)} percent">${beetleSVG(b.color)}${b.mutations ? '<i class="mutation-dot" title="Inherited a mutation" aria-hidden="true"></i>' : ''}</button>`).join('');
+    $('beetle-grid').innerHTML = Array.from({ length: ROWS }, (_, row) => `<div class="population-row ${lastUpdatedRows.includes(row) ? 'row-updated' : ''}" data-population-row="${row}"><div class="jar-holder">${jarMarkup(jarParents[row], row)}</div><div class="row-population"><div class="row-meta"><strong>Population ${row + 1}</strong><span class="row-generation">Generation ${lab.rowGenerations[row]}</span><span>8 beetles</span></div><div class="row-beetles">${lab.population.slice(row * ROW_SIZE, (row + 1) * ROW_SIZE).map((b, col) => `<button class="beetle ${lastUpdatedRows.includes(row) ? 'newborn' : ''}" draggable="false" style="--tilt:${[-8, 5, -3, 9, -6, 4, 7, -4][col]}deg" data-id="${b.id}" data-row="${row}" aria-pressed="false" aria-label="Beetle ${row * ROW_SIZE + col + 1}, row ${row + 1}, ${carrierDescription(b)}${studentMode ? '' : `, camouflage ${format(match(b.color, fromHex(habitat)) * 100)} percent`}">${beetleSVG(b.color)}${b.mutations && !studentMode ? '<i class="mutation-dot" title="Inherited a mutation" aria-hidden="true"></i>' : ''}</button>`).join('')}</div></div></div>`).join('');
     renderSelection();
   }
   const jarCounts = () => ({ ready: jarParents.filter(p => p.every(Boolean)).length, partial: jarParents.filter(p => p.filter(Boolean).length === 1).length });
   function renderJars() {
-    $('jar-rail').innerHTML = jarParents.map((pair, column) => `<div class="jar-column ${column === activeJar ? 'active' : ''} ${pair.every(Boolean) ? 'ready' : ''}" data-jar="${column}"><button class="jar-title" data-action="inspect" aria-label="Inspect jar ${column + 1}" aria-pressed="${column === activeJar}">JAR ${column + 1}${pair.every(Boolean) ? '<i aria-hidden="true">✓</i>' : ''}</button><div class="jar-vessel"><div class="jar-lid"></div><div class="jar-glass">${pair.map((id, slot) => {
-      const b = lab.population.find(item => item.id === id);
-      return `<button class="parent-drop ${b ? 'occupied' : ''}" data-slot="${slot}" aria-label="Jar ${column + 1} parent ${slot ? 'B' : 'A'}${b ? `, beetle ${lab.population.indexOf(b) + 1}, click to remove` : ', drop a beetle or click to add the selected beetle'}">${b ? beetleSVG(b.color) : '<span class="slot-plus">+</span>'}<span class="slot-letter">${slot ? 'B' : 'A'}</span></button>`;
-    }).join('')}</div></div><button class="jar-odds" data-action="inspect">${pair.every(Boolean) ? 'See color odds ↗' : lastFamilies[column] ? `Gen ${lab.generation} family ↗` : '↓ six offspring'}</button></div>`).join('');
+    document.querySelectorAll('.population-row').forEach((el, row) => {
+      el.querySelector('.jar-holder').innerHTML = jarMarkup(jarParents[row], row);
+      el.querySelector('.row-generation').textContent = 'Generation ' + lab.rowGenerations[row];
+      el.classList.toggle('active-population', row === activeJar);
+    });
   }
   function renderGenetics() {
+    if (studentMode) { $('genetics-content').innerHTML = ''; return; }
     const pair = jarParents[activeJar], draft = pair.filter(Boolean);
     const family = draft.length ? null : lastFamilies[activeJar];
     const parents = draft.length === 2 ? pair.map(id => lab.population.find(b => b.id === id)) : family?.parents;
-    $('genetics-jar').textContent = 'Jar ' + (activeJar + 1);
+    $('genetics-jar').textContent = 'Row ' + (activeJar + 1);
     if (!parents) {
-      $('genetics-content').innerHTML = `<p class="genetics-empty">${draft.length ? 'One parent is in this jar. Add a second beetle to see their possible babies.' : 'Drag two beetles into this jar. Or select a beetle on a leaf, then click a + slot above its future family.'}</p><p class="genetics-footnote">Every baby gets one gene copy from each parent. Empty jars use a random pair from their own column when you breed.</p>`;
+      $('genetics-content').innerHTML = `<p class="genetics-empty">${draft.length ? 'One parent is ready. Add a second beetle to reveal their offspring possibilities.' : 'Put two parents in this row’s jar. Only this row will get their eight offspring; empty rows stay exactly as they are.'}</p><p class="genetics-footnote">Colors can be hidden: a green beetle may carry blue, yellow, or red. Select a beetle to inspect its two color alleles, or try the carrier cross above.</p>`;
       return;
     }
     const prediction = cross(parents[0], parents[1]), channel = crossChannel;
-    const names = ['Red', 'Green', 'Blue'], percentage = n => (n * 100).toFixed(1).replace(/\.0$/, '') + '%';
-    $('genetics-content').innerHTML = `<div class="cross-parents">${parents.map((b, i) => `<div>${beetleSVG(b.color)}<p><strong>Parent ${i ? 'B' : 'A'}</strong><span>${hex(b.color).toUpperCase()} · ID ${b.id}</span></p></div>`).join('<span class="cross-plus">×</span>')}<p class="cross-context">${family ? `The pair that produced column ${activeJar + 1} in generation ${lab.generation}.` : `This pair will produce all six beetles in column ${activeJar + 1}.`}</p></div><div class="possibility-layout"><div class="punnett-block"><label for="gene-channel">Follow one color gene <select id="gene-channel">${names.map((name, i) => `<option value="${i}" ${i === channel ? 'selected' : ''}>${name}</option>`).join('')}</select></label><table class="punnett"><caption>Each cell has a 25% chance before mutation.</caption><thead><tr><th>A ↓ / B →</th>${parents[1].genes[channel].map(v => `<th scope="col">${v}</th>`).join('')}</tr></thead><tbody>${parents[0].genes[channel].map(av => `<tr><th scope="row">${av}</th>${parents[1].genes[channel].map(bv => `<td><strong>${(av + bv) / 2}</strong><small>(${av} + ${bv}) ÷ 2</small></td>`).join('')}</tr>`).join('')}</tbody></table></div><div class="color-possibilities"><p class="possibility-heading">64 equally likely gene combinations</p><div class="possibility-dots" role="img" aria-label="64 possible inherited gene combinations, each with a one in 64 chance before mutation. ${prediction.colors.length} different visible colors.">${prediction.combinations.map(color => `<i style="background:${hex(color)}" title="${hex(color).toUpperCase()}: combined chance ${percentage(prediction.colors.find(c => c.color === hex(color)).probability)}"></i>`).join('')}</div><div class="expected-color"><i style="background:${hex(prediction.mean)}"></i><p><strong>Expected average: ${hex(prediction.mean).toUpperCase()}</strong><span>${prediction.colors.length} possible visible ${prediction.colors.length === 1 ? 'color' : 'colors'} before mutation.</span></p></div><div class="color-odds">${prediction.colors.slice().sort((a, b) => b.count - a.count).slice(0, 4).map(o => `<span><i style="background:${o.color}"></i>${o.color.toUpperCase()} <strong>${percentage(o.probability)}</strong></span>`).join('')}</div></div></div><p class="genetics-footnote">Each dot is one of 64 equally likely combinations. Repeated colors add their chances together. Six babies are six independent draws, so their colors may differ from these percentages. Mutation can introduce other shades.</p>`;
+    const percentage = n => (n * 100).toFixed(1).replace(/\.0$/, '') + '%';
+    const pigmentMode = channel < 0;
+    const copiesA = pigmentMode ? parents[0].pigments : parents[0].genes[channel];
+    const copiesB = pigmentMode ? parents[1].pigments : parents[1].genes[channel];
+    const label = v => pigmentMode ? `${PIGMENTS[v].symbol} · ${PIGMENTS[v].name}` : v;
+    const cell = (av, bv) => {
+      if (!pigmentMode) return `<strong>${(av + bv) / 2}</strong><small>(${av} + ${bv}) ÷ 2</small>`;
+      const info = pigmentInfo([av, bv]);
+      return `<i class="punnett-color" style="background:${hex(PIGMENTS[info.visible].color)}"></i><strong>${PIGMENTS[info.visible].name}</strong><small>${alleleLabel([av, bv])}${info.hidden ? ` · carries ${PIGMENTS[info.hidden].name.toLowerCase()}` : ''}</small>`;
+    };
+    $('genetics-content').innerHTML = `<div class="cross-parents">${parents.map((b, i) => `<div>${beetleSVG(b.color)}<p><strong>Parent ${i ? 'B' : 'A'} · ${alleleLabel(b.pigments)}</strong><span>${carrierDescription(b)}</span></p></div>`).join('<span class="cross-plus">×</span>')}<p class="cross-context">${family ? `The pair that made row ${activeJar + 1}, generation ${family.generation}.` : `Eight babies for row ${activeJar + 1}. Other rows stay unchanged.`}</p></div><div class="possibility-layout"><div class="punnett-block"><label for="gene-channel">What is inherited? <select id="gene-channel"><option value="-1" ${pigmentMode ? 'selected' : ''}>Color & hidden alleles</option>${['Red shade', 'Green shade', 'Blue shade'].map((name, i) => `<option value="${i}" ${i === channel ? 'selected' : ''}>${name}</option>`).join('')}</select></label><table class="punnett"><caption>Each cell is a 25% chance, before mutation.</caption><thead><tr><th>A ↓ / B →</th>${copiesB.map(v => `<th scope="col">${label(v)}</th>`).join('')}</tr></thead><tbody>${copiesA.map(av => `<tr><th scope="row">${label(av)}</th>${copiesB.map(bv => `<td>${cell(av, bv)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><div class="color-possibilities"><p class="possibility-heading">Chance for each baby’s visible color</p><div class="pigment-chances">${prediction.pigmentChances.map(o => `<div><i style="background:${hex(PIGMENTS[o.pigment].color)}"></i><span>${PIGMENTS[o.pigment].name}</span><strong>${percentage(o.probability)}</strong><span class="chance-bar" style="--chance:${o.probability * 100}%;--pigment:${hex(PIGMENTS[o.pigment].color)}"></span></div>`).join('')}</div><p class="hidden-explanation">A hidden allele still passes to a baby with a 50% chance. It can show when the other parent also passes a compatible allele.</p><details class="shade-options"><summary>See all 256 color + shade combinations</summary><div class="possibility-dots" role="img" aria-label="256 equally likely color and shade transmissions before mutation.">${prediction.combinations.map(color => `<i style="background:${hex(color)}" title="${hex(color).toUpperCase()}"></i>`).join('')}</div></details></div></div><p class="genetics-footnote">Eight babies are independent draws, so a 25% chance does not promise exactly two babies. In this teaching model, Green masks Yellow, Blue, and Red; Yellow masks Blue and Red; Blue masks Red. Dominance decides which color shows; the habitat decides camouflage. Mutation can randomly introduce any of the four color alleles.</p>`;
   }
-  function assignParent(column, slot, id) {
-    if (busy || !lab.population.some(b => b.id === id)) return;
-    if (jarParents[column][1 - slot] === id) { announce('A jar needs two different beetles. Choose another parent.'); return; }
+
+  function assignParent(row, slot, id) {
+    if (presetError || busy || !lab.population.some(b => b.id === id)) return;
+    if (jarParents[row][1 - slot] === id) { announce('A jar needs two different beetles. Choose another parent.'); return; }
     if (mode !== 'breeding') setMode('breeding');
-    pause(); activeJar = column; jarParents[column][slot] = id;
+    pause(); activeJar = row; jarParents[row][slot] = id;
     renderSelection(); renderButtons();
-    announce(`Beetle added to jar ${column + 1}. ${jarParents[column].filter(Boolean).length} of two parents ready.`);
+    announce(`Beetle added to row ${row + 1} jar. ${jarParents[row].filter(Boolean).length} of two parents ready.`);
   }
   function addObservation(message) {
     observations.unshift(message);
@@ -296,7 +428,7 @@
     let svg = [0, 50, 100].map(n => `<line x1="${left}" y1="${y(n)}" x2="${width - right}" y2="${y(n)}" stroke="#e7ebdd" stroke-dasharray="3 5"/><text x="0" y="${y(n) + 3}">${n}</text>`).join('');
     for (let i = 0; i <= 4; i++) {
       const g = Math.round(maxGen * i / 4);
-      svg += `<text x="${x(g)}" y="133" text-anchor="middle">G${g}</text>`;
+      svg += `<text x="${x(g)}" y="133" text-anchor="middle">R${g}</text>`;
     }
     // Event markers use a contrasting dashed stroke and remain part of the CSV.
     events.filter(e => e.type === 'habitat').slice(-30).forEach(e => {
@@ -305,14 +437,14 @@
     if (history.length > 1) {
       const path = sampled.map((h, i) => `${i ? 'L' : 'M'}${x(h.generation).toFixed(2)},${y(h.match).toFixed(2)}`).join(' ');
       svg += `<path d="${path} L${x(lab.generation)},${bottom} L${left},${bottom} Z" fill="#eff3e5"/><path d="${path}" fill="none" stroke="#78914e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
-    } else svg += '<text x="370" y="60" text-anchor="middle" class="chart-empty">Every generation adds to the story.</text>';
+    } else svg += '<text x="370" y="60" text-anchor="middle" class="chart-empty">Every round adds to the story.</text>';
     const last = history[history.length - 1];
     svg += `<circle cx="${x(last.generation)}" cy="${y(last.match)}" r="4" fill="#78914e" stroke="#fffef9" stroke-width="2"/>`;
     $('history-chart').innerHTML = svg;
-    $('history-chart').setAttribute('aria-label', `Average camouflage at birth: generation 0, ${format(history[0].match)} percent; generation ${last.generation}, ${format(last.match)} percent. ${events.filter(e => e.type === 'habitat').length} habitat changes.`);
+    $('history-chart').setAttribute('aria-label', `Average camouflage after each round: round 0, ${format(history[0].match)} percent; round ${last.generation}, ${format(last.match)} percent. ${events.filter(e => e.type === 'habitat').length} habitat changes.`);
     const count = Math.min(7, history.length);
     const indices = Array.from({ length: count }, (_, i) => count === 1 ? 0 : Math.round(i * (history.length - 1) / (count - 1)));
-    $('color-timeline').innerHTML = indices.map(i => `<span class="color-sample" style="flex:1"><i style="background:${hex(history[i].mean)}" title="Average color ${hex(history[i].mean)}"></i>Gen ${history[i].generation}</span>`).join('');
+    $('color-timeline').innerHTML = indices.map(i => `<span class="color-sample" style="flex:1"><i style="background:${hex(history[i].mean)}" title="Average color ${hex(history[i].mean)}"></i>Round ${history[i].generation}</span>`).join('');
   }
   function renderStats() {
     const stats = lab.stats(fromHex(habitat));
@@ -321,23 +453,24 @@
     $('diversity').textContent = stats.diversity.toFixed(1) + '%';
     $('average-hex').textContent = hex(stats.mean).toUpperCase();
     $('average-swatch').style.background = hex(stats.mean);
-    $('board-label').textContent = 'GENERATION ' + lab.generation;
+    $('board-label').textContent = 'ROUND ' + lab.generation;
     const previous = history.length > 1 ? history[history.length - 2] : null;
     if (previous && previous.habitat === habitat) {
       const delta = stats.match - previous.match;
-      $('match-change').textContent = `${delta >= 0 ? '+' : '−'}${Math.abs(delta).toFixed(1)} points this generation`;
+      $('match-change').textContent = `${delta >= 0 ? '+' : '−'}${Math.abs(delta).toFixed(1)} points this round`;
     } else $('match-change').textContent = lab.generation ? 'Measured in this habitat' : 'Our starting point';
   }
   function renderButtons() {
     const manual = mode === 'breeding';
     const counts = jarCounts();
+    $('student-natural').hidden = !studentMode || !manual;
     $('play').disabled = manual;
     $('speed').disabled = manual;
-    $('step').disabled = busy || (manual && (!counts.ready || counts.partial));
+    $('step').disabled = busy || (manual && !counts.ready);
     $('play').querySelector('span').textContent = playing ? 'Pause' : lab.generation ? 'Keep evolving' : 'Start evolving';
     $('play').querySelector('svg').innerHTML = playing ? '<path d="M5 4h3v12H5ZM12 4h3v12h-3Z" fill="currentColor" stroke="none"/>' : '<path d="m6 3 11 7-11 7Z" fill="currentColor" stroke="none"/>';
-    $('step').querySelector('span').textContent = manual ? 'Breed jar families' : 'Next generation';
-    $('state-pill').innerHTML = `<i></i>${busy ? manual ? 'New families hatching' : 'The bird is feeding' : playing ? 'Evolution in progress' : manual ? `${counts.ready}/8 jars ready` : lab.generation ? 'Paused · take a closer look' : 'Ready to explore'}`;
+    $('step').querySelector('span').textContent = manual ? 'Breed ready rows' : 'Next generation';
+    $('state-pill').innerHTML = `<i></i>${busy ? manual ? 'New families hatching' : 'The bird is feeding' : playing ? 'Evolution in progress' : manual ? `${counts.ready}/${ROWS} rows ready` : lab.generation ? 'Paused · take a closer look' : 'Ready to explore'}`;
     $('state-pill').classList.toggle('running', playing || busy);
     $('pressure').disabled = manual || busy;
     $('mutation').disabled = busy;
@@ -349,7 +482,9 @@
     $('fill-jars').disabled = busy || !jarParents[activeJar].every(Boolean);
     $('clear-jars').disabled = busy || !jarParents.some(p => p.some(Boolean));
     document.querySelectorAll('.beetle, .jar-column button').forEach(b => b.disabled = busy);
-    $('jar-status').textContent = manual ? counts.partial ? `${counts.partial} jar${counts.partial === 1 ? ' needs' : 's need'} a second parent. Complete or clear it before breeding.` : counts.ready ? `${counts.ready} chosen ${counts.ready === 1 ? 'pair' : 'pairs'} · ${8 - counts.ready} random column pairs · six offspring per jar` : 'Drag two parents into a jar to start. Empty jars will choose random parents from their own columns.' : 'Drag to a jar to start breeding, or select a beetle and click a + slot. The bird visits in natural selection mode.';
+    document.querySelectorAll('[data-action="breed-row"]').forEach(b => b.disabled = busy || !jarParents[Number(b.closest('[data-jar]').dataset.jar)].every(Boolean));
+    $('carrier-demo').disabled = busy || lab.population.filter(b => b.pigments.includes('green') && b.pigments.includes('blue')).length < 2;
+    $('jar-status').textContent = manual ? `${counts.ready} row${counts.ready === 1 ? '' : 's'} ready · only complete jars breed. Empty or unfinished rows stay unchanged.` : 'Each row is its own population. Natural selection stays within rows; a jar replaces only its own row.';
   }
   function renderSelection() {
     selected = jarParents.flat().filter(Boolean);
@@ -357,26 +492,30 @@
       const id = Number(button.dataset.id);
       button.classList.toggle('selected', selected.includes(id));
       button.classList.toggle('inspected', id === inspected);
-      button.classList.toggle('family-focus', Number(button.dataset.column) === activeJar && lastFamilies.length > 0);
+      button.classList.toggle('family-focus', Number(button.dataset.row) === activeJar);
       button.setAttribute('aria-pressed', String(selected.includes(id) || id === inspected));
       button.querySelector('.parent-label')?.remove();
     });
     $('parent-tray').hidden = mode !== 'breeding';
     if (mode === 'breeding') {
-      $('parent-tray').innerHTML = '<strong>One jar → one family.</strong> Each column holds six siblings. You can use the same parent in different jars, but each jar needs two different parents.';
+      $('parent-tray').innerHTML = '<strong>One jar → one family.</strong> Each row holds eight beetles. A complete jar replaces only that row; empty rows keep their beetles, genes, and generation.';
     }
-    $('board-instruction').textContent = mode === 'breeding' ? 'Drag parents into the jars above' : 'Drag to breed · click to inspect';
+    $('board-instruction').textContent = mode === 'breeding' ? 'Drag two parents into a row’s jar' : 'Drag to breed · click to inspect';
     renderJars(); renderGenetics();
   }
+
   function renderInspector() {
-    const b = lab.population.find(item => item.id === inspected);
-    if (!b) {
-      $('inspector').innerHTML = '<span class="inspect-icon" aria-hidden="true">⌕</span><p><strong>Every beetle has a story.</strong><span>Click one on a leaf to explore its color genes.</span></p>';
+    if (studentMode) {
+      const b = lab.population.find(item => item.id === inspected);
+      $('inspector').innerHTML = b ? `<div class="gene-card">${beetleSVG(b.color)}<p><strong>${PIGMENTS[pigmentInfo(b.pigments).visible].name} beetle</strong><span>Drag it into a jar, or select it and click a + slot. Only that jar’s row will get the offspring.</span></p></div>` : '<span class="inspect-icon" aria-hidden="true">⌕</span><p><strong>Observe. Predict. Try it.</strong><span>Select a beetle to choose a parent for a row.</span></p>';
       return;
     }
-    const index = lab.population.indexOf(b) + 1;
-    $('inspector').innerHTML = `<div class="gene-card">${beetleSVG(b.color, `Beetle ${index}`)}<div class="gene-details"><div class="gene-heading"><strong>Beetle ${index}</strong><small>${hex(b.color).toUpperCase()} · ${format(match(b.color, fromHex(habitat)) * 100)}% match</small></div><div class="gene-values">${b.genes.map((pair, i) => `<span>${['R', 'G', 'B'][i]} ${pair[0]} / ${pair[1]}</span>`).join('')}</div><p class="lineage">${b.parents.length ? `Parents: IDs ${b.parents.join(' & ')} · ${b.mutations} mutated gene ${b.mutations === 1 ? 'copy' : 'copies'}` : 'Starting population · two copies of each color gene'}</p></div></div>`;
+    const b = lab.population.find(item => item.id === inspected);
+    if (!b) { $('inspector').innerHTML = '<span class="inspect-icon" aria-hidden="true">⌕</span><p><strong>Visible color is only part of the story.</strong><span>Select a beetle to discover the color it carries.</span></p>'; return; }
+    const index = lab.population.indexOf(b) + 1, row = Math.floor((index - 1) / ROW_SIZE), info = pigmentInfo(b.pigments);
+    $('inspector').innerHTML = `<div class="gene-card">${beetleSVG(b.color, `Beetle ${index}`)}<div class="gene-details"><div class="gene-heading"><strong>Beetle ${index} · Row ${row + 1}</strong><small>${format(match(b.color, fromHex(habitat)) * 100)}% match</small></div><p class="carrier-detail"><strong>Shows ${PIGMENTS[info.visible].name} · ${alleleLabel(b.pigments)}</strong><span>${info.hidden ? `Carries hidden ${PIGMENTS[info.hidden].name.toLowerCase()}. It can pass this allele to offspring.` : 'Both color alleles match. No different color is hidden here.'}</span></p><details><summary>Shade genes</summary><div class="gene-values">${b.genes.map((pair, i) => `<span>${['R', 'G', 'B'][i]} ${pair[0]} / ${pair[1]}</span>`).join('')}</div></details><p class="lineage">${b.parents.length ? `Parents: IDs ${b.parents.join(' & ')} · ${b.pigmentMutations} color-allele mutations` : 'Starting population'} · Row generation ${lab.rowGenerations[row]}</p></div></div>`;
   }
+
   function render() { renderStats(); renderButtons(); renderInspector(); renderChart(); renderGenetics(); }
   function pause() { playing = false; clearTimeout(playTimer); if (lab) renderButtons(); }
   function cancel() { pause(); clearTimeout(stageTimer); busy = false; $('bird-head').hidden = true; $('bird-head').classList.remove('pecking'); touchDrag?.ghost?.remove(); touchDrag = null; clearDropTargets(); }
@@ -397,11 +536,11 @@
     const rate = Math.sqrt(Number($('speed').value)), travel = 110 / rate, bite = 95 / rate;
     let index = 0;
     bird.hidden = false; bird.classList.remove('pecking');
-    bird.style.transition = 'none'; bird.style.transform = `translate(-185px, ${$('jar-rail').offsetHeight}px)`;
+    bird.style.transition = 'none'; bird.style.transform = `translate(-185px, 0px)`;
     function visit() {
       if (index >= victims.length) {
         bird.classList.remove('pecking'); bird.style.transition = 'transform 180ms ease-in';
-        bird.style.transform = `translate(${board.clientWidth + 50}px, ${$('jar-rail').offsetHeight}px)`;
+        bird.style.transform = `translate(${board.clientWidth + 50}px, 0px)`;
         stageTimer = setTimeout(() => { bird.hidden = true; done(); }, 190);
         return;
       }
@@ -412,36 +551,36 @@
       bird.style.transform = `translate(${x - 151}px, ${y - 59}px)`;
       stageTimer = setTimeout(() => {
         bird.classList.add('pecking'); target.classList.add('eaten'); index++;
-        $('habitat-caption').textContent = `The bird has eaten ${index} of ${victims.length} beetles. The 24 survivors will breed.`;
+        $('habitat-caption').textContent = `The bird has eaten ${index} of ${victims.length} beetles. ${plan.breeders.length} survivors will breed within their own rows.`;
         stageTimer = setTimeout(visit, bite);
       }, travel);
     }
     stageTimer = setTimeout(visit, 40);
   }
-  function advance() {
-    const counts = jarCounts();
-    if (busy || (mode === 'breeding' && (!counts.ready || counts.partial))) return;
-    const plan = mode === 'breeding' ? lab.planColumns({ pairs: jarParents.map(p => p.filter(Boolean)), mutationRate: settings().mutationRate }) : lab.plan(settings());
+
+  function advance(onlyRow = null) {
+    const pairs = jarParents.map((pair, row) => pair.every(Boolean) && (onlyRow === null || row === onlyRow) ? pair.slice() : []);
+    if (presetError || busy || (mode === 'breeding' && !pairs.some(p => p.length))) return;
+    const plan = mode === 'breeding' ? lab.planRows({ pairs, mutationRate: settings().mutationRate }) : lab.plan(settings());
     busy = true; renderButtons();
-    $('habitat-caption').textContent = mode === 'natural' ? 'The bird is looking for food. Camouflage helps, but chance matters too.' : 'Each jar is mixing its parents’ genes into six new offspring…';
-    announce(mode === 'natural' ? 'The bird will eat 24 beetles; the survivors reproduce.' : 'Eight families are hatching. Each column has its own pair of parents.');
+    $('habitat-caption').textContent = mode === 'natural' ? 'The bird is feeding. Four survivors in each row will breed within their own population.' : `Breeding ${plan.updatedRows.map(r => 'row ' + (r + 1)).join(', ')}. Other populations stay unchanged…`;
     function finish() {
-      lastFamilies = plan.families || [];
-      if (lastFamilies.length) familyRecords.push(...lastFamilies.map(f => ({ ...f, generation: lab.generation + 1 })));
-      lab.commit(plan);
-      jarParents = Array.from({ length: COLUMNS }, () => [null, null]);
-      selected = []; inspected = null; busy = false;
-      record(plan.mutations);
-      createGrid(); render();
-      const mutatedBeetles = plan.children.filter(b => b.mutations > 0).length;
-      $('habitat-caption').textContent = `${lastFamilies.length ? '8 families · 6 siblings per column' : '48 new offspring · 24 surviving breeders'} · ${mutatedBeetles} beetles with mutations`;
-      addObservation(`<strong>Gen ${lab.generation}</strong> · ${format(lab.stats(fromHex(habitat)).match)}% average camouflage. ${lastFamilies.length ? 'Eight pairs produced eight columns of siblings.' : 'The bird ate 24 beetles; the survivors reproduced.'} ${plan.mutations} mutated gene ${plan.mutations === 1 ? 'copy' : 'copies'}.`);
-      announce(`Generation ${lab.generation}. ${format(lab.stats(fromHex(habitat)).match)} percent average camouflage. ${mutatedBeetles} offspring have mutations.`);
-      schedule();
+      if (plan.mode === 'natural') lastFamilies = Array(ROWS).fill(null);
+      else plan.families.forEach(f => { lastFamilies[f.row] = f; familyRecords.push(f); });
+      lab.commit(plan); lastUpdatedRows = plan.updatedRows;
+      const livingIds = new Set(lab.population.map(b => b.id));
+      jarParents = jarParents.map((pair, row) => plan.updatedRows.includes(row) ? [null, null] : pair.map(id => livingIds.has(id) ? id : null));
+      inspected = livingIds.has(inspected) ? inspected : null; busy = false;
+      record(plan.mutations); createGrid(); render();
+      const newborns = plan.updatedRows.flatMap(row => lab.population.slice(row * ROW_SIZE, (row + 1) * ROW_SIZE));
+      const colorMutations = newborns.reduce((sum, b) => sum + b.pigmentMutations, 0);
+      $('habitat-caption').textContent = `${plan.updatedRows.length} row${plan.updatedRows.length === 1 ? '' : 's'} advanced · ${newborns.length} offspring ${studentMode ? '' : `· ${colorMutations} color-allele mutations`}`;
+      addObservation(`<strong>Round ${lab.generation}</strong> · ${plan.mode === 'breeding' ? `Rows ${plan.updatedRows.map(r => r + 1).join(', ')} received eight offspring each. All other rows stayed unchanged.` : 'Each row’s four survivors produced its next eight beetles.'}${studentMode ? '' : ` ${colorMutations} random color-allele mutations.`}`);
+      announce(`Round ${lab.generation}. ${newborns.length} new beetles in ${plan.updatedRows.length} rows. Other rows are unchanged.`); schedule();
     }
-    if (mode === 'natural') animatePredation(plan, finish);
-    else stageTimer = setTimeout(finish, reducedMotion ? 70 : 600);
+    if (mode === 'natural') animatePredation(plan, finish); else stageTimer = setTimeout(finish, reducedMotion ? 70 : 600);
   }
+
   function changeHabitat(value, name) {
     habitat = value.toLowerCase(); habitatName = name;
     $('habitat-color').value = habitat;
@@ -457,7 +596,7 @@
     // Update accessible scores without recreating beetles or moving keyboard focus.
     document.querySelectorAll('.beetle').forEach((button, i) => {
       const b = lab.population[i];
-      button.setAttribute('aria-label', `Beetle ${i + 1}, color ${hex(b.color)}, camouflage ${format(match(b.color, rgb) * 100)} percent`);
+      button.setAttribute('aria-label', `Beetle ${i + 1}, row ${Math.floor(i / ROW_SIZE) + 1}, ${carrierDescription(b)}${studentMode ? '' : `, camouflage ${format(match(b.color, rgb) * 100)} percent`}`);
     });
     renderStats(); renderInspector(); renderChart();
   }
@@ -471,14 +610,14 @@
     announce('Habitat changed to ' + name + '. Beetle genes are unchanged.');
   }
   function setMode(next) {
-    if (busy || mode === next) return;
+    if (presetError || busy || mode === next) return;
     pause(); mode = next; selected = [];
-    if (next === 'natural') jarParents = Array.from({ length: COLUMNS }, () => [null, null]);
+    if (next === 'natural') jarParents = Array.from({ length: ROWS }, () => [null, null]);
     $('natural-mode').classList.toggle('active', mode === 'natural');
     $('breed-mode').classList.toggle('active', mode === 'breeding');
     $('natural-mode').setAttribute('aria-pressed', String(mode === 'natural'));
     $('breed-mode').setAttribute('aria-pressed', String(mode === 'breeding'));
-    $('mode-hint').textContent = mode === 'natural' ? 'Birds are more likely to spot beetles that stand out.' : 'Each jar makes six siblings in its column. Empty jars use a random pair from that column.';
+    $('mode-hint').textContent = mode === 'natural' ? 'Birds are more likely to spot beetles that stand out.' : 'Each jar fills only its own row with eight offspring. Empty rows do not change.';
     events.push({ generation: lab.generation, type: 'mode', detail: `Changed to ${mode} mode` });
     renderSelection(); renderButtons();
     announce(mode === 'breeding' ? 'Breeding jars mode. Drag two parents into a jar, or select a beetle then click an empty slot.' : 'Natural selection mode. The bird eats beetles that do not survive.');
@@ -491,21 +630,22 @@
     $('mutation').setAttribute('aria-valuetext', $('mutation').value + ' percent per inherited gene copy');
   }
   function reset() {
-    cancel(); lab = new Lab(42, 48); selected = []; inspected = null;
-    history = []; observations = []; events = []; mode = 'natural';
-    jarParents = Array.from({ length: COLUMNS }, () => [null, null]);
-    lastFamilies = []; familyRecords = []; activeJar = 0; crossChannel = 0;
-    habitat = '#8fa967'; habitatName = 'Meadow';
-    $('pressure').value = 80; $('mutation').value = 3; $('speed').value = '1';
-    $('bird-animation').checked = true;
-    $('natural-mode').classList.add('active'); $('breed-mode').classList.remove('active');
-    $('natural-mode').setAttribute('aria-pressed', 'true'); $('breed-mode').setAttribute('aria-pressed', 'false');
-    $('mode-hint').textContent = 'Birds are more likely to spot beetles that stand out.';
-    updateSliders(); record(); createGrid(); changeHabitat('#8fa967', 'Meadow');
+    cancel(); ROWS = startPreset.rows; lab = new Lab(startPreset.seed, ROWS * ROW_SIZE, ROW_SIZE, startPreset.scenario); selected = []; inspected = null;
+    history = []; observations = []; events = []; mode = startPreset.mode;
+    jarParents = Array.from({ length: ROWS }, () => [null, null]);
+    lastFamilies = Array(ROWS).fill(null); familyRecords = []; lastUpdatedRows = []; activeJar = 0; crossChannel = -1;
+    habitat = startPreset.habitat; habitatName = ({ '#8fa967': 'Meadow', '#b17b56': 'Dry leaves', '#7785a1': 'Dusk' })[habitat] || 'Custom';
+    $('pressure').value = startPreset.pressure; $('mutation').value = startPreset.mutation; $('speed').value = String(startPreset.speed);
+    $('bird-animation').checked = startPreset.bird;
+    $('natural-mode').classList.toggle('active', mode === 'natural'); $('breed-mode').classList.toggle('active', mode === 'breeding');
+    $('natural-mode').setAttribute('aria-pressed', String(mode === 'natural')); $('breed-mode').setAttribute('aria-pressed', String(mode === 'breeding'));
+    $('mode-hint').textContent = mode === 'natural' ? 'Birds are more likely to spot beetles that stand out.' : 'Each jar fills only its own row with eight offspring. Empty rows do not change.';
+    updateSliders(); record(); createGrid(); changeHabitat(habitat, habitatName);
+    document.querySelector('.population-tag').textContent = lab.size + ' beetles';
     render();
     $('habitat-caption').textContent = 'A little variation is where the story begins.';
-    addObservation('<strong>A fresh start.</strong> 48 beetles, each with a different mix of color genes.');
-    announce('Experiment reset to generation zero. Notes are kept.');
+    addObservation(studentMode ? '<strong>A fresh start.</strong> Observe the colors and predict what the next offspring might look like.' : `<strong>A fresh start.</strong> ${ROWS} separate row populations, with hidden colors and random mutation.`);
+    announce('Experiment reset. All row generations are zero. Notes are kept.');
   }
   function downloadCSV() {
     const quote = value => {
@@ -514,17 +654,21 @@
       if (/^[=+@\-\t\r]/.test(s)) s = "'" + s;
       return '"' + s.replace(/"/g, '""') + '"';
     };
-    const rows = [['Leaf & Lineage experiment', 'Seed', 42], ['Student notes', $('notes').value], [], ['generation', 'habitat', 'habitat_hex', 'mode', 'selection_strength', 'mutation_rate_per_copy', 'average_red', 'average_green', 'average_blue', 'average_color', 'camouflage_percent_at_birth', 'color_diversity_percent', 'mutated_gene_copies']];
+    let rows = [['Leaf & Lineage experiment', 'Seed', startPreset.seed], ['Student notes', $('notes').value], [], ['round', 'habitat', 'habitat_hex', 'mode', 'selection_strength', 'mutation_rate_per_copy', 'average_red', 'average_green', 'average_blue', 'average_color', 'camouflage_percent_at_birth', 'color_diversity_percent', 'mutated_gene_copies']];
     history.forEach(h => rows.push([h.generation, h.habitatName, h.habitat, h.mode, h.pressure, h.mutationRate, ...h.mean.map(v => v.toFixed(3)), hex(h.mean), h.match.toFixed(3), h.diversity.toFixed(3), h.mutations]));
     rows.push([], ['Events after generation', 'type', 'detail']);
     events.forEach(e => rows.push([e.generation, e.type, e.detail]));
-    rows.push([], ['Jar families', 'generation', 'column', 'parent_a_id', 'parent_b_id', 'chosen_or_random', 'parent_a_genes_R1_R2_G1_G2_B1_B2', 'parent_b_genes_R1_R2_G1_G2_B1_B2']);
-    familyRecords.forEach(f => rows.push(['Family', f.generation, f.column + 1, f.parents[0].id, f.parents[1].id, f.chosen ? 'chosen' : 'random', f.parents[0].genes.flat().join('/'), f.parents[1].genes.flat().join('/')]));
-    rows.push([], ['Current generation beetles', 'id', 'red_copy_1', 'red_copy_2', 'green_copy_1', 'green_copy_2', 'blue_copy_1', 'blue_copy_2', 'parent_a_id', 'parent_b_id', 'mutated_gene_copies', 'column']);
-    lab.population.forEach((b, i) => rows.push([i + 1, b.id, ...b.genes.flat(), b.parents[0] ?? '', b.parents[1] ?? '', b.mutations, i % COLUMNS + 1]));
+    rows.push([], ['Jar families', 'row_generation', 'row', 'parent_a_id', 'parent_b_id', 'round', 'parent_a_color_alleles', 'parent_b_color_alleles']);
+    familyRecords.forEach(f => rows.push(['Family', f.generation, f.row + 1, f.parents[0].id, f.parents[1].id, f.round, f.parents[0].pigments.join('/'), f.parents[1].pigments.join('/')]));
+    rows.push([], ['Current generation beetles', 'id', 'red_copy_1', 'red_copy_2', 'green_copy_1', 'green_copy_2', 'blue_copy_1', 'blue_copy_2', 'parent_a_id', 'parent_b_id', 'mutated_gene_copies', 'row', 'row_generation', 'color_allele_a', 'color_allele_b', 'visible_color', 'hidden_color', 'color_allele_mutations']);
+    lab.population.forEach((b, i) => rows.push([i + 1, b.id, ...b.genes.flat(), b.parents[0] ?? '', b.parents[1] ?? '', b.mutations, Math.floor(i / ROW_SIZE) + 1, lab.rowGenerations[Math.floor(i / ROW_SIZE)], ...b.pigments, pigmentInfo(b.pigments).visible, pigmentInfo(b.pigments).hidden || '', b.pigmentMutations]));
+    if (studentMode) {
+      rows = [['Leaf & Lineage observations'], ['Student notes', $('notes').value], [], ['round', 'row', 'row_generation', 'beetle_id', 'visible_color', 'hex_color']];
+      lab.population.forEach((b, i) => { const row = Math.floor(i / ROW_SIZE); rows.push([lab.generation, row + 1, lab.rowGenerations[row], b.id, PIGMENTS[pigmentInfo(b.pigments).visible].name, hex(b.color)]); });
+    }
     const blob = new Blob(['\uFEFF' + rows.map(row => row.map(quote).join(',')).join('\r\n')], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob), link = document.createElement('a');
-    link.href = url; link.download = `leaf-and-lineage-generation-${lab.generation}.csv`; document.body.appendChild(link); link.click(); link.remove();
+    link.href = url; link.download = `leaf-and-lineage-round-${lab.generation}.csv`; document.body.appendChild(link); link.click(); link.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     announce('Experiment data and your notes downloaded as CSV.');
   }
@@ -534,13 +678,14 @@
     pause(); inspected = Number(button.dataset.id);
     renderSelection(); renderInspector(); renderButtons();
     const beetle = lab.population.find(b => b.id === inspected);
-    $('habitat-caption').textContent = `Beetle ${lab.population.indexOf(beetle) + 1} · ${beetle.genes.map((pair, i) => `${['R', 'G', 'B'][i]} ${pair[0]}/${pair[1]}`).join(' · ')} · Two copies of each gene`;
-    announce(`Selected beetle ${lab.population.findIndex(b => b.id === inspected) + 1}. Drag it to a jar, or click an empty jar slot to add it. Gene copies are shown in Field notes.`);
+    $('habitat-caption').textContent = studentMode ? 'Parent selected. Drag it to a row’s jar, or click an empty + slot.' : `Beetle ${lab.population.indexOf(beetle) + 1} · ${carrierDescription(beetle)} · Alleles ${alleleLabel(beetle.pigments)}`;
+    announce(`Selected beetle ${lab.population.findIndex(b => b.id === inspected) + 1}. Drag it to a jar, or click an empty jar slot to add it. Only the chosen jar’s row will be replaced.`);
   });
-  $('jar-rail').addEventListener('click', event => {
+  $('beetle-grid').addEventListener('click', event => {
     const columnEl = event.target.closest('[data-jar]'), slotEl = event.target.closest('[data-slot]');
     if (!columnEl || busy) return;
     activeJar = Number(columnEl.dataset.jar);
+    if (event.target.closest('[data-action="breed-row"]')) { if (mode !== 'breeding') setMode('breeding'); advance(activeJar); return; }
     if (slotEl) {
       const slot = Number(slotEl.dataset.slot);
       if (jarParents[activeJar][slot]) jarParents[activeJar][slot] = null;
@@ -549,22 +694,31 @@
     }
     renderSelection(); renderButtons();
     const focusSelector = slotEl ? `[data-slot="${slotEl.dataset.slot}"]` : '[data-action="inspect"]';
-    $('jar-rail').querySelector(`[data-jar="${activeJar}"] ${focusSelector}`).focus({ preventScroll: true });
+    $('beetle-grid').querySelector(`[data-jar="${activeJar}"] ${focusSelector}`).focus({ preventScroll: true });
   });
   $('fill-jars').addEventListener('click', () => {
     if (busy || !jarParents[activeJar].every(Boolean)) return;
     const pair = jarParents[activeJar].slice();
-    jarParents = Array.from({ length: COLUMNS }, () => pair.slice());
-    renderSelection(); renderButtons(); announce('The same pair is in all eight jars. Compare eight samples of six siblings.');
+    jarParents = Array.from({ length: ROWS }, () => pair.slice());
+    renderSelection(); renderButtons(); announce(`The same pair is in all ${ROWS} jars. Each row will get its own eight offspring.`);
   });
-  $('clear-jars').addEventListener('click', () => { jarParents = Array.from({ length: COLUMNS }, () => [null, null]); renderSelection(); renderButtons(); announce('Parent jars cleared.'); });
+  $('carrier-demo').addEventListener('click', () => {
+    const carriers = lab.population.filter(b => b.pigments.includes('green') && b.pigments.includes('blue'));
+    if (busy || carriers.length < 2) return;
+    if (mode !== 'breeding') setMode('breeding');
+    jarParents[activeJar] = carriers.slice(0, 2).map(b => b.id);
+    $('mutation').value = 0; updateSliders(); crossChannel = -1;
+    renderSelection(); renderButtons();
+    announce('Two green parents carrying blue are ready. Each baby has a 25 percent chance to show blue, without mutation.');
+  });
+  $('clear-jars').addEventListener('click', () => { jarParents = Array.from({ length: ROWS }, () => [null, null]); renderSelection(); renderButtons(); announce('Parent jars cleared.'); });
   $('genetics-content').addEventListener('change', event => { if (event.target.id === 'gene-channel') { crossChannel = Number(event.target.value); renderGenetics(); $('gene-channel').focus({ preventScroll: true }); } });
   function clearDropTargets() { document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target')); }
   function dropInto(target, id) {
     const jar = target?.closest('[data-jar]');
     if (!jar) return;
-    const column = Number(jar.dataset.jar), slot = target.closest('[data-slot]');
-    assignParent(column, slot ? Number(slot.dataset.slot) : jarParents[column].findIndex(id => !id) === 0 ? 0 : 1, id);
+    const row = Number(jar.dataset.jar), slot = target.closest('[data-slot]');
+    assignParent(row, slot ? Number(slot.dataset.slot) : jarParents[row].findIndex(id => !id) === 0 ? 0 : 1, id);
   }
   $('beetle-grid').addEventListener('dragstart', event => event.preventDefault());
   // Pointer capture gives mouse, pen, and touch the same drag behavior.
@@ -617,14 +771,79 @@
     $(id).addEventListener('change', () => events.push({ generation: lab.generation, type: 'setting', detail: `${id} changed to ${$(id).value}%` }));
   });
   $('download').addEventListener('click', downloadCSV);
+  function setupClassroom() {
+    if (studentMode) {
+      document.querySelector('.brand').href = location.href;
+      document.querySelector('.skip').addEventListener('click', event => { event.preventDefault(); $('lab').scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' }); });
+      document.querySelector('.intro-copy').textContent = 'Choose parents. Follow the generations. Discover what the next beetles might look like.';
+      $('classroom-badge').hidden = false;
+      $('classroom-badge').textContent = 'CLASSROOM INVESTIGATION';
+      $('guide').innerHTML = `<button id="student-guide-close" class="dialog-close" aria-label="Close instructions">×</button><p class="eyebrow">YOUR INVESTIGATION</p><h2 id="guide-title">Observe, predict, and experiment.</h2><p>Each row is a separate population. Drag two beetles into that row’s jar, or select a beetle then click a + slot. Press Breed row to replace only that population with its offspring. Other rows stay the same.</p><p>Use Start evolving to observe the bird selecting survivors. After choosing parents yourself, Let bird choose returns to natural selection. Your teacher has already set up the starting conditions.</p><p>Describe which colors appear, what surprises you, and what you predict will happen next. Save data keeps your notes and observations. Start over returns to the same class preset.</p>`;
+      $('student-guide-close').addEventListener('click', () => $('guide').close());
+    }
+    $('reset-student').addEventListener('click', reset);
+    $('download-student').addEventListener('click', downloadCSV);
+    $('student-natural').addEventListener('click', () => setMode('natural'));
+    function formPreset() {
+      return LeafPresets.validate({ seed: Number($('class-seed').value), rows: Number($('class-rows').value), habitat: $('class-habitat').value, pressure: Number($('class-pressure').value), mutation: Number($('class-mutation').value), mode: $('class-mode').value, bird: $('class-bird').checked, speed: Number($('class-speed').value), scenario: $('class-scenario').value });
+    }
+    function fillForm(preset) {
+      for (const field of ['seed','rows','habitat','pressure','mutation','mode','speed','scenario']) $('class-' + field).value = String(preset[field]);
+      $('class-bird').checked = preset.bird;
+    }
+    function createLink() {
+      try {
+        const preset = formPreset(), code = LeafPresets.encode(preset), url = new URL(location.href);
+        url.search = ''; url.hash = 'lab=' + code;
+        $('student-link').value = url.href; $('student-code').value = code;
+        $('student-preview').href = url.href; $('student-preview').hidden = false;
+        $('classroom-message').textContent = 'Ready. This student link hides the odds, carried genes, dominance hierarchy, and difficulty controls.';
+        $('copy-student-link').disabled = false;
+      } catch (error) { $('classroom-message').textContent = error.message; }
+    }
+    $('classroom-open').addEventListener('click', () => {
+      pause();
+      fillForm({ ...startPreset, rows: ROWS, habitat, pressure: Number($('pressure').value), mutation: Number($('mutation').value), mode, bird: $('bird-animation').checked, speed: Number($('speed').value) });
+      $('classroom-dialog').showModal(); createLink();
+    });
+    $('classroom-close').addEventListener('click', () => $('classroom-dialog').close());
+    $('create-student-link').addEventListener('click', createLink);
+    $('apply-classroom').addEventListener('click', () => {
+      try { startPreset = formPreset(); reset(); $('classroom-dialog').close(); } catch (error) { $('classroom-message').textContent = error.message; }
+    });
+    $('copy-student-link').addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText($('student-link').value); $('classroom-message').textContent = 'Student link copied. Paste it into your class assignment.'; }
+      catch { $('student-link').focus(); $('student-link').select(); $('classroom-message').textContent = 'Select and copy the link from the box.'; }
+    });
+    $('load-class-code').addEventListener('click', () => {
+      try { fillForm(LeafPresets.decode($('import-class-code').value)); createLink(); }
+      catch (error) { $('classroom-message').textContent = error.message; }
+    });
+    $('classroom-dialog').addEventListener('input', event => {
+      if (event.target.matches('input,select') && !['student-link','student-code','import-class-code'].includes(event.target.id)) {
+        $('student-link').value = ''; $('student-code').value = ''; $('student-preview').hidden = true; $('copy-student-link').disabled = true;
+        $('classroom-message').textContent = 'Starting conditions changed. Create a new student link to include them.';
+      }
+    });
+  }
   const openGuide = () => { pause(); $('guide').showModal(); };
   $('help-open').addEventListener('click', openGuide);
   $('match-help').addEventListener('click', openGuide);
-  $('help-close').addEventListener('click', () => $('guide').close());
+  $('help-close')?.addEventListener('click', () => $('guide').close());
   $('guide').addEventListener('click', event => { if (event.target === $('guide')) { const r = $('guide').getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) $('guide').close(); } });
   // A hidden tab never keeps consuming cycles; resuming remains the student's choice.
   document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+  setupClassroom();
   reset();
+  if (!studentMode && new URLSearchParams(location.search).get('teacher') === '1') $('classroom-open').click();
+  if (presetError) {
+    $('classroom-error').textContent = presetError;
+    $('classroom-error').hidden = false;
+    $('lab').hidden = true;
+    $('play').disabled = true; $('step').disabled = true;
+    document.querySelectorAll('.beetle,.jar-column button').forEach(b => b.disabled = true);
+    $('reset-student').disabled = true;
+  }
 })();
 
 </script>
