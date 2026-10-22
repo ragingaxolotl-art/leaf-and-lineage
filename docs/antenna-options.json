@@ -1,0 +1,240 @@
+{
+  "status": "design proposal, not implemented",
+  "activity": "creative jar breeding only",
+  "selection": "students choose both parents; no birds or automatic trait ranking",
+  "variants": [
+    {
+      "id": "compact",
+      "name": "Tiny compact clubs",
+      "appearance": "Short, thick antennae; the game can shorten them toward nub-like forms.",
+      "realExample": "Whirligig beetles",
+      "exampleGroup": "beetle",
+      "source": "https://genent.cals.ncsu.edu/insect-identification/order-coleoptera/family-gyrinidae/",
+      "designStrength": "A compact, rounded design"
+    },
+    {
+      "id": "thread",
+      "name": "Thread-like (filiform)",
+      "appearance": "Slender shafts; short through extra-long lengths are separate inherited values.",
+      "realExample": "Ground beetles; longhorn beetles",
+      "exampleGroup": "beetle",
+      "source": "https://genent.cals.ncsu.edu/insect-identification/order-coleoptera/family-carabidae/",
+      "designStrength": "Fine, elegant antennae or a long-reaching silhouette"
+    },
+    {
+      "id": "longhorn",
+      "name": "Extra-long thread-like",
+      "appearance": "A length variant, not a separate anatomical shape.",
+      "realExample": "Longhorn beetles",
+      "exampleGroup": "beetle",
+      "source": "https://www.business.qld.gov.au/industries/farms-fishing-forestry/agriculture/biosecurity/plants/priority-pest-disease/exotic-longhorned-beetles",
+      "designStrength": "Dramatic antennae as long as or longer than the body"
+    },
+    {
+      "id": "beaded",
+      "name": "Beaded (moniliform)",
+      "appearance": "Rounded segments in a chain.",
+      "realExample": "Termites",
+      "exampleGroup": "other insect",
+      "source": "https://pesticidecert.cfans.umn.edu/sites/pesticidecert.cfans.umn.edu/files/2022-03/3.Insect_Morphology.pdf",
+      "designStrength": "A chunky bead-chain appearance"
+    },
+    {
+      "id": "tapered",
+      "name": "Tapered bristle (setaceous)",
+      "appearance": "Wider base narrowing toward a fine point.",
+      "realExample": "Dragonflies and damselflies",
+      "exampleGroup": "other insect",
+      "source": "https://pesticidecert.cfans.umn.edu/sites/pesticidecert.cfans.umn.edu/files/2022-03/3.Insect_Morphology.pdf",
+      "designStrength": "A small, pointed or needle-like silhouette"
+    },
+    {
+      "id": "gradual-club",
+      "name": "Gradually clubbed (clavate)",
+      "appearance": "The end gets thicker gradually.",
+      "realExample": "Carrion beetles",
+      "exampleGroup": "beetle",
+      "source": "https://pesticidecert.cfans.umn.edu/sites/pesticidecert.cfans.umn.edu/files/2022-03/3.Insect_Morphology.pdf",
+      "designStrength": "A smooth transition into a substantial tip"
+    },
+    {
+      "id": "knob",
+      "name": "Knob-tipped (capitate)",
+      "appearance": "An abrupt enlarged tip.",
+      "realExample": "Butterflies",
+      "exampleGroup": "other insect",
+      "source": "https://pesticidecert.cfans.umn.edu/sites/pesticidecert.cfans.umn.edu/files/2022-03/3.Insect_Morphology.pdf",
+      "designStrength": "Distinct little pom-pom or knob ends"
+    },
+    {
+      "id": "saw",
+      "name": "Sawtoothed (serrate)",
+      "appearance": "Short triangular projections make a toothed edge.",
+      "realExample": "Click beetles",
+      "exampleGroup": "beetle",
+      "source": "https://genent.cals.ncsu.edu/insect-identification/order-coleoptera/family-elateridae/",
+      "designStrength": "A jagged, spiky appearance"
+    },
+    {
+      "id": "comb",
+      "name": "Single comb (pectinate)",
+      "appearance": "Longer projections extend from one side of each shaft.",
+      "realExample": "Fire-colored beetles",
+      "exampleGroup": "beetle",
+      "source": "https://pesticidecert.cfans.umn.edu/sites/pesticidecert.cfans.umn.edu/files/2022-03/3.Insect_Morphology.pdf",
+      "designStrength": "A clear row of long side branches"
+    },
+    {
+      "id": "double-comb",
+      "name": "Double comb (bipectinate)",
+      "appearance": "Branches extend along both sides of the shaft.",
+      "realExample": "Male silkmoths",
+      "exampleGroup": "other insect",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3978319/",
+      "designStrength": "A broad, balanced feather-shaped outline"
+    },
+    {
+      "id": "broad-fan",
+      "name": "Broad fan",
+      "appearance": "Large fan-like structures rather than just tiny hairs.",
+      "realExample": "Rhipicera fan-horned beetles",
+      "exampleGroup": "beetle",
+      "source": "https://www.ento.csiro.au/education/insects/coleoptera_families/rhipiceridae.html",
+      "designStrength": "A spectacular wide fan"
+    },
+    {
+      "id": "leaf-fan",
+      "name": "Leaf-plate fan (lamellate)",
+      "appearance": "Flat plates at the tip open into a fan.",
+      "realExample": "Scarab beetles",
+      "exampleGroup": "beetle",
+      "source": "https://genent.cals.ncsu.edu/insect-identification/order-coleoptera/family-scarabaeidae/",
+      "designStrength": "Layered leaf-like paddles"
+    },
+    {
+      "id": "elbow",
+      "name": "Elbowed (geniculate)",
+      "appearance": "A pronounced bend partway along the antenna.",
+      "realExample": "Weevils",
+      "exampleGroup": "beetle",
+      "source": "https://genent.cals.ncsu.edu/insect-identification/order-coleoptera/family-curculionidae/",
+      "designStrength": "Bent, angular or folded-looking antennae"
+    },
+    {
+      "id": "plume",
+      "name": "Hairy plume (plumose)",
+      "appearance": "Dense fine hairs surround the shaft.",
+      "realExample": "Male mosquitoes",
+      "exampleGroup": "other insect",
+      "source": "https://ask.ifas.ufl.edu/publication/IN1265",
+      "designStrength": "A fluffy bottlebrush or cloud of fine hairs"
+    },
+    {
+      "id": "side-bristle",
+      "name": "Short base with side bristle (aristate)",
+      "appearance": "A compact enlarged base with a projecting side bristle.",
+      "realExample": "Houseflies",
+      "exampleGroup": "other insect",
+      "source": "https://pesticidecert.cfans.umn.edu/sites/pesticidecert.cfans.umn.edu/files/2022-03/3.Insect_Morphology.pdf",
+      "designStrength": "A tiny base with a dramatic hair-like offshoot"
+    }
+  ],
+  "variables": [
+    {
+      "key": "lengthRatio",
+      "name": "Length",
+      "range": "Tiny nubs \u2192 short \u2192 medium \u2192 long \u2192 extra-long",
+      "rule": "Additive numeric copies; a proposed drawing range is 0.05\u20133 body lengths, not a biological limit."
+    },
+    {
+      "key": "shaftWidth",
+      "name": "Thickness",
+      "range": "Hair-thin \u2192 slender \u2192 thick",
+      "rule": "Independent of length."
+    },
+    {
+      "key": "segmentCount",
+      "name": "Segments",
+      "range": "Few large sections \u2192 many fine sections",
+      "rule": "Integer derived from bounded inherited values."
+    },
+    {
+      "key": "segmentRoundness",
+      "name": "Bead shape",
+      "range": "Smooth cylinder \u2192 rounded beads",
+      "rule": "Changes segment geometry without rerolling the antenna."
+    },
+    {
+      "key": "curvature",
+      "name": "Curve",
+      "range": "Straight \u2192 gentle arc \u2192 strongly curved",
+      "rule": "A stable shape value, not animation randomness."
+    },
+    {
+      "key": "elbowAngle",
+      "name": "Elbow",
+      "range": "Nearly straight \u2192 sharp bend",
+      "rule": "Separate from a smoothly curved shaft."
+    },
+    {
+      "key": "tipBulge",
+      "name": "Tip size",
+      "range": "Fine point \u2192 gradual club \u2192 large abrupt knob",
+      "rule": "Tip position and transition sharpness are distinct modifiers."
+    },
+    {
+      "key": "branchSides",
+      "name": "Offshoot sides",
+      "range": "None \u2192 one side \u2192 both sides",
+      "rule": "One side means the side of each shaft, not a beetle missing its other antenna."
+    },
+    {
+      "key": "branchCount",
+      "name": "Offshoot number",
+      "range": "Few teeth \u2192 many comb branches",
+      "rule": "Count is separate from branch length and hair density."
+    },
+    {
+      "key": "branchLength",
+      "name": "Offshoot length",
+      "range": "Small sawteeth \u2192 long comb tines \u2192 broad fans",
+      "rule": "May be masked by the expressed framework and reappear in descendants."
+    },
+    {
+      "key": "plateWidth",
+      "name": "Fan plate width",
+      "range": "Narrow fingers \u2192 broad leaf-like plates",
+      "rule": "Used by fan and lamellate frameworks."
+    },
+    {
+      "key": "hairDensity",
+      "name": "Hair density",
+      "range": "Bare \u2192 sparse hairs \u2192 dense fuzz",
+      "rule": "Fine hairs are separate from structural comb branches."
+    },
+    {
+      "key": "hairLength",
+      "name": "Hair length",
+      "range": "Tiny fuzz \u2192 short bristles \u2192 long fine hairs",
+      "rule": "A long bare antenna and a short fluffy one are both possible."
+    },
+    {
+      "key": "spreadAngle",
+      "name": "Spread/posture",
+      "range": "Close together \u2192 upright \u2192 widely spread",
+      "rule": "Held stable for comparison; optional gentle animation cannot change the inherited measurements."
+    },
+    {
+      "key": "antennaPigment",
+      "name": "Color and markings",
+      "range": "Solid color, colored tips, or segment bands",
+      "rule": "Use inherited pigment copies. Initially it can default to body/appendage pigment to limit complexity."
+    },
+    {
+      "key": "symmetry",
+      "name": "Left/right similarity",
+      "range": "Mirrored \u2192 small differences",
+      "rule": "Use the same shared gene program; avoid two unrelated randomly generated antennae."
+    }
+  ]
+}

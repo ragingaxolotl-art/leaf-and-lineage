@@ -116,6 +116,83 @@
           ]
         }
       }
+    },
+    {
+      "id": "D",
+      "blocks": {
+        "antennaFramework": {
+          "copies": [
+            {
+              "family": "thread",
+              "expression": 0.8
+            },
+            {
+              "family": "comb",
+              "expression": 0.3
+            }
+          ]
+        },
+        "antennaLengthRatio": {
+          "copies": [
+            0.2,
+            0.4
+          ]
+        },
+        "shaftWidth": {
+          "copies": [
+            0.03,
+            0.05
+          ]
+        },
+        "segmentCount": {
+          "copies": [
+            8,
+            12
+          ]
+        },
+        "branchSides": {
+          "copies": [
+            "one",
+            "both"
+          ]
+        },
+        "branchLength": {
+          "copies": [
+            0.25,
+            0.7
+          ]
+        },
+        "hairSuppressor": {
+          "copies": [
+            "H",
+            "h"
+          ]
+        },
+        "hairDensity": {
+          "copies": [
+            0.3,
+            0.8
+          ]
+        },
+        "hairLength": {
+          "copies": [
+            0.05,
+            0.25
+          ]
+        },
+        "tipBulge": {
+          "copies": [
+            0.1,
+            0.2
+          ]
+        },
+        "elbowAngleDegrees": {
+          "copies": [
+            0,
+            20
+          ]
+        }
+      }
     }
   ],
   "developmentSeed": 372019,
@@ -128,5 +205,7 @@
     ],
     "visiblePatternLayers": []
   },
-  "note": "Illustrative subset, not the complete schema. This Ss beetle looks plain; both pattern pigment blocks and the T/t gate still exist and can be inherited. Actual homolog order and locus positions must be stored before implementing recombination."
+  "note": "Illustrative subset, not a complete executable schema. This Ss beetle looks plain and can retain hidden pattern colors; its expressed thread framework can mask comb branches, and Hh can mask hairiness. All stated expression rules are invented teaching rules. Actual homolog order, locus positions, tie handling and suppressor interactions must be specified and tested before implementation.",
+  "edition": "Pattern Lab \u2014 creative jar breeding",
+  "activity": "breeding-only"
 }

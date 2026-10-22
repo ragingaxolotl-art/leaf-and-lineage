@@ -1,6 +1,6 @@
 # Leaf & Lineage
 
-The current game is preserved as **Simplified v1.0**: [open Simplified](https://ragingaxolotl-art.github.io/leaf-and-lineage/simplified/) · [Simplified teacher setup](https://ragingaxolotl-art.github.io/leaf-and-lineage/simplified/?teacher=1). Its sources, offline download and integrity manifest are in `dist/simplified/`. Existing root links remain available. The planned larger-beetle Pattern Lab will be a separate edition; this snapshot preserves the current inheritance and selection rules. The proposed genetics and rendering architecture is documented in `docs/pattern-lab-plan.html`, with an illustrative data record in `docs/pattern-genetic-data-example.json`.
+The current game is preserved as **Simplified v1.0**: [open Simplified](https://ragingaxolotl-art.github.io/leaf-and-lineage/simplified/) · [Simplified teacher setup](https://ragingaxolotl-art.github.io/leaf-and-lineage/simplified/?teacher=1). Its sources, offline download and integrity manifest are in `dist/simplified/`. Existing root links remain available. The planned larger-beetle Pattern Lab is a creative jar-breeding edition, including inherited antennae; this snapshot preserves the current inheritance and selection rules. The proposed genetics and rendering architecture is documented in `docs/pattern-lab-plan.html`, with an illustrative data record in `docs/pattern-genetic-data-example.json`.
 
 [Teacher setup](https://ragingaxolotl-art.github.io/leaf-and-lineage/?teacher=1) · [Open lab](https://ragingaxolotl-art.github.io/leaf-and-lineage/)
 
