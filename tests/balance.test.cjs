@@ -23,7 +23,7 @@ test('Endurance preserves energy during the same sustained effort',()=>{
  for(let n=0;n<180&&!m.done;n++)S.step(m);assert.ok(m.fighters[0].energy>m.fighters[1].energy+.01);
 });
 test('Old SUMO2 notebooks replay with their original physics and both versions save correctly',()=>{
- const s=G.createState(),a=s.beetles.B3,b=s.beetles.B7;const old=S.run(a,b,753,{version:'SUMO2'}),expected=Legacy.run(a,b,753),current=S.run(a,b,753);assert.deepEqual(S.record(old),Legacy.record(expected));assert.equal(current.version,'SUMO6');s.matchHistory=[S.record(old),S.record(current)];G.validate(G.clone(s));
+ const s=G.createState(),a=s.beetles.B3,b=s.beetles.B7;const old=S.run(a,b,753,{version:'SUMO2'}),expected=Legacy.run(a,b,753),current=S.run(a,b,753);assert.deepEqual(S.record(old),Legacy.record(expected));assert.equal(current.version,'SUMO7');s.matchHistory=[S.record(old),S.record(current)];G.validate(G.clone(s));
 });
 test('Mutation-free strength stays within 3.5 points of the parental mean, including extreme hidden values',()=>{
  const a=beetle('A'),b=beetle('B'),r=G.seeded(672);G.setCopies(a,'strength',0,1);G.setCopies(b,'strength',0,1);let above=0,below=0;

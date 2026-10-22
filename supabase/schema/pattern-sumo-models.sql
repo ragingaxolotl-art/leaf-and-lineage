@@ -4,10 +4,10 @@ create or replace function public.pattern_sumo_exchange_versioned(p_action text,
 returns jsonb language plpgsql security invoker set search_path=pg_catalog,public as $$
 declare result jsonb; model text;
 begin
- if p_model not in ('SUMO2','SUMO3','SUMO4','SUMO5','SUMO5X10','SUMO6','SUMO6X10') then raise exception 'Invalid battle model'; end if;
+ if p_model not in ('SUMO2','SUMO3','SUMO4','SUMO5','SUMO5X10','SUMO6','SUMO6X10','SUMO7','SUMO7X2','SUMO7X10') then raise exception 'Invalid battle model'; end if;
  if p_action<>'create' then
   select physics_version into model from public.pattern_sumo_rooms where code=p_code and expires_at>now() for update;
-  if found and model<>p_model then raise exception 'These screens use different battle rules. Open the latest lab on both screens and create a new code'; end if;
+  if found and model<>p_model and not (model in ('SUMO7X2','SUMO7X10') and p_model in ('SUMO7X2','SUMO7X10')) then raise exception 'These screens use different battle rules. Open the latest lab on both screens and create a new code'; end if;
  end if;
  result=public.pattern_sumo_exchange(p_action,p_code,p_token_hash,p_beetle,p_seed);
  if p_action='create' then

@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pattern Lab · SUMO7 checks</title><style>body{font:15px/1.6 system-ui;max-width:900px;margin:35px auto;padding:24px;color:#254b3e;background:#f8f8ef}h1,h2{font-family:Georgia}table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:8px;border-bottom:1px solid #ccd6c2;text-align:left}pre{white-space:pre-wrap;overflow-wrap:anywhere}a{color:inherit}</style><p>LEAF &amp; LINEAGE · 20261022-19</p><h1>Faster movement and lift-driven flips</h1><p>7,200 matches across nine builds, 100 seeds and both corner orders for every pair. These finite fixtures check functional effects and counters; builds have unequal trait investment, so they do not establish universal balance. All 196 automated checks passed.</p><h2>Build outcomes</h2><table><thead><tr><th>Build</th><th>Wins</th><th>Losses</th><th>Ties</th><th>Score</th></tr></thead><tbody><tr><td>Balanced</td><td>754</td><td>846</td><td>0</td><td>47.1%</td></tr><tr><td>Lifter</td><td>873</td><td>727</td><td>0</td><td>54.6%</td></tr><tr><td>Jumper</td><td>729</td><td>871</td><td>0</td><td>45.6%</td></tr><tr><td>Puffer</td><td>754</td><td>846</td><td>0</td><td>47.1%</td></tr><tr><td>Mixed</td><td>799</td><td>801</td><td>0</td><td>49.9%</td></tr><tr><td>Bracer</td><td>971</td><td>629</td><td>0</td><td>60.7%</td></tr><tr><td>Sprinter</td><td>538</td><td>1062</td><td>0</td><td>33.6%</td></tr><tr><td>Power</td><td>540</td><td>1060</td><td>0</td><td>33.8%</td></tr><tr><td>Tactician</td><td>1242</td><td>358</td><td>0</td><td>77.6%</td></tr></tbody></table><h2>What changed</h2><p>Arena walking is 40% faster, acceleration 20% faster and turning 15% faster. Successful lifts make a separate flip roll; its chance increases with effective lift height. Power, horn reach and control help, while defender mass, grip and balance resist. Flipped beetles cannot push or start abilities and retain only 20% support until they right themselves. Recovery uses inherited recovery, leg length and body build, with a brief grace period afterward. No health or KO bar is involved.</p><h2>Synchronization and compatibility</h2><p>The host selects 2× or 10× before creating a code; the visitor adopts that stored room speed. Both screens retain identical fixed-step physics, flip events and results. Countdown and celebrations use wall-clock time. Existing SUMO2–SUMO6 replay engines remain preserved. Live service checks passed for opposite-speed visitors, immutable room speed, capability authorization and rejection of incompatible older physics.</p><h2>Trait magnifier</h2><p>Three searchable choices below the tank open a portrait/readings card on hover or keyboard focus. It does not stop tank movement. Student permissions allow notebook measurements and visible forms; full-stat classes and teacher labs can choose additional expressed factors. Hidden copies remain absent. Unit checks cover exact grown dimensions, the three-choice limit, duplicate rejection and permission boundaries.</p><h2>Controlled build modifications</h2><p>Unlisted numeric traits start at midpoint; growth modifiers are zero. Each build has 1,600 matches.</p><pre>{
+  &quot;Balanced&quot;: {},
+  &quot;Lifter&quot;: {
+    &quot;horn&quot;: 0.8,
+    &quot;liftPower&quot;: 0.8,
+    &quot;liftControl&quot;: 0.8,
+    &quot;liftInstinct&quot;: 0.8
+  },
+  &quot;Jumper&quot;: {
+    &quot;jumpGate&quot;: {
+      &quot;value&quot;: &quot;n&quot;,
+      &quot;expression&quot;: 0.5
+    },
+    &quot;jumpPower&quot;: 0.8,
+    &quot;jumpReach&quot;: 0.7,
+    &quot;jumpControl&quot;: 0.8,
+    &quot;jumpInstinct&quot;: 0.8
+  },
+  &quot;Puffer&quot;: {
+    &quot;puffGate&quot;: {
+      &quot;value&quot;: &quot;n&quot;,
+      &quot;expression&quot;: 0.5
+    },
+    &quot;puffPower&quot;: 0.8,
+    &quot;puffReach&quot;: 0.8,
+    &quot;puffControl&quot;: 0.8,
+    &quot;puffInstinct&quot;: 0.8
+  },
+  &quot;Mixed&quot;: {
+    &quot;horn&quot;: 0.8,
+    &quot;jumpGate&quot;: {
+      &quot;value&quot;: &quot;n&quot;,
+      &quot;expression&quot;: 0.5
+    },
+    &quot;puffGate&quot;: {
+      &quot;value&quot;: &quot;n&quot;,
+      &quot;expression&quot;: 0.5
+    },
+    &quot;liftPower&quot;: 0.8,
+    &quot;liftControl&quot;: 0.8,
+    &quot;liftInstinct&quot;: 0.8,
+    &quot;jumpControl&quot;: 0.8,
+    &quot;jumpInstinct&quot;: 0.8,
+    &quot;puffControl&quot;: 0.8,
+    &quot;puffInstinct&quot;: 0.8
+  },
+  &quot;Bracer&quot;: {
+    &quot;grip&quot;: 0.9,
+    &quot;brace&quot;: 0.9,
+    &quot;lateralBalance&quot;: 0.8,
+    &quot;edgeSense&quot;: 0.8,
+    &quot;motor&quot;: 0.3,
+    &quot;stride&quot;: 0.3
+  },
+  &quot;Sprinter&quot;: {
+    &quot;motor&quot;: 0.95,
+    &quot;stride&quot;: 0.95,
+    &quot;strength&quot;: 0.3,
+    &quot;mass&quot;: 0.3,
+    &quot;grip&quot;: 0.3,
+    &quot;focus&quot;: 0.3
+  },
+  &quot;Power&quot;: {
+    &quot;strength&quot;: 0.95,
+    &quot;mass&quot;: 0.8,
+    &quot;motor&quot;: 0.3,
+    &quot;stride&quot;: 0.3,
+    &quot;focus&quot;: 0.3,
+    &quot;persistence&quot;: 0.3,
+    &quot;tactics&quot;: 0.2,
+    &quot;turnRate&quot;: 0.3
+  },
+  &quot;Tactician&quot;: {
+    &quot;motor&quot;: 0.4,
+    &quot;stride&quot;: 0.4,
+    &quot;tracking&quot;: 0.8,
+    &quot;reaction&quot;: 0.8,
+    &quot;focus&quot;: 0.8,
+    &quot;tactics&quot;: 0.8,
+    &quot;grip&quot;: 0.6,
+    &quot;endurance&quot;: 0.7
+  }
+}</pre><p><a href="./">Open Pattern Lab</a></p></html>

@@ -25,3 +25,10 @@
 .fighter.move-jump:before{content:'';position:absolute;inset:15% -12%;border:2px dashed #b8e1cf99;border-radius:50%;pointer-events:none}
 .fighter.move-lift:before{content:'↟';position:absolute;top:-75%;left:25%;font:bold 28px system-ui;color:#ffe8a6;text-shadow:0 2px 2px #263f36;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.fighter.airborne svg,.fighter.lifted svg,.fighter.winding-jump svg,.fighter.winding-lift svg{transform:translate(-50%,-69%)}.fighter.move-jump:before{border-style:solid}}
+
+.flip-belly{display:none;pointer-events:none}.fighter.flipped svg{transform:translate(-50%,-69%) rotateY(180deg) rotate(-8deg);filter:drop-shadow(2px 4px 2px #0b1b1b88) saturate(.45) brightness(1.2)}
+.fighter.flipped .flip-belly{display:block;position:absolute;width:68%;height:80%;left:16%;top:2%;border:2px solid #75654c;border-radius:47%;background:repeating-linear-gradient(0deg,#b8a382 0px,#b8a382 7px,#796950 8px,#e3d5b3 10px);box-shadow:inset 2px 0 3px #fff7;opacity:.95}
+.fighter.flipped .flip-belly:after{content:'↻';position:absolute;left:18%;top:16%;color:#fff7da;font:bold 24px system-ui;text-shadow:0 1px 2px #342e22}
+.fighter.flipped .leg-swing{animation:flipWriggle .22s ease-in-out infinite alternate}.resting .fighter.flipped .leg-swing{animation-play-state:paused}
+@keyframes flipWriggle{from{transform:rotate(-9deg)}to{transform:rotate(9deg)}}
+@media(prefers-reduced-motion:reduce){.fighter.flipped .leg-swing{animation:none}}

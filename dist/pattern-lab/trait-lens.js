@@ -1,0 +1,8 @@
+(function(root){
+'use strict';
+const G=typeof module!=='undefined'&&module.exports?require('./genetics.js'):root.PatternGenetics;
+const visible=[{key:'antennaForm',label:'Antenna shape',unit:''},{key:'legForm',label:'Leg shape',unit:''},{key:'hornForm',label:'Visible horn shape',unit:''},{key:'patternForm',label:'Visible pattern',unit:''}];
+function options(full=false){const out=[...G.studentTraits.map(t=>({...t})),...visible];if(full)for(const l of G.loci)if(l.type==='number'&&!out.some(t=>t.key===l.key))out.push({key:l.key,label:l.label,unit:l.key.endsWith('Growth')?'log₂ growth contribution':'inherited model value'});return out;}
+function rows(b,keys,{full=false}={}){if(!Array.isArray(keys)||keys.length>3||new Set(keys).size!==keys.length)throw Error('Choose up to three different traits.');const allowed=options(full),p=G.phenotype(b),m=G.measurements(b),forms={antennaForm:G.antennaNames[p.antenna],legForm:G.legNames[p.leg],hornForm:p.visibleHorns?p.hornShape+' · '+p.visibleHorns+' horn'+(p.visibleHorns===1?'':'s'):'No visible horns',patternForm:p.visibleLayers?p.shape+' · '+p.visibleLayers+' pattern color'+(p.visibleLayers===1?'':'s'):'Plain shell'};return keys.map(key=>{const t=allowed.find(t=>t.key===key);if(!t)throw Error('That trait is unavailable in this class.');const value=Object.hasOwn(forms,key)?forms[key]:Object.hasOwn(m,key)?m[key]:p[key];return {key,label:t.label,unit:t.unit,value,display:typeof value==='number'?String(Number(value.toFixed(4))):value};});}
+const api={options,rows};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PatternTraitLens=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
