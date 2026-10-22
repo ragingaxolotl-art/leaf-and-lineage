@@ -16,7 +16,9 @@ Only two newest broods stay in the main tank and nursery. Older unsaved beetles 
 Trade with a classmate exchanges one offered beetle for one offered beetle. Create a trade code, your friend enters it and offers theirs, then the creator previews and confirms. Both devices receive the exact genes and appearance. Use the original device until complete. Offers expire after two hours; collection receipts last seven days. Internet is required for codes. Keep your own tank file backup.
 
 HOW TO PLAY
-1. Cool & pause, then click a beetle to inspect it. Add 2–4 parents to a jar.
+1. Click a beetle to inspect it without stopping the tank. Add 2–4 parents to a jar.
+   Drag beetles to place them in either tank. Holding stops only that beetle.
+   Release resumes movement; Cool & pause stops both tanks until Run is selected.
 2. Check Use this jar. Breed selected jars makes 10–20 babies total.
 3. With two jars, the babies split between them. Each baby's two parents come from its own jar.
 4. New babies wander in the breeder tank. Overflow waits in the nursery.
@@ -27,7 +29,7 @@ HOW TO PLAY
 
 SUMO AND SHARING
 Choose red and blue beetles, then Start local match. Pause or adjust playback without changing the outcome.
-Tracking, reaction, focus, ring tactics, speed, grip, mass, bracing, balance and instincts are inherited spectra. Sustained pushing uses muscle, alignment, grip and energy; speed helps approaching and circling. Strength uses a continuous many-gene breeding-value approximation: normal babies stay near the parents’ average, with small variation up or down. With mutation off, the difference is at most about 3.5 unrounded points. Most strength mutations are small; a rare subset can make a larger change. Existing beetles keep their stored strength. Other simple genes still pass actual parental copies. Old match notebooks replay with their original rules; new shared matches require the current rules on both screens.
+Tracking, reaction, focus, ring tactics, speed, grip, mass, bracing, balance and instincts are inherited spectra. Sustained pushing uses muscle, alignment, grip and energy; speed helps approaching and circling. All 53 continuous anatomy and behavior values use a many-gene breeding-value approximation. Babies normally stay near the parents’ average with small variation up or down. Most mutations are small; occasional larger effects can shift a value further. The classroom mutation setting controls frequency. Existing beetles retain their stored values. Appearance genes still pass real parental copies, so hidden colors and patterns can reappear. The field-mark tags are consistent clues to discover through observation. Full-stat class links retain explicit measurements. The smaller legal ring has concentric distance guides. A single ring-out wins immediately; at 60 seconds, or a simultaneous double exit, the closer beetle wins. Nearly equal distances can tie. Old match notebooks replay with their original rules; new shared matches require the current rules on both screens.
 Front, side and rear pushes use different resistance. Wander-prone beetles may explore instead of pushing.
 There are no injuries, deaths or gene changes from a match. The match notebook records replays.
 To challenge another screen, expand Challenge another screen. The host chooses its red beetle and creates a code.

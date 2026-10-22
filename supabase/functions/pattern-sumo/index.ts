@@ -28,7 +28,7 @@ Deno.serve(async(req:Request)=>{
  try{
   if(Number(req.headers.get('content-length')||0)>48000)return reply({error:'Request too large.'},413);
   const text=await req.text();if(text.length>48000)return reply({error:'Request too large.'},413);
-  const data=JSON.parse(text),action=data.action,model=data.model||'SUMO2';if(!['SUMO2','SUMO3'].includes(model))throw Error('Invalid battle model.');
+  const data=JSON.parse(text),action=data.action,model=data.model||'SUMO2';if(!['SUMO2','SUMO3','SUMO4'].includes(model))throw Error('Invalid battle model.');
   if(!['create','join','read','start','close'].includes(action))return reply({error:'Unknown room action.'},400);
   const token=data.token;if(typeof token!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(token))return reply({error:'This device needs a fresh room connection.'},400);
   const tokenHash=await digest(token),ip=(req.headers.get('x-forwarded-for')||'unknown').split(',')[0];

@@ -1,0 +1,1198 @@
+{
+  "date": "2026-10-22",
+  "model": "SUMO3",
+  "finalBattleCount": 25840,
+  "strengthBirthCount": 80000,
+  "battle": {
+    "cornerBalance": {
+      "red": 760,
+      "blue": 803,
+      "draws": 2437,
+      "matches": 4000
+    },
+    "version": "SUMO3",
+    "seeds": 240,
+    "sweeps": {
+      "strength": {
+        "matches": 480,
+        "winsA": 135,
+        "winsB": 67,
+        "draws": 278,
+        "scoreA": 0.571,
+        "meanSeconds": 40.9,
+        "wandering": [
+          10.4,
+          10.4
+        ],
+        "side": [
+          2.92,
+          2.76
+        ],
+        "edge": [
+          0.73,
+          0.98
+        ]
+      },
+      "speed": {
+        "matches": 480,
+        "winsA": 100,
+        "winsB": 84,
+        "draws": 296,
+        "scoreA": 0.517,
+        "meanSeconds": 42.5,
+        "wandering": [
+          10.9,
+          11
+        ],
+        "side": [
+          2.84,
+          2.87
+        ],
+        "edge": [
+          0.55,
+          0.85
+        ]
+      },
+      "grip": {
+        "matches": 480,
+        "winsA": 145,
+        "winsB": 62,
+        "draws": 273,
+        "scoreA": 0.586,
+        "meanSeconds": 40.2,
+        "wandering": [
+          10.5,
+          10.2
+        ],
+        "side": [
+          2.98,
+          2.73
+        ],
+        "edge": [
+          0.6,
+          1.02
+        ]
+      },
+      "mass": {
+        "matches": 480,
+        "winsA": 119,
+        "winsB": 69,
+        "draws": 292,
+        "scoreA": 0.552,
+        "meanSeconds": 42.3,
+        "wandering": [
+          10.9,
+          10.9
+        ],
+        "side": [
+          3.01,
+          2.8
+        ],
+        "edge": [
+          0.61,
+          0.94
+        ]
+      },
+      "tracking": {
+        "matches": 480,
+        "winsA": 112,
+        "winsB": 60,
+        "draws": 308,
+        "scoreA": 0.554,
+        "meanSeconds": 43.5,
+        "wandering": [
+          11.2,
+          11.1
+        ],
+        "side": [
+          3.51,
+          2.54
+        ],
+        "edge": [
+          0.66,
+          0.94
+        ]
+      },
+      "reaction": {
+        "matches": 480,
+        "winsA": 120,
+        "winsB": 26,
+        "draws": 334,
+        "scoreA": 0.598,
+        "meanSeconds": 46,
+        "wandering": [
+          11.8,
+          11.7
+        ],
+        "side": [
+          3.48,
+          1.59
+        ],
+        "edge": [
+          1.02,
+          0.63
+        ]
+      },
+      "focus": {
+        "matches": 480,
+        "winsA": 263,
+        "winsB": 23,
+        "draws": 194,
+        "scoreA": 0.75,
+        "meanSeconds": 32.6,
+        "wandering": [
+          4.1,
+          12.9
+        ],
+        "side": [
+          3.92,
+          0.89
+        ],
+        "edge": [
+          0.47,
+          1.27
+        ]
+      },
+      "tactics": {
+        "matches": 480,
+        "winsA": 109,
+        "winsB": 46,
+        "draws": 325,
+        "scoreA": 0.566,
+        "meanSeconds": 45.6,
+        "wandering": [
+          11.8,
+          11.6
+        ],
+        "side": [
+          2.34,
+          3.67
+        ],
+        "edge": [
+          0.39,
+          1.15
+        ]
+      },
+      "edgeSense": {
+        "matches": 480,
+        "winsA": 93,
+        "winsB": 71,
+        "draws": 316,
+        "scoreA": 0.523,
+        "meanSeconds": 44.1,
+        "wandering": [
+          11.3,
+          11.4
+        ],
+        "side": [
+          3.02,
+          3.06
+        ],
+        "edge": [
+          0.91,
+          0.12
+        ]
+      },
+      "brace": {
+        "matches": 480,
+        "winsA": 67,
+        "winsB": 81,
+        "draws": 332,
+        "scoreA": 0.485,
+        "meanSeconds": 45.5,
+        "wandering": [
+          11.5,
+          11.8
+        ],
+        "side": [
+          3.17,
+          3.11
+        ],
+        "edge": [
+          0.59,
+          0.76
+        ]
+      },
+      "lateralBalance": {
+        "matches": 480,
+        "winsA": 84,
+        "winsB": 77,
+        "draws": 319,
+        "scoreA": 0.507,
+        "meanSeconds": 44.8,
+        "wandering": [
+          11.5,
+          11.5
+        ],
+        "side": [
+          3.1,
+          3.04
+        ],
+        "edge": [
+          0.63,
+          0.6
+        ]
+      },
+      "endurance": {
+        "matches": 480,
+        "winsA": 146,
+        "winsB": 69,
+        "draws": 265,
+        "scoreA": 0.58,
+        "meanSeconds": 40.4,
+        "wandering": [
+          10.6,
+          10.3
+        ],
+        "side": [
+          2.87,
+          2.76
+        ],
+        "edge": [
+          0.6,
+          1.04
+        ]
+      },
+      "recovery": {
+        "matches": 480,
+        "winsA": 88,
+        "winsB": 71,
+        "draws": 321,
+        "scoreA": 0.518,
+        "meanSeconds": 44.5,
+        "wandering": [
+          11.6,
+          11.5
+        ],
+        "side": [
+          3.05,
+          3.11
+        ],
+        "edge": [
+          0.55,
+          0.64
+        ]
+      },
+      "turnRate": {
+        "matches": 480,
+        "winsA": 111,
+        "winsB": 54,
+        "draws": 315,
+        "scoreA": 0.559,
+        "meanSeconds": 44.2,
+        "wandering": [
+          11.5,
+          11.3
+        ],
+        "side": [
+          3.15,
+          3.03
+        ],
+        "edge": [
+          0.64,
+          0.81
+        ]
+      },
+      "pushDrive": {
+        "matches": 480,
+        "winsA": 350,
+        "winsB": 22,
+        "draws": 108,
+        "scoreA": 0.842,
+        "meanSeconds": 24.4,
+        "wandering": [
+          3.1,
+          11.3
+        ],
+        "side": [
+          3.45,
+          0.58
+        ],
+        "edge": [
+          0.53,
+          1.31
+        ]
+      },
+      "wander": {
+        "matches": 480,
+        "winsA": 25,
+        "winsB": 348,
+        "draws": 107,
+        "scoreA": 0.164,
+        "meanSeconds": 24.9,
+        "wandering": [
+          10.2,
+          3.8
+        ],
+        "side": [
+          0.46,
+          3.51
+        ],
+        "edge": [
+          1.46,
+          0.5
+        ]
+      },
+      "acceleration": {
+        "matches": 480,
+        "winsA": 134,
+        "winsB": 64,
+        "draws": 282,
+        "scoreA": 0.573,
+        "meanSeconds": 41.2,
+        "wandering": [
+          10.5,
+          10.6
+        ],
+        "side": [
+          2.79,
+          2.98
+        ],
+        "edge": [
+          0.49,
+          0.85
+        ]
+      },
+      "centerDrive": {
+        "matches": 480,
+        "winsA": 132,
+        "winsB": 52,
+        "draws": 296,
+        "scoreA": 0.583,
+        "meanSeconds": 42.6,
+        "wandering": [
+          11,
+          10.8
+        ],
+        "side": [
+          2.91,
+          2.91
+        ],
+        "edge": [
+          0.38,
+          0.79
+        ]
+      },
+      "curiosity": {
+        "matches": 480,
+        "winsA": 102,
+        "winsB": 77,
+        "draws": 301,
+        "scoreA": 0.526,
+        "meanSeconds": 42.7,
+        "wandering": [
+          9.7,
+          12.3
+        ],
+        "side": [
+          3.53,
+          2.51
+        ],
+        "edge": [
+          0.57,
+          0.69
+        ]
+      },
+      "persistence": {
+        "matches": 480,
+        "winsA": 185,
+        "winsB": 36,
+        "draws": 259,
+        "scoreA": 0.655,
+        "meanSeconds": 38.7,
+        "wandering": [
+          7,
+          13.2
+        ],
+        "side": [
+          3.84,
+          1.68
+        ],
+        "edge": [
+          0.58,
+          0.93
+        ]
+      }
+    },
+    "tournament": {
+      "balanced vs power": {
+        "matches": 240,
+        "winsA": 56,
+        "winsB": 48,
+        "draws": 136,
+        "scoreA": 0.517,
+        "meanSeconds": 40.5,
+        "wandering": [
+          10.3,
+          11.4
+        ],
+        "side": [
+          2.9,
+          2.64
+        ],
+        "edge": [
+          0.63,
+          0.47
+        ]
+      },
+      "balanced vs sprinter": {
+        "matches": 240,
+        "winsA": 80,
+        "winsB": 22,
+        "draws": 138,
+        "scoreA": 0.621,
+        "meanSeconds": 40.5,
+        "wandering": [
+          10.5,
+          14.9
+        ],
+        "side": [
+          4.13,
+          2.65
+        ],
+        "edge": [
+          0.5,
+          0.83
+        ]
+      },
+      "balanced vs tactician": {
+        "matches": 240,
+        "winsA": 39,
+        "winsB": 34,
+        "draws": 167,
+        "scoreA": 0.51,
+        "meanSeconds": 45.6,
+        "wandering": [
+          11.6,
+          12.5
+        ],
+        "side": [
+          2.6,
+          2.75
+        ],
+        "edge": [
+          0.61,
+          1.34
+        ]
+      },
+      "balanced vs anchor": {
+        "matches": 240,
+        "winsA": 74,
+        "winsB": 51,
+        "draws": 115,
+        "scoreA": 0.548,
+        "meanSeconds": 36.4,
+        "wandering": [
+          9.4,
+          9.2
+        ],
+        "side": [
+          2.34,
+          2.58
+        ],
+        "edge": [
+          0.79,
+          1.01
+        ]
+      },
+      "balanced vs stamina": {
+        "matches": 240,
+        "winsA": 12,
+        "winsB": 80,
+        "draws": 148,
+        "scoreA": 0.358,
+        "meanSeconds": 42.9,
+        "wandering": [
+          10.9,
+          5.8
+        ],
+        "side": [
+          1.5,
+          3.33
+        ],
+        "edge": [
+          1,
+          0.66
+        ]
+      },
+      "balanced vs wanderer": {
+        "matches": 240,
+        "winsA": 224,
+        "winsB": 13,
+        "draws": 3,
+        "scoreA": 0.94,
+        "meanSeconds": 10.1,
+        "wandering": [
+          2.8,
+          8.9
+        ],
+        "side": [
+          1.55,
+          0.22
+        ],
+        "edge": [
+          0.14,
+          0.72
+        ]
+      },
+      "power vs sprinter": {
+        "matches": 240,
+        "winsA": 93,
+        "winsB": 28,
+        "draws": 119,
+        "scoreA": 0.635,
+        "meanSeconds": 37.2,
+        "wandering": [
+          10.6,
+          13.9
+        ],
+        "side": [
+          3.8,
+          2.48
+        ],
+        "edge": [
+          0.45,
+          0.72
+        ]
+      },
+      "power vs tactician": {
+        "matches": 240,
+        "winsA": 78,
+        "winsB": 49,
+        "draws": 113,
+        "scoreA": 0.56,
+        "meanSeconds": 34.1,
+        "wandering": [
+          9.5,
+          9.3
+        ],
+        "side": [
+          2.18,
+          2.37
+        ],
+        "edge": [
+          0.68,
+          2.17
+        ]
+      },
+      "power vs anchor": {
+        "matches": 240,
+        "winsA": 73,
+        "winsB": 52,
+        "draws": 115,
+        "scoreA": 0.544,
+        "meanSeconds": 36.3,
+        "wandering": [
+          9.9,
+          9.3
+        ],
+        "side": [
+          2.37,
+          2.64
+        ],
+        "edge": [
+          0.58,
+          1.11
+        ]
+      },
+      "power vs stamina": {
+        "matches": 240,
+        "winsA": 66,
+        "winsB": 64,
+        "draws": 110,
+        "scoreA": 0.504,
+        "meanSeconds": 36.9,
+        "wandering": [
+          10.2,
+          5.1
+        ],
+        "side": [
+          1.27,
+          2.57
+        ],
+        "edge": [
+          0.58,
+          1.18
+        ]
+      },
+      "power vs wanderer": {
+        "matches": 240,
+        "winsA": 212,
+        "winsB": 26,
+        "draws": 2,
+        "scoreA": 0.887,
+        "meanSeconds": 9.8,
+        "wandering": [
+          2.9,
+          8.6
+        ],
+        "side": [
+          1.18,
+          0.2
+        ],
+        "edge": [
+          0.14,
+          0.61
+        ]
+      },
+      "sprinter vs tactician": {
+        "matches": 240,
+        "winsA": 9,
+        "winsB": 60,
+        "draws": 171,
+        "scoreA": 0.394,
+        "meanSeconds": 46.5,
+        "wandering": [
+          17.5,
+          12.5
+        ],
+        "side": [
+          2.18,
+          5.02
+        ],
+        "edge": [
+          0.8,
+          0.71
+        ]
+      },
+      "sprinter vs anchor": {
+        "matches": 240,
+        "winsA": 48,
+        "winsB": 96,
+        "draws": 96,
+        "scoreA": 0.4,
+        "meanSeconds": 32.8,
+        "wandering": [
+          12.2,
+          8.5
+        ],
+        "side": [
+          1.9,
+          3.46
+        ],
+        "edge": [
+          0.75,
+          0.63
+        ]
+      },
+      "sprinter vs stamina": {
+        "matches": 240,
+        "winsA": 17,
+        "winsB": 126,
+        "draws": 97,
+        "scoreA": 0.273,
+        "meanSeconds": 32.9,
+        "wandering": [
+          12.5,
+          4.4
+        ],
+        "side": [
+          0.92,
+          3.86
+        ],
+        "edge": [
+          1.07,
+          0.48
+        ]
+      },
+      "sprinter vs wanderer": {
+        "matches": 240,
+        "winsA": 216,
+        "winsB": 13,
+        "draws": 11,
+        "scoreA": 0.923,
+        "meanSeconds": 15.2,
+        "wandering": [
+          5.7,
+          13.5
+        ],
+        "side": [
+          2.7,
+          0.62
+        ],
+        "edge": [
+          0.25,
+          0.9
+        ]
+      },
+      "tactician vs anchor": {
+        "matches": 240,
+        "winsA": 67,
+        "winsB": 63,
+        "draws": 110,
+        "scoreA": 0.508,
+        "meanSeconds": 34.4,
+        "wandering": [
+          9.2,
+          8.6
+        ],
+        "side": [
+          1.9,
+          2.18
+        ],
+        "edge": [
+          2.65,
+          1.28
+        ]
+      },
+      "tactician vs stamina": {
+        "matches": 240,
+        "winsA": 16,
+        "winsB": 101,
+        "draws": 123,
+        "scoreA": 0.323,
+        "meanSeconds": 36.4,
+        "wandering": [
+          9.7,
+          4.8
+        ],
+        "side": [
+          1.15,
+          2.56
+        ],
+        "edge": [
+          3.88,
+          1.11
+        ]
+      },
+      "tactician vs wanderer": {
+        "matches": 240,
+        "winsA": 236,
+        "winsB": 2,
+        "draws": 2,
+        "scoreA": 0.988,
+        "meanSeconds": 10.9,
+        "wandering": [
+          3,
+          9.6
+        ],
+        "side": [
+          1.87,
+          0.23
+        ],
+        "edge": [
+          0.61,
+          0.78
+        ]
+      },
+      "anchor vs stamina": {
+        "matches": 240,
+        "winsA": 53,
+        "winsB": 77,
+        "draws": 110,
+        "scoreA": 0.45,
+        "meanSeconds": 35.6,
+        "wandering": [
+          9.1,
+          4.8
+        ],
+        "side": [
+          1.31,
+          2.39
+        ],
+        "edge": [
+          0.93,
+          1.07
+        ]
+      },
+      "anchor vs wanderer": {
+        "matches": 240,
+        "winsA": 207,
+        "winsB": 32,
+        "draws": 1,
+        "scoreA": 0.865,
+        "meanSeconds": 10.8,
+        "wandering": [
+          2.8,
+          9.4
+        ],
+        "side": [
+          1.16,
+          0.18
+        ],
+        "edge": [
+          0.34,
+          0.65
+        ]
+      },
+      "stamina vs wanderer": {
+        "matches": 240,
+        "winsA": 234,
+        "winsB": 6,
+        "draws": 0,
+        "scoreA": 0.975,
+        "meanSeconds": 8.1,
+        "wandering": [
+          1.3,
+          7.2
+        ],
+        "side": [
+          1.13,
+          0.05
+        ],
+        "edge": [
+          0.17,
+          0.53
+        ]
+      }
+    },
+    "randomFounders": {
+      "matches": 2400,
+      "decisive": 1454,
+      "draws": 946,
+      "strongComparable": 1454,
+      "fastComparable": 1444,
+      "strongerWins": 805,
+      "fasterWins": 686,
+      "strongerWinRate": 0.5536451169188445,
+      "fasterWinRate": 0.47506925207756234
+    },
+    "randomDescendants": {
+      "matches": 2400,
+      "decisive": 1518,
+      "draws": 882,
+      "strongComparable": 1518,
+      "fastComparable": 1498,
+      "strongerWins": 792,
+      "fasterWins": 679,
+      "strongerWinRate": 0.5217391304347826,
+      "fasterWinRate": 0.4532710280373832
+    },
+    "doseResponse": {
+      "strength": [
+        {
+          "value": 0.1,
+          "matches": 240,
+          "winsA": 26,
+          "winsB": 36,
+          "draws": 178,
+          "scoreA": 0.479,
+          "meanSeconds": 48.6,
+          "wandering": [
+            12.5,
+            12.4
+          ],
+          "side": [
+            3.28,
+            3.27
+          ],
+          "edge": [
+            0.56,
+            0.68
+          ]
+        },
+        {
+          "value": 0.3,
+          "matches": 240,
+          "winsA": 32,
+          "winsB": 34,
+          "draws": 174,
+          "scoreA": 0.496,
+          "meanSeconds": 47.1,
+          "wandering": [
+            12.4,
+            12.2
+          ],
+          "side": [
+            3.15,
+            3.13
+          ],
+          "edge": [
+            0.6,
+            0.63
+          ]
+        },
+        {
+          "value": 0.5,
+          "matches": 240,
+          "winsA": 34,
+          "winsB": 34,
+          "draws": 172,
+          "scoreA": 0.5,
+          "meanSeconds": 46.6,
+          "wandering": [
+            11.9,
+            11.9
+          ],
+          "side": [
+            3.13,
+            3.13
+          ],
+          "edge": [
+            0.49,
+            0.49
+          ]
+        },
+        {
+          "value": 0.7,
+          "matches": 240,
+          "winsA": 34,
+          "winsB": 31,
+          "draws": 175,
+          "scoreA": 0.506,
+          "meanSeconds": 47.4,
+          "wandering": [
+            12.4,
+            12.1
+          ],
+          "side": [
+            3.25,
+            3.19
+          ],
+          "edge": [
+            0.67,
+            0.75
+          ]
+        },
+        {
+          "value": 0.9,
+          "matches": 240,
+          "winsA": 44,
+          "winsB": 32,
+          "draws": 164,
+          "scoreA": 0.525,
+          "meanSeconds": 45.5,
+          "wandering": [
+            11.7,
+            12
+          ],
+          "side": [
+            3.18,
+            2.8
+          ],
+          "edge": [
+            0.75,
+            0.85
+          ]
+        }
+      ],
+      "speed": [
+        {
+          "value": 0.1,
+          "matches": 240,
+          "winsA": 28,
+          "winsB": 53,
+          "draws": 159,
+          "scoreA": 0.448,
+          "meanSeconds": 44.3,
+          "wandering": [
+            11.4,
+            11.4
+          ],
+          "side": [
+            2.96,
+            3
+          ],
+          "edge": [
+            0.87,
+            0.5
+          ]
+        },
+        {
+          "value": 0.3,
+          "matches": 240,
+          "winsA": 33,
+          "winsB": 44,
+          "draws": 163,
+          "scoreA": 0.477,
+          "meanSeconds": 45.3,
+          "wandering": [
+            11.8,
+            11.5
+          ],
+          "side": [
+            3.02,
+            2.93
+          ],
+          "edge": [
+            0.92,
+            0.9
+          ]
+        },
+        {
+          "value": 0.5,
+          "matches": 240,
+          "winsA": 34,
+          "winsB": 34,
+          "draws": 172,
+          "scoreA": 0.5,
+          "meanSeconds": 46.6,
+          "wandering": [
+            11.9,
+            11.9
+          ],
+          "side": [
+            3.13,
+            3.13
+          ],
+          "edge": [
+            0.49,
+            0.49
+          ]
+        },
+        {
+          "value": 0.7,
+          "matches": 240,
+          "winsA": 42,
+          "winsB": 33,
+          "draws": 165,
+          "scoreA": 0.519,
+          "meanSeconds": 45.7,
+          "wandering": [
+            11.9,
+            11.6
+          ],
+          "side": [
+            3,
+            3.12
+          ],
+          "edge": [
+            0.67,
+            0.76
+          ]
+        },
+        {
+          "value": 0.9,
+          "matches": 240,
+          "winsA": 41,
+          "winsB": 40,
+          "draws": 159,
+          "scoreA": 0.502,
+          "meanSeconds": 44.1,
+          "wandering": [
+            11.2,
+            11.3
+          ],
+          "side": [
+            3.32,
+            3.17
+          ],
+          "edge": [
+            0.55,
+            0.6
+          ]
+        }
+      ]
+    },
+    "inheritance": {
+      "zeroMutationBirths": 10000,
+      "medianDeviation": 0.007048774369177391,
+      "p95Deviation": 0.01950876513728872,
+      "maxDeviation": 0.03184258304128884,
+      "over10Points": 0,
+      "outsideParents": 384
+    }
+  },
+  "strengthBreeding": {
+    "zero": {
+      "births": 20000,
+      "mutationRate": 0,
+      "strengthMutationBirths": 0,
+      "over10PointChanges": 0,
+      "unexplainedLargeChanges": 0,
+      "strongerThanParents": 10117,
+      "weakerThanParents": 9883,
+      "medianChange": 0.7051447249035112,
+      "p95Change": 1.924147703771597,
+      "maxChange": 3.119503427753224
+    },
+    "default": {
+      "births": 30000,
+      "mutationRate": 0.005,
+      "strengthMutationBirths": 301,
+      "over10PointChanges": 16,
+      "unexplainedLargeChanges": 0,
+      "strongerThanParents": 14916,
+      "weakerThanParents": 15084,
+      "medianChange": 0.7051660063775507,
+      "p95Change": 1.9895003365015098,
+      "maxChange": 25.257278314480793
+    },
+    "threePercent": {
+      "births": 30000,
+      "mutationRate": 0.03,
+      "strengthMutationBirths": 1813,
+      "over10PointChanges": 106,
+      "unexplainedLargeChanges": 0,
+      "strongerThanParents": 14909,
+      "weakerThanParents": 15091,
+      "medianChange": 0.7326564757141755,
+      "p95Change": 2.1465072082407994,
+      "maxChange": 25.85977786132833
+    },
+    "selectStronger": [
+      50.5,
+      52.378267899529014,
+      53.87473715847039,
+      54.91787822408806,
+      56.506403421660075,
+      58.11098105381972,
+      60.36251324060781,
+      61.668452495099054,
+      63.149092921961866,
+      64.51177999722539,
+      65.63652892718297,
+      66.83495116018517,
+      67.83828673483399,
+      69.64061834961322,
+      70.8423472607226,
+      72.26992172882049,
+      74.43403449570557,
+      75.12453116706399,
+      77.22482351551561,
+      79.1798629331097,
+      81.41436640162168,
+      83.26628311090842,
+      84.75018369114261,
+      86.45418227252523,
+      87.51793647918183,
+      88.57306401759153,
+      90.59107188793745,
+      92.16185763808434,
+      93.67986647337531,
+      95.42614204255457,
+      96.96194091183222
+    ],
+    "selectWeaker": [
+      50.5,
+      48.88531120141298,
+      47.1910953622617,
+      45.054434380456804,
+      42.94383994242234,
+      41.277570006357564,
+      39.77290631398267,
+      37.13521110112837,
+      35.19200700554239,
+      34.004425319962316,
+      31.736232634054897,
+      30.121163712190747,
+      28.5858030531826,
+      27.252716671719675,
+      25.542632186166877,
+      24.096889142656288,
+      22.39647473192453,
+      20.533273656766685,
+      18.64206305696716,
+      17.26313231900596,
+      15.466321155017061,
+      13.296884717561474,
+      11.64881291047844,
+      10.237532735406415,
+      8.912618753399286,
+      7.43080285183299,
+      5.013096957497177,
+      3.5634674530624704,
+      1.9477308353086074,
+      1,
+      1
+    ]
+  },
+  "method": {
+    "seedOffset": 17342991,
+    "seedsPerControlledPair": 240,
+    "randomMatchesPerPool": 2400,
+    "sides": "Every controlled duel and random-pool pairing runs in both corner assignments.",
+    "strengthScale": "1 + 99 \u00d7 continuous strength; deviations use unrounded points from parental mean.",
+    "limits": "A finite deterministic simulation audit, not a proof that all genomes are equally competitive or biological validation."
+  }
+}

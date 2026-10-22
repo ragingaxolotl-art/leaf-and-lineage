@@ -2,8 +2,8 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const G=require('../dist/pattern-lab/genetics.js'),S=require('../dist/pattern-lab/sumo.js');
 const specimen=()=>G.createState(42).beetles.B3;
-test('All added behavior and anatomy traits inherit actual copies and mutate within bounds',()=>{
- const s=G.createState(),r=G.seeded(391);for(let i=0;i<200;i++){const b=G.baby(s.beetles.B3,s.beetles.B7,'B99',{rate:0,rng:r});for(let ci=5;ci<7;ci++)for(let k=0;k<G.chromosomes[ci].loci.length;k++)for(let p=0;p<2;p++)assert.ok((p?s.beetles.B7:s.beetles.B3).genome[ci].copies.some(cp=>cp[k]===b.genome[ci].copies[p][k]));}
+test('Behavior and anatomy use bounded quantitative contributions; appearance retains actual copies',()=>{
+ const s=G.createState(),r=G.seeded(391);for(let i=0;i<200;i++){const b=G.baby(s.beetles.B3,s.beetles.B7,'B99',{rate:0,rng:r});for(let ci=5;ci<7;ci++)for(let k=0;k<G.chromosomes[ci].loci.length;k++)for(let p=0;p<2;p++){const parent=p?s.beetles.B7:s.beetles.B3,l=G.chromosomes[ci].loci[k],v=b.genome[ci].copies[p][k];if(l.model==='quantitative')assert.ok(Math.abs(v-G.expressed(parent,l.key))<=.035000001*(l.max-l.min));else assert.ok(parent.genome[ci].copies.some(cp=>cp[k]===v));}}
  const a=G.importPacket(s,G.packet(s.beetles.B3));s.settings.mutation=.1;G.move(s,a.id,'jar-1');G.move(s,'B7','jar-1');for(let i=0;i<3;i++)G.breedRound(s,{rng:r});G.validate(s);
 });
 test('Version-one saves upgrade once without replacing the original genes, names or kept beetles',()=>{
@@ -32,10 +32,10 @@ test('Colors and cosmetic patterns do not decide sumo winners',()=>{
  const s=G.createState(),a=s.beetles.B3,b=s.beetles.B7,c=G.clone(a);G.setCopies(c,'body',{rgb:[255,0,0],expression:1});G.setCopies(c,'plain',{value:'S',expression:1});for(let seed=0;seed<20;seed++){const x=S.run(a,b,seed),y=S.run(c,b,seed);assert.equal(x.winner,y.winner);assert.equal(x.tick,y.tick);assert.deepEqual(x.events,y.events);}
 });
 test('A ring-out is detected from movement and time-limit draws remain possible',()=>{
- const a=specimen(),b=G.clone(a),m=S.create(a,b,43);m.fighters[0].x=m.radius+2;S.step(m);assert.equal(m.winner,1);assert.equal(m.reason,'Ring-out');const timed=S.run(a,b,37,{maxSeconds:.2});assert.equal(timed.winner,null);assert.match(timed.reason,/Time limit/);
+ const a=specimen(),b=G.clone(a),m=S.create(a,b,43);m.fighters[0].x=m.radius+2;S.step(m);assert.equal(m.winner,1);assert.equal(m.reason,'Ring-out');const timed=S.run(a,b,37,{maxSeconds:.2,version:'SUMO3'});assert.equal(timed.winner,null);assert.match(timed.reason,/Time limit/);
 });
 test('A shared sixty-second replay reaches an exact time-limit draw',()=>{
- const a=specimen(),m=S.create(a,G.clone(a),38);for(const f of m.fighters){f.t.maxSpeed=0;f.t.pushPower=0;f.x=f.index?80:-80;f.y=0;}while(!m.done&&m.tick<3600)S.step(m);assert.equal(m.tick,3600);assert.equal(m.time,60);assert.equal(m.done,true);assert.equal(m.reason,'Time limit — draw');
+ const a=specimen(),m=S.create(a,G.clone(a),38);for(const f of m.fighters){f.t.maxSpeed=0;f.t.pushPower=0;f.x=f.index?80:-80;f.y=0;}while(!m.done&&m.tick<3600)S.step(m);assert.equal(m.tick,3600);assert.equal(m.time,60);assert.equal(m.done,true);assert.equal(m.reason,'Center tie');
 });
 test('Whole-experiment files preserve completed match records and new classroom permissions',()=>{
  const s=G.createState(),m=S.run(s.beetles.B3,s.beetles.B7,37);s.matchHistory.push({...S.record(m),participants:m.fighters.map(f=>G.packet(f.beetle))});assert.deepEqual(G.validate(JSON.parse(JSON.stringify(s))).matchHistory,s.matchHistory);for(const sumo of [false,true]){const c={v:1,seed:1,mutation:0,backdrop:'moss',stats:false,environment:false,speed:1,sumo};assert.deepEqual(G.decodeConfig(G.encodeConfig(c)),c);}assert.throws(()=>G.validConfig({v:1,seed:1,mutation:0,backdrop:'moss',stats:false,environment:false,speed:1,sumo:'false'}));

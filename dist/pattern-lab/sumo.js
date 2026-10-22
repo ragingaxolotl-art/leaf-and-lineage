@@ -2,6 +2,7 @@
 'use strict';
 const G=typeof module!=='undefined'&&module.exports?require('./genetics.js'):root.PatternGenetics;
 const legacy=typeof module!=='undefined'&&module.exports?require('./sumo-legacy.js'):root.PatternSumoLegacy;
+const v3=typeof module!=='undefined'&&module.exports?require('./sumo-v3.js'):root.PatternSumoV3;
 const clamp=G.clamp,TAU=Math.PI*2,wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
 const unit=a=>({x:Math.cos(a),y:Math.sin(a)}),dot=(a,b)=>a.x*b.x+a.y*b.y;
 function traits(b){const p=G.phenotype(b);return {...p,massValue:1.8+1.2*p.mass+.2*p.bodyWidth,maxSpeed:42+32*p.speed,traction:.8+.2*p.grip+.03*p.claw+.03*(p.legSpread-.7),turnSpeed:2+2.5*p.turnRate,pushPower:82.5+45*p.strength};}
@@ -11,10 +12,10 @@ function support(t,heading,pushToward){
  const front=Math.max(0,facing),rear=Math.max(0,-facing),side=1-Math.abs(facing);
  return (.65+front*(.35+.65*t.brace)+side*(-.25+.3*t.lateralBalance)+rear*(-.25+.25*t.recovery))*t.traction*(.9+.2*t.mass);
 }
-function fighter(b,index,r){const t=traits(b);return {beetle:G.clone(b),t,index,x:index?108:-108,y:(r()-.5)*28,vx:0,vy:0,heading:index?Math.PI:0,targetHeading:index?Math.PI:0,energy:1,think:0,engaged:false,mode:'Finding the other beetle',flankSide:r()<.5?-1:1,wanderingTime:0,contactTime:0,edgeSaves:0,sideHits:0,rearHits:0,frontHits:0};}
+function fighter(b,index,r){const t=traits(b);return {beetle:G.clone(b),t,index,x:index?82:-82,y:(r()-.5)*28,vx:0,vy:0,heading:index?Math.PI:0,targetHeading:index?Math.PI:0,energy:1,think:0,engaged:false,mode:'Finding the other beetle',flankSide:r()<.5?-1:1,wanderingTime:0,contactTime:0,edgeSaves:0,sideHits:0,rearHits:0,frontHits:0};}
 function create(a,b,seed=Math.floor(Math.random()*4294967296),options={}){
- if(options.version==='SUMO2')return legacy.create(a,b,seed,options);
- const rng=G.seeded(seed),match={version:'SUMO3',seed,rng,time:0,tick:0,radius:205,bodyRadius:24,maxSeconds:options.maxSeconds||60,done:false,winner:null,reason:null,events:[],lastContact:-10,contact:false,fighters:[fighter(a,0,rng),fighter(b,1,rng)]};
+ if(options.version==='SUMO2')return legacy.create(a,b,seed,options);if(options.version==='SUMO3')return v3.create(a,b,seed,options);
+ const rng=G.seeded(seed),match={version:'SUMO4',seed,rng,time:0,tick:0,radius:160,bodyRadius:24,maxSeconds:options.maxSeconds||60,done:false,winner:null,reason:null,events:[],lastContact:-10,contact:false,fighters:[fighter(a,0,rng),fighter(b,1,rng)]};
  const rotation=rng()*TAU,c=Math.cos(rotation),s=Math.sin(rotation);
  for(const f of match.fighters){const x=f.x;f.x=x*c-f.y*s;f.y=x*s+f.y*c;f.heading+=rotation;f.targetHeading=f.heading;}
  return match;
@@ -45,7 +46,7 @@ function decide(m,f,other,otherVx,otherVy){
  f.think=.12+(1-t.reaction)*.62;
 }
 function step(m){
- if(m.version==='SUMO2')return legacy.step(m);
+ if(m.version==='SUMO2')return legacy.step(m);if(m.version==='SUMO3')return v3.step(m);
  if(m.done)return m;
  const dt=1/60;m.tick++;m.time=m.tick/60;
  const [a,b]=m.fighters;
@@ -94,11 +95,11 @@ function step(m){
  }
  for(const f of m.fighters){f.x+=f.vx*dt;f.y+=f.vy*dt;}
  const out=m.fighters.map(f=>Math.hypot(f.x,f.y)>m.radius);
- if(out.some(Boolean)){m.done=true;m.winner=out[0]&&out[1]?null:out[0]?1:0;m.reason=out[0]&&out[1]?'Both centers crossed the line':'Ring-out';}
- else if(m.time>=m.maxSeconds){m.done=true;m.winner=null;m.reason='Time limit — draw';}
+ if(out.some(Boolean)&&!out.every(Boolean)){m.done=true;m.winner=out[0]?1:0;m.reason='Ring-out';}
+ else if(out.every(Boolean)||m.time>=m.maxSeconds){m.done=true;const distances=m.fighters.map(f=>Math.hypot(f.x,f.y));m.centerDistances=distances;if(Math.abs(distances[0]-distances[1])<.01){m.winner=null;m.reason='Center tie';}else{m.winner=distances[0]<distances[1]?0:1;m.reason='Closest to center';}}
  return m;
 }
 function run(a,b,seed,options){const m=create(a,b,seed,options);while(!m.done)step(m);return m;}
-function record(m){if(m.version==='SUMO2')return legacy.record(m);return {version:m.version,seed:m.seed,seconds:Number(m.time.toFixed(2)),winner:m.winner,reason:m.reason,events:m.events.slice(),fighters:m.fighters.map(f=>({id:f.beetle.id,name:f.beetle.name,genomeFingerprint:G.checksum(JSON.stringify(f.beetle.genome)+f.beetle.developmentSeed),wanderingSeconds:Number(f.wanderingTime.toFixed(1)),contactSeconds:Number(f.contactTime.toFixed(1)),sidePushes:f.sideHits,rearPushes:f.rearHits,frontPushes:f.frontHits}))};}
+function record(m){if(m.version==='SUMO2')return legacy.record(m);if(m.version==='SUMO3')return v3.record(m);return {version:m.version,seed:m.seed,seconds:Number(m.time.toFixed(2)),winner:m.winner,reason:m.reason,...(m.centerDistances?{centerDistances:m.centerDistances.map(d=>Number(d.toFixed(3)))}:{}),events:m.events.slice(),fighters:m.fighters.map(f=>({id:f.beetle.id,name:f.beetle.name,genomeFingerprint:G.checksum(JSON.stringify(f.beetle.genome)+f.beetle.developmentSeed),wanderingSeconds:Number(f.wanderingTime.toFixed(1)),contactSeconds:Number(f.contactTime.toFixed(1)),sidePushes:f.sideHits,rearPushes:f.rearHits,frontPushes:f.frontHits}))};}
 const api={traits,support,create,step,run,record};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PatternSumo=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
