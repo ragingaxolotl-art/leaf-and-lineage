@@ -5,11 +5,11 @@ const ready=(two=false)=>{const s=G.createState(42);for(const id of ['B1','B2','
 test('Pattern Lab has 80 paired loci, seven chromosomes, and reproducible founders',()=>{
  const s=G.createState(42);assert.equal(G.loci.length,80);assert.equal(s.tank.length,16);assert.deepEqual(s,G.createState(42));assert.notDeepEqual(s,G.createState(43));G.validate(s);
 });
-test('Each transmitted copy at zero mutation is a real parental allele; linked copies cross at most once',()=>{
+test('Mendelian loci transmit actual parental alleles; strength has bounded quantitative segregation',()=>{
  const s=G.createState(),a=s.beetles.B1,b=s.beetles.B2,r=G.seeded(1);
  // Give every locus a distinct, valid homolog value to observe linkage.
  for(const c of G.chromosomes)for(const l of c.loci)if(l.type==='number')G.setCopies(a,l.key,l.min,l.max);
- for(let n=0;n<200;n++){const child=G.baby(a,b,'test',{rate:0,rng:r});assert.equal(child.mutations.length,0);for(let ci=0;ci<5;ci++){let switches=0,side=null;for(let i=0;i<G.chromosomes[ci].loci.length;i++){for(let parent=0;parent<2;parent++){const source=parent?b:a,allele=child.genome[ci].copies[parent][i];assert.ok(source.genome[ci].copies.some(cp=>JSON.stringify(cp[i])===JSON.stringify(allele)));}const l=G.chromosomes[ci].loci[i];if(l.type==='number'){const next=child.genome[ci].copies[0][i]===l.min?0:1;if(side!==null&&side!==next)switches++;side=next;}}assert.ok(switches<=1);}}
+ for(let n=0;n<200;n++){const child=G.baby(a,b,'test',{rate:0,rng:r});assert.equal(child.mutations.length,0);for(let ci=0;ci<5;ci++){let switches=0,side=null;for(let i=0;i<G.chromosomes[ci].loci.length;i++){for(let parent=0;parent<2;parent++){const source=parent?b:a,allele=child.genome[ci].copies[parent][i];if(G.chromosomes[ci].loci[i].key==='strength')assert.ok(Math.abs(allele-G.expressed(source,'strength'))<=.035000001);else assert.ok(source.genome[ci].copies.some(cp=>JSON.stringify(cp[i])===JSON.stringify(allele)));}const l=G.chromosomes[ci].loci[i];if(l.type==='number'&&l.key!=='strength'){const next=child.genome[ci].copies[0][i]===l.min?0:1;if(side!==null&&side!==next)switches++;side=next;}}assert.ok(switches<=1);}}
 });
 test('Hidden pattern gates follow independent Ss Tt inheritance without mutation',()=>{
  const s=G.createState(),a=s.beetles.B1,b=s.beetles.B2,r=G.seeded(921),n=6000,counts=[0,0,0];
@@ -26,7 +26,7 @@ test('Latent framework genes can reappear in descendants and rendered phenotype 
 });
 test('Single-jar rounds produce 10–20 babies, preserve parents, and retain only two newest broods',()=>{
  const s=ready(),r=G.seeded(92),parents=s.jars[0].members.slice(),seen=new Set();let total=0;
- for(let i=0;i<15;i++){const h=G.breedRound(s,{rng:r});seen.add(h.total);total+=h.total;assert.ok(h.total>=10&&h.total<=20);assert.equal(h.allocations.length,1);assert.equal(h.allocations[0].count,h.total);for(const id of h.offspring){const b=s.beetles[id];assert.equal(new Set(b.parents).size,2);assert.ok(b.parents.every(id=>parents.includes(id)));assert.equal(b.lineageGeneration,1);}}
+ for(let i=0;i<30;i++){const h=G.breedRound(s,{rng:r});seen.add(h.total);total+=h.total;assert.ok(h.total>=10&&h.total<=20);assert.equal(h.allocations.length,1);assert.equal(h.allocations[0].count,h.total);for(const id of h.offspring){const b=s.beetles[id];assert.equal(new Set(b.parents).size,2);assert.ok(b.parents.every(id=>parents.includes(id)));assert.equal(b.lineageGeneration,1);}}
  assert.ok(seen.size>=7);assert.deepEqual(s.jars[0].members,parents);const recent=s.history.slice(-2).reduce((n,h)=>n+h.total,0);assert.equal(s.tank.length,recent);assert.equal(s.nursery.length,0);assert.equal(Object.keys(s.beetles).length,4+recent);assert.equal(Object.keys(s.retired).length,16+total-4-recent);G.validate(s);
 });
 test('Two jars split the total, never cross parents, and the extra is not always assigned to one jar',()=>{

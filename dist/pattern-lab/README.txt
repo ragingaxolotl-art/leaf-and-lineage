@@ -27,7 +27,7 @@ HOW TO PLAY
 
 SUMO AND SHARING
 Choose red and blue beetles, then Start local match. Pause or adjust playback without changing the outcome.
-Tracking, reaction, focus, ring tactics, speed, grip, mass, bracing, balance and instincts are inherited spectra.
+Tracking, reaction, focus, ring tactics, speed, grip, mass, bracing, balance and instincts are inherited spectra. Sustained pushing uses muscle, alignment, grip and energy; speed helps approaching and circling. Strength uses a continuous many-gene breeding-value approximation: normal babies stay near the parents’ average, with small variation up or down. With mutation off, the difference is at most about 3.5 unrounded points. Most strength mutations are small; a rare subset can make a larger change. Existing beetles keep their stored strength. Other simple genes still pass actual parental copies. Old match notebooks replay with their original rules; new shared matches require the current rules on both screens.
 Front, side and rear pushes use different resistance. Wander-prone beetles may explore instead of pushing.
 There are no injuries, deaths or gene changes from a match. The match notebook records replays.
 To challenge another screen, expand Challenge another screen. The host chooses its red beetle and creates a code.

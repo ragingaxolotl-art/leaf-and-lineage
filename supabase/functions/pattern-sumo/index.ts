@@ -28,7 +28,7 @@ Deno.serve(async(req:Request)=>{
  try{
   if(Number(req.headers.get('content-length')||0)>48000)return reply({error:'Request too large.'},413);
   const text=await req.text();if(text.length>48000)return reply({error:'Request too large.'},413);
-  const data=JSON.parse(text),action=data.action;
+  const data=JSON.parse(text),action=data.action,model=data.model||'SUMO2';if(!['SUMO2','SUMO3'].includes(model))throw Error('Invalid battle model.');
   if(!['create','join','read','start','close'].includes(action))return reply({error:'Unknown room action.'},400);
   const token=data.token;if(typeof token!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(token))return reply({error:'This device needs a fresh room connection.'},400);
   const tokenHash=await digest(token),ip=(req.headers.get('x-forwarded-for')||'unknown').split(',')[0];
@@ -40,8 +40,8 @@ Deno.serve(async(req:Request)=>{
   if(!/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$/.test(code))return reply({error:'Enter the full eight-character room code.'},400);
   const seed=action==='start'?crypto.getRandomValues(new Uint32Array(1))[0]:null;
   let room;
-  for(let attempt=0;attempt<3;attempt++){try{room=await rpc('pattern_sumo_exchange',{p_action:action,p_code:code,p_token_hash:tokenHash,p_beetle:beetle,p_seed:seed});break;}catch(e){if(action==='create'&&(e as any).code==='23505'){code=randomCode();continue;}throw e;}}
+  for(let attempt=0;attempt<3;attempt++){try{room=await rpc('pattern_sumo_exchange_versioned',{p_action:action,p_code:code,p_token_hash:tokenHash,p_beetle:beetle,p_seed:seed,p_model:model});break;}catch(e){if(action==='create'&&(e as any).code==='23505'){code=randomCode();continue;}throw e;}}
   if(!room)throw Error('Please create a new room.');
   return reply({room,role:action==='create'?'host':action==='join'?'guest':undefined});
- }catch(e){const message=e instanceof Error?e.message:'Could not complete that room action.';const allowed=/code is unavailable|room already|Only the|Wait for|Invalid |room service|fresh room|Choose |too large|new room|more matches|beetle|gene|chromosome|copy|model|trait|identity/i.test(message);return reply({error:allowed?message:'Could not complete that room action. Check the code and try again.'},400);}
+ }catch(e){const message=e instanceof Error?e.message:'Could not complete that room action.';const allowed=/different battle rules|code is unavailable|room already|Only the|Wait for|Invalid |room service|fresh room|Choose |too large|new room|more matches|beetle|gene|chromosome|copy|model|trait|identity/i.test(message);return reply({error:allowed?message:'Could not complete that room action. Check the code and try again.'},400);}
 });

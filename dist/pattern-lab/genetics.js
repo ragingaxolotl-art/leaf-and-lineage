@@ -9,7 +9,7 @@ const chromosomes=[
  {id:'B',loci:[color('primary','First pattern color'),cat('layers','Second-color gate',['T','t']),cat('shape','Mark shape',['spot','mottle','stripe','speckle']),num('frontBias','Front / back placement',-1,1),num('edgeBias','Center / edge placement',-1,1),num('cluster','Clustering'),num('patternStretch','Mark stretch',.5,1.8)]},
  {id:'C',loci:[color('secondary','Second pattern color'),num('secondaryDensity','Second-layer density'),num('secondarySize','Second-layer size'),num('secondaryBias','Second-layer placement',-1,1),num('appendageShade','Appendage brightness',.35,1),num('banding','Appendage bands')]},
  {id:'D',loci:[cat('antenna','Antenna framework',['thread','bead','bristle','club','knob','saw','comb','doublecomb','fan','plates','elbow','plume','aristate']),num('antennaLength','Antenna length',.05,3),num('shaftWidth','Antenna width',.7,3.5),num('segments','Antenna segments',4,16),num('beadRoundness','Bead roundness'),num('curve','Antenna curve',-.5,.7),num('elbow','Elbow angle',0,85),num('tip','Tip enlargement'),num('branches','Branch count',2,14),num('branchLength','Branch length'),num('plateWidth','Fan / plate width'),cat('hairGate','Hair suppressor',['H','h']),num('hairDensity','Fine hair density'),num('hairLength','Fine hair length'),num('spread','Antenna spread',.15,1)]},
- {id:'E',loci:[cat('leg','Leg framework',['runner','sturdy','shovel','jumper','paddle','hooked','spiny','longfoot']),num('legLength','Leg length',.55,1.5),num('femur','Thigh thickness',.7,2.4),num('tibia','Shin width',.7,2),num('foot','Foot length',.5,1.8),num('joint','Joint angle',-.4,.4),num('legSpread','Leg spread',.7,1.4),num('claw','Claw curve'),num('spines','Spine density'),num('legHair','Leg hair density'),num('hind','Hind-leg emphasis'),num('motor','Motor speed'),num('stride','Stride drive'),num('strength','Strength')]}
+ {id:'E',loci:[cat('leg','Leg framework',['runner','sturdy','shovel','jumper','paddle','hooked','spiny','longfoot']),num('legLength','Leg length',.55,1.5),num('femur','Thigh thickness',.7,2.4),num('tibia','Shin width',.7,2),num('foot','Foot length',.5,1.8),num('joint','Joint angle',-.4,.4),num('legSpread','Leg spread',.7,1.4),num('claw','Claw curve'),num('spines','Spine density'),num('legHair','Leg hair density'),num('hind','Hind-leg emphasis'),num('motor','Motor speed'),num('stride','Stride drive'),{...num('strength','Strength breeding value'),model:'quantitative'}]}
 ];
 // All behavior and sumo measurements are continuous game traits, not species claims.
 chromosomes.push({id:'F',loci:[num('tracking','Opponent tracking'),num('reaction','Reaction speed'),num('focus','Attention focus'),num('pushDrive','Pushing instinct'),num('wander','Wandering instinct'),num('turnRate','Turning agility'),num('tactics','Ring tactics (game intelligence)'),num('edgeSense','Edge awareness'),num('brace','Bracing instinct'),num('lateralBalance','Sideways balance'),num('grip','Foot grip'),num('endurance','Endurance'),num('recovery','Recovery'),num('mass','Body mass'),num('acceleration','Acceleration'),num('centerDrive','Center preference'),num('curiosity','Curiosity'),num('sociality','Social approach'),num('caution','Caution'),num('persistence','Persistence')]});
@@ -52,13 +52,17 @@ function phenotype(b){
 }
 function mutate(a,l,rate,r){
  if(r()>=rate)return {allele:clone(a),changed:false};
+ if(l.key==='strength'){const large=r()<.05,delta=(r()<.5?-1:1)*(large?.24+r()*.32:.008+r()*.05),value=clamp(a+delta,l.min,l.max);return {allele:value,changed:value!==a};}
  if(l.type==='number'){const span=l.max-l.min,delta=(r()<.5?-1:1)*span*(.04+r()*.12);return {allele:clamp(a+delta,l.min,l.max),changed:true};}
  if(l.type==='color'){const v=clone(a),channel=Math.floor(r()*3);v.rgb[channel]=clamp(v.rgb[channel]+(r()<.5?-1:1)*(8+Math.floor(r()*40)),0,255);v.expression=clamp(v.expression+(r()-.5)*.3);return {allele:v,changed:true};}
  const alternatives=l.values.filter(v=>v!==a.value);return {allele:{value:pick(alternatives,r),expression:clamp(a.expression+(r()-.5)*.3)},changed:true};
 }
 function gamete(b,rate,r){
  const mutations=[];
- const chromosomesOut=chromosomes.map((c,ci)=>{let side=r()<.5?0:1;const cross=r()<.35?1+Math.floor(r()*(c.loci.length-1)):-1;return c.loci.map((l,i)=>{if(i===cross)side=1-side;const m=mutate(b.genome[ci].copies[side][i],l,rate,r);if(m.changed)mutations.push(l.key);return m.allele;});});
+ const chromosomesOut=chromosomes.map((c,ci)=>{let side=r()<.5?0:1;const cross=r()<.35?1+Math.floor(r()*(c.loci.length-1)):-1;return c.loci.map((l,i)=>{if(i===cross)side=1-side;// Strength is an aggregate of many small effects: a continuous breeding-value
+ // approximation, rather than a single dominant/recessive allele. Other loci
+ // still transmit actual parental copies and retain chromosome linkage.
+ const inherited=l.key==='strength'?clamp(expressed(b,'strength')+.035*(r()+r()-1)):b.genome[ci].copies[side][i];const m=mutate(inherited,l,rate,r);if(m.changed)mutations.push(l.key);return m.allele;});});
  return {chromosomes:chromosomesOut,mutations};
 }
 function baby(a,b,id,{rate=.005,rng=Math.random,jarId=null,broodId=null}={}){
@@ -144,7 +148,7 @@ function validate(s){
  if(!Number.isFinite(s.settings.mutation)||s.settings.mutation<0||s.settings.mutation>.1||!['moss','sand','bark','night'].includes(s.settings.backdrop)||typeof s.settings.showStats!=='boolean'||typeof s.settings.allowBackdrop!=='boolean')throw Error('Invalid settings.');
  if(typeof s.settings.allowSumo!=='boolean'||!Array.isArray(s.matchHistory)||s.matchHistory.length>100)throw Error('Invalid sumo records.');
  for(const m of s.matchHistory){
-  if(!m||m.version!=='SUMO2'||!Number.isInteger(m.seed)||m.seed<0||m.seed>4294967295||!Number.isFinite(m.seconds)||m.seconds<0||m.seconds>60.1||![null,0,1].includes(m.winner)||!['Ring-out','Both centers crossed the line','Time limit — draw'].includes(m.reason)||!Array.isArray(m.fighters)||m.fighters.length!==2||!Array.isArray(m.events)||m.events.length>120)throw Error('Invalid saved match.');
+  if(!m||!['SUMO2','SUMO3'].includes(m.version)||!Number.isInteger(m.seed)||m.seed<0||m.seed>4294967295||!Number.isFinite(m.seconds)||m.seconds<0||m.seconds>60.1||![null,0,1].includes(m.winner)||!['Ring-out','Both centers crossed the line','Time limit — draw'].includes(m.reason)||!Array.isArray(m.fighters)||m.fighters.length!==2||!Array.isArray(m.events)||m.events.length>120)throw Error('Invalid saved match.');
   for(const f of m.fighters){if(!f||typeof f.id!=='string'||f.id.length>80||typeof f.name!=='string'||f.name.length>40||['wanderingSeconds','contactSeconds','sidePushes','rearPushes','frontPushes'].some(k=>!Number.isFinite(f[k])||f[k]<0||f[k]>120))throw Error('Invalid fighter record.');}
   for(const e of m.events)if(!e||!Number.isFinite(e.time)||e.time<0||e.time>60.1||![0,1].includes(e.attacker)||![0,1].includes(e.defender)||e.attacker===e.defender||!['front','side','rear'].includes(e.side))throw Error('Invalid contact record.');
   if(m.participants!==undefined){if(!Array.isArray(m.participants)||m.participants.length!==2)throw Error('Invalid replay data.');m.participants.forEach(validatePacket);}

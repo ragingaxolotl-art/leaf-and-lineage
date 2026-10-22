@@ -25,8 +25,8 @@ test('Bracing protects front pushes; lateral balance and recovery protect differ
 test('Wandering and pushing instincts produce measurably different choices',()=>{
  const wanderer=specimen(),pusher=G.clone(wanderer),other=G.createState().beetles.B7;for(const [key,value] of Object.entries({pushDrive:0,wander:1,focus:0,persistence:0,curiosity:0}))G.setCopies(wanderer,key,value);for(const [key,value] of Object.entries({pushDrive:1,wander:0,focus:1,persistence:1,curiosity:0}))G.setCopies(pusher,key,value);let w=0,p=0,secondsW=0,secondsP=0;for(let seed=1;seed<=30;seed++){const a=S.run(wanderer,other,seed),b=S.run(pusher,other,seed);w+=a.fighters[0].wanderingTime;p+=b.fighters[0].wanderingTime;secondsW+=a.time;secondsP+=b.time;}assert.ok(w/secondsW>p/secondsP+.4);
 });
-test('Identical opponents do not get a systematic red-corner advantage',()=>{
- const a=specimen(),b=G.clone(a);b.id='B999';let red=0,blue=0;for(let seed=0;seed<160;seed++){const m=S.run(a,b,seed);if(m.winner===0)red++;if(m.winner===1)blue++;}assert.ok(Math.abs(red-blue)<35,JSON.stringify({red,blue}));assert.ok(red>15&&blue>15);
+test('Identical opponents across four different genotypes have no systematic corner advantage',()=>{
+ const state=G.createState();let red=0,blue=0;for(const id of ['B1','B3','B7','B11'])for(let seed=0;seed<1000;seed++){const m=S.run(state.beetles[id],state.beetles[id],seed);if(m.winner===0)red++;if(m.winner===1)blue++;}assert.ok(red>80&&blue>80,JSON.stringify({red,blue}));assert.ok(Math.abs(red-blue)<.1*(red+blue),JSON.stringify({red,blue}));
 });
 test('Colors and cosmetic patterns do not decide sumo winners',()=>{
  const s=G.createState(),a=s.beetles.B3,b=s.beetles.B7,c=G.clone(a);G.setCopies(c,'body',{rgb:[255,0,0],expression:1});G.setCopies(c,'plain',{value:'S',expression:1});for(let seed=0;seed<20;seed++){const x=S.run(a,b,seed),y=S.run(c,b,seed);assert.equal(x.winner,y.winner);assert.equal(x.tick,y.tick);assert.deepEqual(x.events,y.events);}
