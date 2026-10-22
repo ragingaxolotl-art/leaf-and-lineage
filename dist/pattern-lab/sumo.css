@@ -13,3 +13,15 @@
 
 .tree-node>button{display:flex;flex-direction:column;align-items:center;min-width:116px;max-width:170px;padding:8px 12px;gap:4px}.tree-node>button svg{display:block;width:112px;height:142px;overflow:hidden}.tree-node>button:disabled{opacity:.8;cursor:default}.tree-node>button small{max-width:145px}.missing-portrait{font-size:44px;color:#9ba78d;line-height:130px}.tree-parents{gap:18px}.tree-node{flex-shrink:0}#family-tree-content{overflow:auto;padding:12px}.tree-node .leg-swing{animation:none}
 .tree-node>button{margin-inline:auto}
+
+/* Action telegraphs and trails sit on the existing art; no life or KO meter. */
+.fighter.winding-lift svg{filter:drop-shadow(0 -4px 3px #ffe7a7);transform:translate(-50%,-72%) rotate(-5deg)}
+.fighter.winding-jump svg{transform:translate(-50%,-65%) scale(1.07,.88);filter:drop-shadow(0 0 4px #b9e9ef)}
+.fighter.winding-puff svg{filter:drop-shadow(0 0 5px #f9ce70)}
+.fighter.airborne svg{transform:translate(-50%,calc(-69% - var(--hop)*25%)) scale(calc(1 + var(--hop)*.12));filter:drop-shadow(3px 15px 4px #10292155)}
+.fighter.lifted svg{transform:translate(-50%,-78%) rotate(-12deg);filter:drop-shadow(4px 10px 3px #10292177)}
+.fighter.dizzy svg{filter:drop-shadow(0 0 6px #e8d787);opacity:.8}
+.fighter.move-puff:before{content:'';position:absolute;left:-20%;top:-90%;width:140%;height:95%;border-radius:40% 60% 60% 45%;background:radial-gradient(ellipse,#fff1b5cc 10%,#eac463aa 45%,#f7efc000 72%);box-shadow:15px -8px 0 -8px #f9df8b77,-15px -12px 0 -5px #f7e3ab66;pointer-events:none}
+.fighter.move-jump:before{content:'';position:absolute;inset:15% -12%;border:2px dashed #b8e1cf99;border-radius:50%;pointer-events:none}
+.fighter.move-lift:before{content:'↟';position:absolute;top:-75%;left:25%;font:bold 28px system-ui;color:#ffe8a6;text-shadow:0 2px 2px #263f36;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.fighter.airborne svg,.fighter.lifted svg,.fighter.winding-jump svg,.fighter.winding-lift svg{transform:translate(-50%,-69%)}.fighter.move-jump:before{border-style:solid}}

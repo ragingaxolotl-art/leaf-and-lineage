@@ -19,11 +19,11 @@ test('Greater speed actually closes the approach gap faster, independently of pu
  const a=S.create(slow,other,123),b=S.create(fast,other,123);for(let n=0;n<30;n++){S.step(a);S.step(b);}const distance=m=>Math.hypot(m.fighters[0].x-m.fighters[1].x,m.fighters[0].y-m.fighters[1].y);assert.ok(distance(b)<distance(a)-3);
 });
 test('Endurance preserves energy during the same sustained effort',()=>{
- const m=S.create(beetle('Durable',{endurance:.9}),beetle('Tires',{endurance:.1}),41);m.contact=true;for(const [i,f]of m.fighters.entries()){f.x=i?23:-23;f.y=0;f.vx=f.vy=0;f.heading=f.targetHeading=i?Math.PI:0;f.engaged=true;f.think=100;}
+ const m=S.create(beetle('Durable',{endurance:.9,horn:0}),beetle('Tires',{endurance:.1,horn:0}),41);m.contact=true;for(const [i,f]of m.fighters.entries()){f.x=i?23:-23;f.y=0;f.vx=f.vy=0;f.heading=f.targetHeading=i?Math.PI:0;f.engaged=true;f.think=100;}
  for(let n=0;n<180&&!m.done;n++)S.step(m);assert.ok(m.fighters[0].energy>m.fighters[1].energy+.01);
 });
 test('Old SUMO2 notebooks replay with their original physics and both versions save correctly',()=>{
- const s=G.createState(),a=s.beetles.B3,b=s.beetles.B7;const old=S.run(a,b,753,{version:'SUMO2'}),expected=Legacy.run(a,b,753),current=S.run(a,b,753);assert.deepEqual(S.record(old),Legacy.record(expected));assert.equal(current.version,'SUMO5');s.matchHistory=[S.record(old),S.record(current)];G.validate(G.clone(s));
+ const s=G.createState(),a=s.beetles.B3,b=s.beetles.B7;const old=S.run(a,b,753,{version:'SUMO2'}),expected=Legacy.run(a,b,753),current=S.run(a,b,753);assert.deepEqual(S.record(old),Legacy.record(expected));assert.equal(current.version,'SUMO6');s.matchHistory=[S.record(old),S.record(current)];G.validate(G.clone(s));
 });
 test('Mutation-free strength stays within 3.5 points of the parental mean, including extreme hidden values',()=>{
  const a=beetle('A'),b=beetle('B'),r=G.seeded(672);G.setCopies(a,'strength',0,1);G.setCopies(b,'strength',0,1);let above=0,below=0;

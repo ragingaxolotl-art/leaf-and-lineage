@@ -1,6 +1,6 @@
 (function(root){
 'use strict';
-const SHARED_SPEED=10,SHARED_MODEL='SUMO5X10';
+const SHARED_SPEED=10,SHARED_MODEL='SUMO6X10';
 const G=typeof module!=='undefined'&&module.exports?require('./genetics.js'):root.PatternGenetics;
 // A monotonic server-time estimate. Prefer short round trips over delayed replies.
 function createClock({wallNow=()=>Date.now(),monoNow=()=>performance.now()}={}){

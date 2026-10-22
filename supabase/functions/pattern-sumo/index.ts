@@ -12,15 +12,19 @@ async function rpc(name:string,body:unknown){
  const response=await fetch(base+'/rest/v1/rpc/'+name,{method:'POST',headers,body:JSON.stringify(body)}),value=await response.json();
  if(!response.ok){const e:any=new Error(value.message||'The room service is unavailable.');e.code=value.code;throw e;}return value;
 }
-function cleanPacket(input:any,model:string='SUMO5'){
+function cleanPacket(input:any,model:string='SUMO6X10'){
  const raw=input?.beetle;if(!raw)throw Error('Choose a beetle before sharing.');
  const packet=G.validatePacket({format:'PatternLabBeetle',version:2,beetle:{id:'B1',name:'',parents:[],sourceJarId:null,broodId:null,lineageGeneration:raw.lineageGeneration,developmentSeed:raw.developmentSeed,genome:raw.genome,mutations:Array.isArray(raw.mutations)?raw.mutations:[]}});
- const genome=packet.beetle.genome,body=genome[0].copies.map((cp:any[])=>cp[0]),colors=genome[8];
+ const genome=packet.beetle.genome;
+ const neutralAbilities=JSON.stringify(genome[9])===JSON.stringify(G.neutralAbilities());
+ if(neutralAbilities)genome.pop();
+ if(!['SUMO6','SUMO6X10'].includes(model)&&!neutralAbilities)throw Error('This beetle needs the latest battle rules. Refresh both screens.');
+ const body=genome[0].copies.map((cp:any[])=>cp[0]),colors=genome[8];
  const neutralColors=colors&&colors.copies.every((cp:any[],i:number)=>cp.every((a:any)=>JSON.stringify(a)===JSON.stringify(body[i])));
- if(neutralColors)genome.pop();
+ if(neutralColors&&genome.length===9)genome.pop();
  const h=genome[7],neutralGrowth=h&&h.copies.every((cp:any[])=>cp.every((a:any,i:number)=>i<6?a===0:a.value===(i===6?'single':'spike')&&a.expression===.5));
- if(!['SUMO5','SUMO5X10'].includes(model)&&(!neutralGrowth||!neutralColors))throw Error('This beetle needs the latest battle rules. Refresh both screens.');
- if(neutralGrowth&&neutralColors){genome.pop();packet.version=2;}
+ if(!['SUMO5','SUMO5X10','SUMO6','SUMO6X10'].includes(model)&&(!neutralGrowth||!neutralColors))throw Error('This beetle needs the latest battle rules. Refresh both screens.');
+ if(neutralGrowth&&neutralColors&&genome.length===8){genome.pop();packet.version=2;}
  if(JSON.stringify(packet).length>24000)throw Error('This beetle file is too large.');return packet;
 }
 Deno.serve(async(req:Request)=>{
@@ -34,7 +38,7 @@ Deno.serve(async(req:Request)=>{
  try{
   if(Number(req.headers.get('content-length')||0)>48000)return reply({error:'Request too large.'},413);
   const text=await req.text();if(text.length>48000)return reply({error:'Request too large.'},413);
-  const data=JSON.parse(text),action=data.action,model=data.model||'SUMO2';if(!['SUMO2','SUMO3','SUMO4','SUMO5','SUMO5X10'].includes(model))throw Error('Invalid battle model.');
+  const data=JSON.parse(text),action=data.action,model=data.model||'SUMO2';if(!['SUMO2','SUMO3','SUMO4','SUMO5','SUMO5X10','SUMO6','SUMO6X10'].includes(model))throw Error('Invalid battle model.');
   if(!['create','join','read','start','close'].includes(action))return reply({error:'Unknown room action.'},400);
   const token=data.token;if(typeof token!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(token))return reply({error:'This device needs a fresh room connection.'},400);
   const tokenHash=await digest(token),ip=(req.headers.get('x-forwarded-for')||'unknown').split(',')[0];
