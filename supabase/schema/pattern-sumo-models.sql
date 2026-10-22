@@ -4,7 +4,7 @@ create or replace function public.pattern_sumo_exchange_versioned(p_action text,
 returns jsonb language plpgsql security invoker set search_path=pg_catalog,public as $$
 declare result jsonb; model text;
 begin
- if p_model not in ('SUMO2','SUMO3','SUMO4','SUMO5') then raise exception 'Invalid battle model'; end if;
+ if p_model not in ('SUMO2','SUMO3','SUMO4','SUMO5','SUMO5X10') then raise exception 'Invalid battle model'; end if;
  if p_action<>'create' then
   select physics_version into model from public.pattern_sumo_rooms where code=p_code and expires_at>now() for update;
   if found and model<>p_model then raise exception 'These screens use different battle rules. Open the latest lab on both screens and create a new code'; end if;

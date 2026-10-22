@@ -166,3 +166,9 @@ Family-tree nodes display fitted portraits, names and generations. New retired r
 ## Simple bar report — release 20261022-13
 
 Inspect a beetle and choose **Simple trait report** for the earlier horizontal bar view. It shows expressed movement/pushing traits, body dimensions and behavioral spectra, plus a fitted portrait and visible colors. Index traits use 0–100; dimensional bars use current model bounds and display relative units. Horn counts and frameworks are named separately. Hidden pigment copies and chromosome records stay in the full technical report. The printable HTML download retains the same readable bars. Teacher labs always have access; student class links follow the existing full-genetics permission. This does not add graphs to the student raw-data notebook or change any genes, saves or sumo rules.
+
+## Friend battles at 10× — release 20261022-14
+
+Shared friend battles now advance ten simulated seconds per real second, with the same SUMO5 fixed-step physics, seeds and winner. Both screens derive their target simulation tick from the shared start time multiplied by ten, including after delayed polls or a background tab. The three-second countdown and six-second winner celebration retain their real-time durations; celebration timing uses simulated finish time divided by ten. The shared playback selector shows a locked 10× value. Local matches and recorded replays retain adjustable playback.
+
+New friend rooms identify their synchronized presentation as SUMO5X10 while retaining SUMO5 physics. The service still accepts prior room versions, and rejects cross-version joining so an older 1× screen cannot join a new 10× room. Refresh both screens and create a new code to use the new speed. No genes, results, table permissions or rate limits change.

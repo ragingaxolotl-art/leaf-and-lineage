@@ -34,7 +34,7 @@ Front, side and rear pushes use different resistance. Wander-prone beetles may e
 There are no injuries, deaths or gene changes from a match. The match notebook records replays.
 To challenge another screen, expand Battle together on two computers. The host chooses its red beetle and creates a code.
 The other child chooses their red beetle, enters the code and sends it. The host starts the shared match.
-Both screens share a three-second countdown, the same fixed-step moves and the same result.
+Both screens share a three-second countdown, the same fixed-step moves and the same result. Friend battles run at 10× speed on both screens: sixty simulated seconds take six real seconds after the countdown. The countdown and six-second victory dance remain at normal speed. Both classmates should refresh the lab and create a new room code for synchronized 10× playback. Local playback remains adjustable.
 The client corrects its clock using short server round trips; a screen returning from a background tab catches up.
 Small timing differences remain possible on slow connections. The winner gets confetti and a short dance
 on both screens, and the winning student sees Your beetle wins. Reduced-motion settings show a still celebration.

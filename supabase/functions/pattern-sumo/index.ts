@@ -19,7 +19,7 @@ function cleanPacket(input:any,model:string='SUMO5'){
  const neutralColors=colors&&colors.copies.every((cp:any[],i:number)=>cp.every((a:any)=>JSON.stringify(a)===JSON.stringify(body[i])));
  if(neutralColors)genome.pop();
  const h=genome[7],neutralGrowth=h&&h.copies.every((cp:any[])=>cp.every((a:any,i:number)=>i<6?a===0:a.value===(i===6?'single':'spike')&&a.expression===.5));
- if(model!=='SUMO5'&&(!neutralGrowth||!neutralColors))throw Error('This beetle needs the latest battle rules. Refresh both screens.');
+ if(!['SUMO5','SUMO5X10'].includes(model)&&(!neutralGrowth||!neutralColors))throw Error('This beetle needs the latest battle rules. Refresh both screens.');
  if(neutralGrowth&&neutralColors){genome.pop();packet.version=2;}
  if(JSON.stringify(packet).length>24000)throw Error('This beetle file is too large.');return packet;
 }
@@ -34,7 +34,7 @@ Deno.serve(async(req:Request)=>{
  try{
   if(Number(req.headers.get('content-length')||0)>48000)return reply({error:'Request too large.'},413);
   const text=await req.text();if(text.length>48000)return reply({error:'Request too large.'},413);
-  const data=JSON.parse(text),action=data.action,model=data.model||'SUMO2';if(!['SUMO2','SUMO3','SUMO4','SUMO5'].includes(model))throw Error('Invalid battle model.');
+  const data=JSON.parse(text),action=data.action,model=data.model||'SUMO2';if(!['SUMO2','SUMO3','SUMO4','SUMO5','SUMO5X10'].includes(model))throw Error('Invalid battle model.');
   if(!['create','join','read','start','close'].includes(action))return reply({error:'Unknown room action.'},400);
   const token=data.token;if(typeof token!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(token))return reply({error:'This device needs a fresh room connection.'},400);
   const tokenHash=await digest(token),ip=(req.headers.get('x-forwarded-for')||'unknown').split(',')[0];
