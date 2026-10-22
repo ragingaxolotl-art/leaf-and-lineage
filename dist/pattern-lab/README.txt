@@ -32,9 +32,13 @@ Choose red and blue beetles, then Start local match. Pause or adjust playback wi
 Tracking, reaction, focus, ring tactics, speed, grip, mass, bracing, balance and instincts are inherited spectra. Sustained pushing uses muscle, alignment, grip and energy; speed helps approaching and circling. All 53 continuous anatomy and behavior values use a many-gene breeding-value approximation. Babies normally stay near the parents’ average with small variation up or down. Most mutations are small; occasional larger effects can shift a value further. The classroom mutation setting controls frequency. Existing beetles retain their stored values. Appearance genes still pass real parental copies, so hidden colors and patterns can reappear. The field-mark tags are consistent clues to discover through observation. Full-stat class links retain explicit measurements. The smaller legal ring has concentric distance guides. A single ring-out wins immediately; at 60 seconds, or a simultaneous double exit, the closer beetle wins. Nearly equal distances can tie. Old match notebooks replay with their original rules; new shared matches require the current rules on both screens.
 Front, side and rear pushes use different resistance. Wander-prone beetles may explore instead of pushing.
 There are no injuries, deaths or gene changes from a match. The match notebook records replays.
-To challenge another screen, expand Challenge another screen. The host chooses its red beetle and creates a code.
+To challenge another screen, expand Battle together on two computers. The host chooses its red beetle and creates a code.
 The other child chooses their red beetle, enters the code and sends it. The host starts the shared match.
-Both screens use the same seed, physics and result. Each new match has fresh decision rolls.
+Both screens share a three-second countdown, the same fixed-step moves and the same result.
+The client corrects its clock using short server round trips; a screen returning from a background tab catches up.
+Small timing differences remain possible on slow connections. The winner gets confetti and a short dance
+on both screens, and the winning student sees Your beetle wins. Reduced-motion settings show a still celebration.
+Each new match has fresh decision rolls. Rematches clear the old celebration.
 Only the selected beetle's anonymous genetic packet is sent, not names, notes or the rest of the tank.
 Codes expire in two hours. Create a new code to change the shared beetles. The code service needs internet.
 
