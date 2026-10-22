@@ -1,0 +1,132 @@
+{
+  "genomeVersion": "pattern-v1",
+  "id": "beetle-1042",
+  "parents": [
+    "beetle-821",
+    "beetle-846"
+  ],
+  "chromosomePairs": [
+    {
+      "id": "A",
+      "blocks": {
+        "bodyPigment": {
+          "copies": [
+            {
+              "rgb": [
+                60,
+                145,
+                88
+              ],
+              "expression": 0.8
+            },
+            {
+              "rgb": [
+                206,
+                170,
+                54
+              ],
+              "expression": 0.3
+            }
+          ]
+        },
+        "patternSuppressor": {
+          "copies": [
+            "S",
+            "s"
+          ]
+        },
+        "density": {
+          "copies": [
+            0.35,
+            0.55
+          ]
+        }
+      }
+    },
+    {
+      "id": "B",
+      "blocks": {
+        "primaryPatternPigment": {
+          "copies": [
+            {
+              "rgb": [
+                224,
+                165,
+                55
+              ],
+              "expression": 0.6
+            },
+            {
+              "rgb": [
+                70,
+                85,
+                190
+              ],
+              "expression": 0.4
+            }
+          ]
+        },
+        "secondColorGate": {
+          "copies": [
+            "T",
+            "t"
+          ]
+        },
+        "frontBackBias": {
+          "copies": [
+            -0.2,
+            0.1
+          ]
+        }
+      }
+    },
+    {
+      "id": "C",
+      "blocks": {
+        "secondaryPatternPigment": {
+          "copies": [
+            {
+              "rgb": [
+                90,
+                45,
+                160
+              ],
+              "expression": 0.5
+            },
+            {
+              "rgb": [
+                190,
+                60,
+                76
+              ],
+              "expression": 0.7
+            }
+          ]
+        },
+        "markShape": {
+          "copies": [
+            "spot",
+            "mottle"
+          ]
+        },
+        "markRadius": {
+          "copies": [
+            0.08,
+            0.12
+          ]
+        }
+      }
+    }
+  ],
+  "developmentSeed": 372019,
+  "phenotypeCache": {
+    "derivedFromGenome": true,
+    "bodyRgb": [
+      60,
+      145,
+      88
+    ],
+    "visiblePatternLayers": []
+  },
+  "note": "Illustrative subset, not the complete schema. This Ss beetle looks plain; both pattern pigment blocks and the T/t gate still exist and can be inherited. Actual homolog order and locus positions must be stored before implementing recombination."
+}

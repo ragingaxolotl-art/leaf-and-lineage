@@ -1,0 +1,132 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Leaf & Lineage — Pattern Lab genetics plan</title><style>body{font:16px/1.6 system-ui,sans-serif;max-width:1080px;margin:36px auto;padding:24px;color:#253d30;background:#faf9f2}h1,h2,h3{line-height:1.2}h1{font:700 38px Georgia,serif}h2{margin-top:32px}table{border-collapse:collapse;width:100%;background:#fff}th,td{vertical-align:top;padding:12px;border-bottom:1px solid #dce2d4;text-align:left}thead{background:#e7eddc}.note{padding:16px 20px;background:#e9eedf;border-radius:12px}code,pre{font:13px/1.5 ui-monospace,monospace}pre{overflow:auto;background:#f0f1e9;padding:16px}a{color:#286144}@media(max-width:700px){body{padding:16px}table{font-size:14px}td,th{padding:8px}}</style><h1>Pattern Lab: larger beetles, inherited spots and mottles</h1><p>Design proposal · October 21, 2026 · The advanced game is planned, not implemented.</p><div class="note"><strong>Keep Simplified v1.0 intact.</strong> The current game is preserved at <a href="https://ragingaxolotl-art.github.io/leaf-and-lineage/simplified/">/simplified/</a>, with separate teacher links, an offline copy and a version manifest. Develop Pattern Lab as a separate edition and route. Existing class links must continue to open the correct edition.</div><h2>1. What “random” means</h2><p>Offspring get random parental transmissions and occasional mutations. They can have no visible pattern, one pattern color, or two pattern colors. A plain beetle still carries genes for its hidden pattern colors, size and arrangement. Its visible pattern is generated once and remains fixed for its lifetime; opening the inspector, resizing the page or watching the bird must not repaint it.</p><p>This is an invented teaching model of inheritance, linkage, gene interactions and selection. We would not present these genes as actual beetle genetics.</p><h2>2. Traits and genetic rules</h2><table><thead><tr><th>Trait</th><th>Proposed data and rule</th><th>Result students can observe</th></tr></thead><tbody><tr><td>Body color</td><td>Two linked color recipes; each includes full-range RGB and expression strength.</td><td>The stronger recipe supplies the base; equal strengths blend. No fixed color ranking.</td></tr><tr><td>Pattern visibility</td><td>A suppressor gene S/s: SS or Ss is plain; ss allows the pattern.</td><td>Plain carriers can pass s and all underlying pattern genes to descendants.</td></tr><tr><td>One or two pattern colors</td><td>A separate T/t gate: with pattern visible, T_ shows one color and tt permits two.</td><td>Its gate is on a different chromosome pair from S so the introductory cross is predictable.</td></tr><tr><td>Pattern colors 1 and 2</td><td>Each has its own pair of linked RGB/expression recipes.</td><td>Colors are inherited even when their layer is hidden. Any RGB color is reachable; there is no tiny fixed palette.</td></tr><tr><td>Spots versus mottles</td><td>A shape locus controls round spots, irregular spots, or merged soft mottles.</td><td>A heterozygote can have an intermediate shape. It does not receive a whole unrelated new pattern at birth.</td></tr><tr><td>Mark count and size</td><td>A few additive loci control density and radius, with bounds.</td><td>Several genes contribute, so siblings vary around family tendencies; number and size remain separate.</td></tr><tr><td>Distribution</td><td>Additive biases for front/back, center/edges, and clustering/spread.</td><td>Parents pass regional tendencies, rather than an arbitrary list of random pixels.</td></tr><tr><td>Symmetry and edge softness</td><td>One or more loci control left/right mirroring, jitter amplitude, and spot edge softness.</td><td>Variation can produce neatly paired spots or irregular mottling without changing the genes during a redraw.</td></tr></tbody></table><p>A practical first version would have roughly 25–35 loci, each with two copies. The exact count should follow a renderer prototype. Use three chromosome pairs with color recipes stored as linked blocks; preserve actual homolog order. Start with an explicitly documented dominance/recessiveness rule for each discrete gene and additive rules for continuous traits. Avoid one global dominance order for colors.</p><h2>3. A useful classroom cross</h2><p>Two plain parents can both be <code>Ss Tt</code>, carrying hidden pattern colors. With S and T on separate chromosome pairs and mutation off, the expected offspring are:</p><table><thead><tr><th>Visible outcome</th><th>Chance</th><th>Why</th></tr></thead><tbody><tr><td>Plain</td><td>75%</td><td>At least one S suppresses the pattern.</td></tr><tr><td>One pattern color</td><td>18.75%</td><td>ss permits pattern; T_ keeps the second color hidden.</td></tr><tr><td>Two pattern colors</td><td>6.25%</td><td>ss tt reveals both layers.</td></tr></tbody></table><p>Each baby is an independent draw; a small brood need not match these percentages. All pattern colors and arrangements come from the parents’ real gene copies. Mutation is not needed for this surprise.</p><h2>4. Separate genome, appearance and development</h2><p><strong>Genome:</strong> inherited copies, chromosome/homolog order, locus positions and mutation records. There is no separate “hidden blue” label or ancestral archive: hidden copies are normal genes whose effects are masked.</p><p><strong>Phenotype:</strong> computed body color and pattern layers, including mark centers, sizes, colors and softness. This can be cached for speed but must remain derived data. A plain coat produces zero visible layers without deleting their genes.</p><p><strong>Development seed:</strong> stable for that individual, providing small non-inherited variations in mark edges and jitter. Shared genetic layout rules should account for most family resemblance. Developmental noise must never overwhelm inherited placement, or be confused with mutation.</p><p><a href="pattern-genetic-data-example.json">Download an illustrative data record</a>. It is a partial sketch; actual chromosome order and locus positions are required before implementing linked recombination.</p><pre>{
+  &quot;genomeVersion&quot;: &quot;pattern-v1&quot;,
+  &quot;id&quot;: &quot;beetle-1042&quot;,
+  &quot;parents&quot;: [
+    &quot;beetle-821&quot;,
+    &quot;beetle-846&quot;
+  ],
+  &quot;chromosomePairs&quot;: [
+    {
+      &quot;id&quot;: &quot;A&quot;,
+      &quot;blocks&quot;: {
+        &quot;bodyPigment&quot;: {
+          &quot;copies&quot;: [
+            {
+              &quot;rgb&quot;: [
+                60,
+                145,
+                88
+              ],
+              &quot;expression&quot;: 0.8
+            },
+            {
+              &quot;rgb&quot;: [
+                206,
+                170,
+                54
+              ],
+              &quot;expression&quot;: 0.3
+            }
+          ]
+        },
+        &quot;patternSuppressor&quot;: {
+          &quot;copies&quot;: [
+            &quot;S&quot;,
+            &quot;s&quot;
+          ]
+        },
+        &quot;density&quot;: {
+          &quot;copies&quot;: [
+            0.35,
+            0.55
+          ]
+        }
+      }
+    },
+    {
+      &quot;id&quot;: &quot;B&quot;,
+      &quot;blocks&quot;: {
+        &quot;primaryPatternPigment&quot;: {
+          &quot;copies&quot;: [
+            {
+              &quot;rgb&quot;: [
+                224,
+                165,
+                55
+              ],
+              &quot;expression&quot;: 0.6
+            },
+            {
+              &quot;rgb&quot;: [
+                70,
+                85,
+                190
+              ],
+              &quot;expression&quot;: 0.4
+            }
+          ]
+        },
+        &quot;secondColorGate&quot;: {
+          &quot;copies&quot;: [
+            &quot;T&quot;,
+            &quot;t&quot;
+          ]
+        },
+        &quot;frontBackBias&quot;: {
+          &quot;copies&quot;: [
+            -0.2,
+            0.1
+          ]
+        }
+      }
+    },
+    {
+      &quot;id&quot;: &quot;C&quot;,
+      &quot;blocks&quot;: {
+        &quot;secondaryPatternPigment&quot;: {
+          &quot;copies&quot;: [
+            {
+              &quot;rgb&quot;: [
+                90,
+                45,
+                160
+              ],
+              &quot;expression&quot;: 0.5
+            },
+            {
+              &quot;rgb&quot;: [
+                190,
+                60,
+                76
+              ],
+              &quot;expression&quot;: 0.7
+            }
+          ]
+        },
+        &quot;markShape&quot;: {
+          &quot;copies&quot;: [
+            &quot;spot&quot;,
+            &quot;mottle&quot;
+          ]
+        },
+        &quot;markRadius&quot;: {
+          &quot;copies&quot;: [
+            0.08,
+            0.12
+          ]
+        }
+      }
+    }
+  ],
+  &quot;developmentSeed&quot;: 372019,
+  &quot;phenotypeCache&quot;: {
+    &quot;derivedFromGenome&quot;: true,
+    &quot;bodyRgb&quot;: [
+      60,
+      145,
+      88
+    ],
+    &quot;visiblePatternLayers&quot;: []
+  },
+  &quot;note&quot;: &quot;Illustrative subset, not the complete schema. This Ss beetle looks plain; both pattern pigment blocks and the T/t gate still exist and can be inherited. Actual homolog order and locus positions must be stored before implementing recombination.&quot;
+}</pre><h2>5. How marks get placed</h2><p>Use fixed candidate anchors in normalized shell coordinates, shared across all beetles. Count/density genes determine how many anchors become active; regional genes bias their ranking toward front, back, edges or center. Keep the anchor rankings correlated when genes change, rather than reseeding every mark after any mutation. Size genes scale the active marks. Symmetry genes mirror positions across the shell seam. A small stable developmental offset makes siblings differ without erasing family resemblance.</p><p>Spots use circles or ellipses. Mottles can use a few overlapping, soft-edged lobes per active anchor, so they remain inexpensive to render. The second pigment layer uses a separate mask with explicit overlap order. Clip both layers to the shell. Shared shape data should drive both the visible drawing and camouflage calculations.</p><h2>6. Inheritance and mutation</h2><p>For each chromosome pair, produce a gamete by selecting a homolog, with occasional crossover between defined blocks. Keep RGB and expression genes within a pigment recipe strongly linked in the initial version. Each baby gets one gamete from each parent. Locus order and recombination rules must be saved with the genome version.</p><p>Keep color, size, count and placement mutations independent of the environment. Numeric mutations make bounded small changes; discrete mutations change an allele. Tune a low per-copy rate after counting the loci: reusing 3% across a much larger genome produces more total changes per baby. A starting experimental range of 0.5–1% per copy is reasonable to test, not a promised final setting. Mutation-off breeding must remain useful.</p><h2>7. Natural selection must see the whole pattern</h2><p>Do not compare only average RGB: half red and half green can have a misleading brown average while looking very different from a brown background. Instead, sample the actual rendered shell mask against the local habitat patch. Compare spatial colors and coverage at a documented coarse viewing scale. Overlapping marks must be composited once, not double-counted.</p><p>First test solid habitats, where adding contrasting spots should not earn a free camouflage bonus. Then add optional reproducible habitat texture—speckles, veins and mottles—with its own color, scale, contrast and seed. This is where well-matched spot size and arrangement can matter. A multiscale score can later approximate different viewing distances, but should be introduced only after visual checks and calibration.</p><p>Keep neighbor protection bounded and based on the same camouflage score. Each living insect still receives one fresh independent survival roll at the moment it is checked. Survival randomness, genetic transmissions, initial population seeds and developmental drawing seeds must remain separate.</p><h2>8. Larger beetles and student data</h2><p>Give beetles a larger selectable view and a magnified inspector, with clear pattern colors and marks. Keep eight logical columns so zooming or changing screen size never changes mate distance or which Neapolitan background a beetle occupies. Allow horizontal scrolling on narrow Chromebooks rather than changing the simulation geometry with responsive layout.</p><p>Keep the teacher’s choice to hide or show statistics. Full details should distinguish what is visible, both inherited copies, masked traits, parents, mutations and measured survival chance. Basic students should discover patterns from breeding and observations. Preserve breeding-only, selection-only and both-activity classroom links.</p><p>Use exact probabilities for discrete gates such as S/s and T/t. For many continuous linked traits, show explicitly labeled sampled predictions or ranges with a stated sample size, rather than pretending to enumerate every possible whole-genome offspring. Use a separate versioned class-code format such as <code>PL1</code>, containing starting conditions rather than a student’s personal data or full saved history.</p><p>Founder presets should deliberately cover a range of hues, hidden copies and pattern arrangements, rather than relying on a small random sample to contain every useful trait. Teacher links store the chosen founder recipe and seed. Keep the new PL1 links separate from old LL1–LL4 links; do not silently reinterpret a Simplified class as a different genome.</p><h2>9. Build and verify in stages</h2><ol><li><strong>Genome and specimen viewer:</strong> render plain, one-color spots, two-color spots and mottles; prove stable redraws and full color reach.</li><li><strong>Breeding laboratory:</strong> implement copied alleles, linkage, masked traits, mutation-off crosses and truthful previews. Verify the Ss Tt example and multigeneration hidden traits.</li><li><strong>Camouflage laboratory:</strong> show actual shell masks beside background samples; validate solid and textured habitats before enabling bird selection.</li><li><strong>Full simulation:</strong> reconnect spatial breeding, individual hunts, Neapolitan and class permissions. Keep Simplified unchanged.</li><li><strong>Balance and device audit:</strong> three 100-generation runs per habitat plus several starting seeds, custom colors, small boards, mutation-zero trials and Chromebook performance checks. Measure color, pattern coverage, mark sizes, distributions, survivor calibration and cross-patch mating—not just average body color.</li></ol><h2>10. Acceptance checks before release</h2><ul><li>Hidden pattern genes survive masking and reappear through real inheritance.</li><li>The same genome and development seed render identically on redraw and export.</li><li>Small genetic changes usually preserve recognizable family pattern structure.</li><li>Rendering and selection use the same clipped, composited pattern.</li><li>Averaging two contrasting colors cannot create false perfect camouflage.</li><li>No habitat or color family receives a hardcoded survival preference.</li><li>Mutation-off crosses match their stated probabilities; sampled forecasts are labeled estimates.</li><li>Speed, zoom and viewport size do not change genetic or survival odds.</li><li>Simplified class links, saved parent jars and downloads remain intact.</li></ul></html>
