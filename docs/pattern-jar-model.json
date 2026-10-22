@@ -1,5 +1,5 @@
 {
-  "status": "design specification; group mixing and split broods chosen by user; not implemented",
+  "status": "Implemented in Pattern Lab v1; this example illustrates group allocation, not an importable save file.",
   "jarCount": 2,
   "capacityPerJar": 4,
   "minimumParentsPerActiveJar": 2,
@@ -53,5 +53,11 @@
     ]
   },
   "tankFullRule": "Keep new offspring in the visible nursery until tank space is available.",
-  "coolingChangesGenes": false
+  "coolingChangesGenes": false,
+  "keepTank": {
+    "capacity": 10,
+    "view": "separate top-down tank",
+    "replacedByBroods": false,
+    "save": "Download the complete experiment with favorites, genes, names, family and Keep tank layout."
+  }
 }

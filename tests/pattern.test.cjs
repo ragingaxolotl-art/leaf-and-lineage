@@ -81,3 +81,10 @@ test('Every antenna and leg framework renders stable original vector artwork',()
   G.setCopies(b,'antenna',{value:form,expression:.5});G.setCopies(b,'leg',{value:leg,expression:.5});G.setCopies(b,'plain',{value:'s',expression:.5});G.setCopies(b,'layers',{value:'t',expression:.5});const before=JSON.stringify(b),svg=global.PatternBeetles.draw(b,'test');assert.equal(svg,global.PatternBeetles.draw(b,'test'));assert.match(svg,/<svg /);assert.doesNotMatch(svg,/NaN|undefined|Infinity/);assert.equal(JSON.stringify(b),before);
  }
 });
+test('Forecasts use the same fair parental-order tie rule as actual births',()=>{
+ const s=G.createState();G.move(s,'B1','jar-1');G.move(s,'B2','jar-1');s.settings.mutation=0;
+ G.setCopies(s.beetles.B1,'antenna',{value:'thread',expression:.8});G.setCopies(s.beetles.B2,'antenna',{value:'fan',expression:.8});
+ const f=G.forecast(s,s.jars[0],2000);assert.ok(Math.abs(f.antennae.thread/f.n-.5)<.05);assert.ok(Math.abs(f.antennae.fan/f.n-.5)<.05);
+ const r=G.seeded(431);let thread=0,total=0;for(let i=0;i<30;i++){const h=G.breedRound(s,{rng:r});for(const id of h.offspring){total++;if(G.phenotype(s.beetles[id]).antenna==='thread')thread++;}}
+ assert.ok(Math.abs(thread/total-f.antennae.thread/f.n)<.08);
+});
