@@ -3,7 +3,7 @@
 'use strict';
 const G=PatternGenetics,B=PatternBeetles,$=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const SAVE='leaf-lineage-pattern-PL1',MAX=3000,views=new Map(),keepViews=new Map(),motionRandom=G.seeded(crypto.getRandomValues(new Uint32Array(1))[0]),inheritanceRandom=G.seeded(crypto.getRandomValues(new Uint32Array(1))[0]);
-let state,selected=null,running=!matchMedia('(prefers-reduced-motion: reduce)').matches,animationSpeed=1,last=0,toastTimer,saveTimer,browseType='all',browsePage=0,classConfig=null,resumeState=null,storageKey=SAVE,blocked=false,held=null,suppressedClick=null;
+let state,selected=null,running=!matchMedia('(prefers-reduced-motion: reduce)').matches,animationSpeed=1,last=0,toastTimer,saveTimer,browseType='all',browsePage=0,classConfig=null,resumeState=null,storageKey=SAVE,blocked=false,held=null,suppressedClick=null,cleanupReview=null,cleanupPage=0;
 const hash=G.checksum,validConfig=G.validConfig,encode=G.encodeConfig,decode=G.decodeConfig;
 function newState(config){const s=G.createState(config?.seed||42);if(config)Object.assign(s.settings,{mutation:config.mutation,showStats:config.stats,allowBackdrop:config.environment,backdrop:config.backdrop,allowSumo:config.sumo!==false,broods:config.broods??2});return s;}
 try{const params=new URLSearchParams(location.hash.slice(1)),code=params.get('class');if(params.has('class')){classConfig=decode(code);storageKey=SAVE+'-'+hash(code);}state=newState(classConfig);}catch(e){state=G.createState();blocked=true;$('invalid-link').textContent=e.message+' The lab has not applied any replacement presets.';$('invalid-link').hidden=false;}
@@ -21,7 +21,14 @@ function ensureView(id,kind='tank'){
  const cache=kind==='keep'?keepViews:views,layout=kind==='keep'?state.keepLayout:state.tankLayout;
  if(!cache.has(id)){const p=G.phenotype(state.beetles[id]),saved=layout[id];cache.set(id,{x:saved?.x??(.08+motionRandom()*.84),y:saved?.y??(.1+motionRandom()*.8),angle:saved?.angle??(motionRandom()*Math.PI*2),turn:0,speed:p.speed,traits:p,el:null});}return cache.get(id);
 }
-function paint(v,box,kind){if(!v.el)return;const w=box.clientWidth,h=box.clientHeight;if(kind==='keep'){v.el.style.left=v.x*w+'px';v.el.style.top=v.y*h+'px';v.el.style.transform=`translate(-50%,-50%) rotate(${v.angle}rad)`;}else v.el.style.transform=`translate(${v.x*w-v.el.offsetWidth/2}px,${v.y*h-v.el.offsetHeight/2}px) rotate(${v.angle}rad)`;}
+function syncNameTag(box,id,kind){
+ const v=ensureView(id,kind),text=state.beetles[id].name.trim();
+ let tag=[...box.children].find(e=>e.dataset.nameFor===id);
+ if(!text){tag?.remove();v.tag=null;return;}
+ if(!tag){tag=document.createElement('span');tag.className='beetle-name-tag';tag.dataset.nameFor=id;tag.setAttribute('aria-hidden','true');box.append(tag);}
+ tag.textContent=text;tag.title=text;v.tag=tag;
+}
+function paint(v,box,kind){if(!v.el)return;const w=box.clientWidth,h=box.clientHeight;if(v.tag){v.tag.style.left=v.x*w+'px';v.tag.style.top=(v.y*h+v.el.offsetHeight/2+4)+'px';}if(kind==='keep'){v.el.style.left=v.x*w+'px';v.el.style.top=v.y*h+'px';v.el.style.transform=`translate(-50%,-50%) rotate(${v.angle}rad)`;}else v.el.style.transform=`translate(${v.x*w-v.el.offsetWidth/2}px,${v.y*h-v.el.offsetHeight/2}px) rotate(${v.angle}rad)`;}
 function bindBeetle(el,id,kind){
  el.draggable=false;el.addEventListener('dragstart',e=>e.preventDefault());
  el.addEventListener('click',e=>{if(suppressedClick?.id===id&&performance.now()<suppressedClick.until){e.preventDefault();return;}inspect(id);});
@@ -32,13 +39,13 @@ function bindBeetle(el,id,kind){
 }
 function renderTank(){
  const box=$('tank-bugs'),present=new Set(state.tank);
- for(const el of [...box.children])if(!present.has(el.dataset.id)){el.remove();const v=views.get(el.dataset.id);if(v)v.el=null;}
+ for(const el of [...box.children])if(!present.has(el.dataset.id||el.dataset.nameFor)){el.remove();const v=views.get(el.dataset.id);if(v)v.el=null;}
  for(const id of views.keys())if(!state.beetles[id])views.delete(id);
- for(const id of state.tank){let el=[...box.children].find(e=>e.dataset.id===id);if(!el){el=document.createElement('button');el.className='tank-bug';el.dataset.id=id;el.innerHTML=B.draw(state.beetles[id],'tank');bindBeetle(el,id,'tank');box.append(el);}el.setAttribute('aria-label','Inspect '+name(state.beetles[id]));el.title=name(state.beetles[id]);const v=ensureView(id);v.el=el;}
+ for(const id of state.tank){let el=[...box.children].find(e=>e.dataset.id===id);if(!el){el=document.createElement('button');el.className='tank-bug';el.dataset.id=id;el.innerHTML=B.draw(state.beetles[id],'tank');bindBeetle(el,id,'tank');box.append(el);}el.setAttribute('aria-label','Inspect '+name(state.beetles[id]));el.title=name(state.beetles[id]);const v=ensureView(id);v.el=el;syncNameTag(box,id,'tank');paint(v,box,'tank');}
  $('tank-count').textContent=state.tank.length+' / 48 in tank';$('nursery-count').textContent=state.nursery.length;$('collection-count').textContent=state.collection.length;
  $('round').textContent=state.round;$('highest-generation').textContent=Object.values({...state.retired,...state.beetles}).reduce((n,b)=>Math.max(n,b.lineageGeneration),0);
  $('broods').value=String(state.settings.broods);$('broods').disabled=blocked;
- $('brood-hint').textContent=(state.settings.broods===1?'When the next brood arrives, only that newest brood stays in the tank and nursery.':'When the next brood arrives, the two newest broods stay in the tank and nursery.')+' Save favorites in the Keep tank (10 max) before breeding. Jar parents and pending trades stay safe. The starting beetles count as the first group. Archived trait data stays in the notebook.';
+ $('brood-hint').textContent=(state.settings.broods===1?'When the next brood arrives, only that newest brood stays in the tank and nursery.':'When the next brood arrives, the two newest broods stay in the tank and nursery.')+' Save favorites in the Keep tank (10 max) before breeding. Jar parents, pending trades and beetles excluded from cleanup stay safe. The starting beetles count as the first group. Archived trait data stays in the notebook.';
  $('backdrop').value=state.settings.backdrop;$('tank').className='tank '+state.settings.backdrop+(running?'':' cooled');$('backdrop-field').hidden=!state.settings.allowBackdrop;
  $('tank-hint').textContent=state.tank.length?'Drag beetles to place them; click for a closer look':'Return a beetle from a jar, nursery or collection';
 }
@@ -56,13 +63,13 @@ function renderKeepTank(){
  $('collection-count').textContent=state.collection.length+' / 10';$('keep-count').textContent=state.collection.length+' / 10 favorites';$('keep-tank').className='tank keep-tank '+state.settings.backdrop+(running?'':' cooled');$('keep-motion').textContent=running?'❄ Cool & pause':'▶ Run tank';
  state.keepLayout=state.keepLayout||{};
  $('keep-bugs').innerHTML=state.collection.map((id,i)=>{if(!state.keepLayout[id]){const cells=Array.from({length:10},(_,k)=>({x:.15+(k%5)*.17,y:k<5?.35:.73}));const free=cells.find(c=>!state.collection.some(other=>other!==id&&state.keepLayout[other]&&Math.hypot(c.x-state.keepLayout[other].x,c.y-state.keepLayout[other].y)<.07))||cells[i];state.keepLayout[id]={...free,angle:(motionRandom()-.5)*1.2};}const v=ensureView(id,'keep');return `<button class="keep-bug" data-keep="${id}" style="left:${v.x*100}%;top:${v.y*100}%;transform:translate(-50%,-50%) rotate(${v.angle}rad)" aria-label="Inspect ${esc(name(state.beetles[id]))}">${B.draw(state.beetles[id],'keep')}</button>`;}).join('');
- for(const el of $('keep-bugs').children){const id=el.dataset.keep,v=ensureView(id,'keep');v.el=el;bindBeetle(el,id,'keep');}
+ for(const el of [...$('keep-bugs').children]){const id=el.dataset.keep,v=ensureView(id,'keep');v.el=el;bindBeetle(el,id,'keep');syncNameTag($('keep-bugs'),id,'keep');paint(v,$('keep-bugs'),'keep');}
  $('keep-empty').hidden=state.collection.length>0;
 }
 function safely(fn){try{fn();}catch(e){toast(e.message);}}
 function move(id,target){safely(()=>{G.move(state,id,target);render();saveSoon();if($('browse').open)renderBrowse();toast(shortName(G.record(state,id))+' moved to '+target.replace('-',' ')+'.');});}
 function inspect(id){
- if(!state.beetles[id]){toast('This beetle has left the tank. Its family record is preserved.');return;}selected=id;const b=state.beetles[id],p=G.phenotype(b);$('inspect-title').textContent='Meet '+shortName(b);$('beetle-name').value=b.name;$('specimen-svg').innerHTML=B.draw(b,'inspect');
+ if(!state.beetles[id]){toast('This beetle has left the tank. Its family record is preserved.');return;}selected=id;const b=state.beetles[id],p=G.phenotype(b);$('inspect-title').textContent='Meet '+shortName(b);$('beetle-name').value=b.name;$('cleanup-excluded').checked=state.cleanupExcluded.includes(id);$('cleanup-excluded').disabled=blocked;$('specimen-svg').innerHTML=B.draw(b,'inspect');
  $('trait-summary').innerHTML=`<div class="swatches"><span><i class="swatch" style="background:${B.rgb(p.body)}"></i>Body</span>${p.visibleLayers?`<span><i class="swatch" style="background:${B.rgb(p.primary)}"></i>Pattern</span>`:''}${p.visibleLayers===2?`<i class="swatch" style="background:${B.rgb(p.secondary)}"></i>`:''}</div><div class="traits"><span class="trait">${p.visibleLayers===0?'Plain shell':p.shape+' · '+p.visibleLayers+' pattern '+(p.visibleLayers===1?'color':'colors')}</span><span class="trait">${G.antennaNames[p.antenna]}</span><span class="trait">${G.legNames[p.leg]}</span>${G.observationTags(b).map(word=>`<span class="trait clue">${word}</span>`).join('')}${p.hairs>.2?'<span class="trait">Fine antenna hairs</span>':''}</div>`;
  $('clue-hint').textContent='Field marks are clues. Watch, breed and compare to discover what they mean.';
  $('parent-summary').textContent=(b.parents.length?'Parents: '+b.parents.map(id=>name(G.record(state,id))).join(' + ')+' · '+b.sourceJarId.replace('-',' ')+' · '+b.broodId.replace('-',' '):(b.provenance?'Imported beetle · source '+b.provenance.sourceId:'Founder · part of the starting family'))+' · Lineage generation '+b.lineageGeneration+' · In '+G.container(state,id).replace('-',' ');
@@ -129,9 +136,25 @@ $('jars').addEventListener('click',e=>{const inspectButton=e.target.closest('[da
 
 for(let i=1;i<=2;i++)$('add-jar-'+i).onclick=()=>{if(!selected)return;move(selected,'jar-'+i);inspect(selected);};
 $('return-tank').onclick=()=>{if(selected){move(selected,'tank');inspect(selected);}};$('archive-beetle').onclick=()=>{if(selected){move(selected,'collection');inspect(selected);}};
-$('beetle-name').oninput=()=>{if(!selected)return;state.beetles[selected].name=$('beetle-name').value.slice(0,40);$('inspect-title').textContent='Meet '+shortName(state.beetles[selected]);saveSoon();};
+$('beetle-name').oninput=()=>{if(!selected||blocked)return;const b=state.beetles[selected],wasNamed=Boolean(b.name.trim());b.name=$('beetle-name').value.slice(0,40);if(!wasNamed&&b.name.trim())G.excludeFromCleanup(state,selected,true);$('cleanup-excluded').checked=state.cleanupExcluded.includes(selected);$('inspect-title').textContent='Meet '+shortName(b);renderTank();if($('keep').open)renderKeepTank();saveSoon();};
+$('cleanup-excluded').onchange=()=>safely(()=>{if(!selected||blocked)return;G.excludeFromCleanup(state,selected,$('cleanup-excluded').checked);saveSoon();});
 $('inspector').addEventListener('close',()=>{render();if($('browse').open)renderBrowse();});
-$('clear-unsaved').onclick=()=>safely(()=>{if(blocked)return;if(!confirm('Clear all unsaved beetles from the tank and nursery? Keep tank favorites, jar parents and pending trade beetles stay. This cannot be undone.'))return;const ids=G.cleanup(state,{all:true});for(const id of ids)views.delete(id);selected=null;render();saveSoon();toast(ids.length+' unsaved beetles cleared. Favorites and parents are safe.');});
+function cleanupSummary(){
+ const eligible=cleanupReview.ids.filter(id=>state.beetles[id]&&['tank','nursery'].includes(G.container(state,id))&&!state.tradeLocks.includes(id));
+ const remove=eligible.filter(id=>!cleanupReview.excluded.has(id)).length;
+ $('cleanup-summary').textContent=remove+' beetles will be deleted; '+(eligible.length-remove)+' excluded. Keep tank favorites, jar parents and pending trades stay safe.';
+ $('cleanup-confirm').textContent=remove?'Delete '+remove+' beetles':'Save exclusions';
+}
+function renderCleanupReview(){
+ const ids=cleanupReview.ids.slice(cleanupPage*30,(cleanupPage+1)*30);
+ $('cleanup-list').innerHTML=ids.map(id=>{const b=state.beetles[id],locked=state.tradeLocks.includes(id);return b?`<li><div><strong>${esc(shortName(b))}</strong><small>${id} · ${esc(G.container(state,id)||'left tank')} · Generation ${b.lineageGeneration}${locked?' · pending trade':''}</small></div><label><input type="checkbox" data-exclude="${id}" ${locked||cleanupReview.excluded.has(id)?'checked':''} ${locked?'disabled':''}> Exclude from cleanup</label></li>`:'';}).join('')||'<li>No beetles in the tank or nursery.</li>';
+ $('cleanup-page').textContent='Page '+(cleanupPage+1)+' of '+Math.max(1,Math.ceil(cleanupReview.ids.length/30));$('cleanup-prev').disabled=cleanupPage===0;$('cleanup-next').disabled=(cleanupPage+1)*30>=cleanupReview.ids.length;cleanupSummary();
+}
+$('clear-unsaved').onclick=()=>{if(blocked)return;cleanupReview={ids:[...state.tank,...state.nursery],excluded:new Set(state.cleanupExcluded)};cleanupPage=0;renderCleanupReview();$('cleanup-review').showModal();};
+$('cleanup-list').onchange=e=>{const id=e.target.dataset.exclude;if(!id||!cleanupReview)return;if(e.target.checked)cleanupReview.excluded.add(id);else cleanupReview.excluded.delete(id);cleanupSummary();};
+$('cleanup-prev').onclick=()=>{cleanupPage--;renderCleanupReview();};$('cleanup-next').onclick=()=>{cleanupPage++;renderCleanupReview();};
+$('cleanup-confirm').onclick=()=>safely(()=>{if(blocked||!cleanupReview)return;for(const id of cleanupReview.ids)if(state.beetles[id]&&!state.tradeLocks.includes(id))G.excludeFromCleanup(state,id,cleanupReview.excluded.has(id));const ids=G.cleanup(state,{all:true,ids:cleanupReview.ids});for(const id of ids)views.delete(id);selected=null;render();saveSoon();$('cleanup-review').close();toast(ids.length+' beetles deleted. Excluded beetles, favorites and parents are safe.');});
+$('cleanup-review').addEventListener('close',()=>cleanupReview=null);
 $('open-nursery').onclick=()=>browse('nursery');$('open-collection').onclick=()=>{renderKeepTank();$('keep').showModal();};$('open-all').onclick=()=>browse();
 $('keep-motion').onclick=()=>running?cool():run();
 $('keep-save').onclick=()=>{saveNow();download('Pattern-Lab-keep-tank-round-'+state.round+'.json',state);toast('Saved the Keep tank, all genes and the experiment’s family records.');};
@@ -140,7 +163,7 @@ $('page-prev').onclick=()=>{browsePage--;renderBrowse();};$('page-next').onclick
 for(const button of document.querySelectorAll('[data-close]'))button.onclick=()=>$ (button.dataset.close).close();
 for(const id of ['guide','teacher'])$(id+'-open').onclick=()=>{if(id==='teacher'){if(classConfig){toast('This is a student class link. Open the teacher edition to make a new link.');return;}$('class-seed').value=state.seed;$('class-mutation').value=state.settings.mutation*100;$('class-backdrop').value=state.settings.backdrop;$('class-stats').checked=state.settings.showStats;$('class-environment').checked=state.settings.allowBackdrop;$('class-speed').value=animationSpeed;$('class-sumo').checked=state.settings.allowSumo!==false;$('class-broods').value=String(state.settings.broods);}$(id).showModal();};
 if(classConfig)$('teacher-open').hidden=true;
-$('create-link').onclick=()=>safely(()=>{const code=encode(configFromForm()),u=new URL(location.protocol==='file:'?'https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/':location.href);u.search='?v=PL2-20261022-8';u.hash='class='+code;$('student-link').value=u.href;$('copy-link').disabled=false;$('link-status').textContent='Ready. The link starts a fresh student tank with these presets.';});
+$('create-link').onclick=()=>safely(()=>{const code=encode(configFromForm()),u=new URL(location.protocol==='file:'?'https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/':location.href);u.search='?v=PL2-20261022-9';u.hash='class='+code;$('student-link').value=u.href;$('copy-link').disabled=false;$('link-status').textContent='Ready. The link starts a fresh student tank with these presets.';});
 $('try-settings').onclick=()=>safely(()=>{noPending();const c=configFromForm();if(!confirm('Start a new teacher tank with these presets? Save your current tank file first to keep it.'))return;state=newState(c);animationSpeed=c.speed;$('speed').value=c.speed;resumeState=null;views.clear();keepViews.clear();$('resume-banner').hidden=true;$('last-brood').hidden=true;$('teacher').close();render();cool(false);saveSoon();toast('Teacher presets applied.');});
 $('copy-link').onclick=async()=>{try{await navigator.clipboard.writeText($('student-link').value);$('link-status').textContent='Copied. Share this full link with your class.';}catch(e){$('student-link').select();$('link-status').textContent='Select and copy the link above.';}};
 $('notes').oninput=()=>{state.notes=$('notes').value.slice(0,10000);saveSoon();};$('notes').maxLength=10000;
