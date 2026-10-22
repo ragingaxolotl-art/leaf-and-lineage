@@ -193,7 +193,7 @@ A lift requires horn reach and frontal positioning; bracing, grip and a lower bo
 The full report now has 110 paired factors; the simple report includes expressed adaptation bars. The student raw notebook remains a 48-trait table with strength/hidden copies excluded. Match notebooks list move times and outcomes. The [adaptation audit](https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/adaptations-report.html) reports 7,200 controlled matches across nine builds, both corners and 100 seeds per pairing. This establishes functional effects and counters, not universal competitive balance or biological accuracy. All 187 automated checks pass.
 
 
-## Faster matches, lift-driven flips and the trait magnifier — 20261022-19
+## Faster matches, lift-driven flips and the trait magnifier — 20261022-20
 
 The host can choose **2× or 10×** before creating a shared code. A visitor automatically adopts the room’s fixed speed, even if their local selector differs. Countdown and victory celebration remain at ordinary wall-clock speed. New rooms use SUMO7X2 or SUMO7X10, both running SUMO7 physics. Requests within this family negotiate the stored room model without changing it; older physics still cannot join. Existing room versions and exact SUMO6 replay behavior remain supported.
 
