@@ -79,7 +79,7 @@ function act(m,f,o){const move=f.action.move,t=f.t,r=m.rng,dx=o.x-f.x,dy=o.y-f.y
   const aim=angle+(r()-.5)*(1-t.jumpControl)*2.2,distance=18+30*t.jumpReach+8*t.jumpPower;
   f.air=f.airTotal=.42+.18*t.jumpPower;f.hopVx=Math.cos(aim)*distance/f.air;f.hopVy=Math.sin(aim)*distance/f.air;f.landingNoise=(r()-.5)*(1-t.jumpControl);f.lifted=0;hit=true;
  }else if(move==='lift'){
-  const reach=t.horn*t.hornFactor,leverage=Math.min(1,reach/.55),low=Math.min(1,o.t.bodyRadius/t.bodyRadius),resist=.35+.35*o.t.grip+.2*o.t.brace+.1*(1-low);
+  const reach=t.horn*t.hornFactor*(.65+.7*t.liftReach),leverage=Math.min(1,reach/.55),low=Math.min(1,o.t.bodyRadius/t.bodyRadius),resist=.35+.35*o.t.grip+.2*o.t.brace+.1*(1-low);
   const chance=clamp((.35+.6*t.liftControl)*(.45+.55*leverage)*(1.25-resist),.02,.85);
   hit=o.air<=0&&d<contact+8+Math.min(20,reach*15)&&face>.72&&r()<chance;
   if(hit)o.lifted=Math.max(o.lifted,(.3+.9*t.liftPower)*(.25+.75*leverage)/(1+.35*o.t.mass));

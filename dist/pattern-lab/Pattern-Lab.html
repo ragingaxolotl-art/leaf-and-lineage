@@ -999,7 +999,7 @@ function act(m,f,o){const move=f.action.move,t=f.t,r=m.rng,dx=o.x-f.x,dy=o.y-f.y
   const aim=angle+(r()-.5)*(1-t.jumpControl)*2.2,distance=18+30*t.jumpReach+8*t.jumpPower;
   f.air=f.airTotal=.42+.18*t.jumpPower;f.hopVx=Math.cos(aim)*distance/f.air;f.hopVy=Math.sin(aim)*distance/f.air;f.landingNoise=(r()-.5)*(1-t.jumpControl);f.lifted=0;hit=true;
  }else if(move==='lift'){
-  const reach=t.horn*t.hornFactor,leverage=Math.min(1,reach/.55),low=Math.min(1,o.t.bodyRadius/t.bodyRadius),resist=.35+.35*o.t.grip+.2*o.t.brace+.1*(1-low);
+  const reach=t.horn*t.hornFactor*(.65+.7*t.liftReach),leverage=Math.min(1,reach/.55),low=Math.min(1,o.t.bodyRadius/t.bodyRadius),resist=.35+.35*o.t.grip+.2*o.t.brace+.1*(1-low);
   const chance=clamp((.35+.6*t.liftControl)*(.45+.55*leverage)*(1.25-resist),.02,.85);
   hit=o.air<=0&&d<contact+8+Math.min(20,reach*15)&&face>.72&&r()<chance;
   if(hit)o.lifted=Math.max(o.lifted,(.3+.9*t.liftPower)*(.25+.75*leverage)/(1+.35*o.t.mass));
@@ -1315,7 +1315,7 @@ $('page-prev').onclick=()=>{browsePage--;renderBrowse();};$('page-next').onclick
 for(const button of document.querySelectorAll('[data-close]'))button.onclick=()=>$ (button.dataset.close).close();
 for(const id of ['guide','teacher'])$(id+'-open').onclick=()=>{if(id==='teacher'){if(classConfig){toast('This is a student class link. Open the teacher edition to make a new link.');return;}$('class-seed').value=state.seed;$('class-mutation').value=state.settings.mutation*100;$('class-backdrop').value=state.settings.backdrop;$('class-stats').checked=state.settings.showStats;$('class-environment').checked=state.settings.allowBackdrop;$('class-speed').value=animationSpeed;$('class-sumo').checked=state.settings.allowSumo!==false;$('class-broods').value=String(state.settings.broods);}$(id).showModal();};
 if(classConfig)$('teacher-open').hidden=true;
-$('create-link').onclick=()=>safely(()=>{const code=encode(configFromForm()),u=new URL(location.protocol==='file:'?'https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/':location.href);u.search='?v=PL2-20261022-17';u.hash='class='+code;$('student-link').value=u.href;$('copy-link').disabled=false;$('link-status').textContent='Ready. The link starts a fresh student tank with these presets.';});
+$('create-link').onclick=()=>safely(()=>{const code=encode(configFromForm()),u=new URL(location.protocol==='file:'?'https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/':location.href);u.search='?v=PL2-20261022-18';u.hash='class='+code;$('student-link').value=u.href;$('copy-link').disabled=false;$('link-status').textContent='Ready. The link starts a fresh student tank with these presets.';});
 $('try-settings').onclick=()=>safely(()=>{noPending();const c=configFromForm();if(!confirm('Start a new teacher tank with these presets? Save your current tank file first to keep it.'))return;state=newState(c);animationSpeed=c.speed;$('speed').value=c.speed;resumeState=null;views.clear();keepViews.clear();$('resume-banner').hidden=true;$('last-brood').hidden=true;$('teacher').close();render();cool(false);saveSoon();toast('Teacher presets applied.');});
 $('copy-link').onclick=async()=>{try{await navigator.clipboard.writeText($('student-link').value);$('link-status').textContent='Copied. Share this full link with your class.';}catch(e){$('student-link').select();$('link-status').textContent='Select and copy the link above.';}};
 $('notes').oninput=()=>{state.notes=$('notes').value.slice(0,10000);saveSoon();};$('notes').maxLength=10000;

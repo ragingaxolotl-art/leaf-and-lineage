@@ -182,7 +182,7 @@ A round-specific random seed and claimed slots persist in device saves and tank 
 A save last written by an older client may retain a previous round’s valid stock record. On upgrade, that stale selection is discarded without changing the saved tank, allowing the current round’s new arrivals. Future-round and malformed records remain rejected.
 
 
-## Grappling adaptations — release 20261022-17
+## Grappling adaptations — release 20261022-18
 
 New matches use SUMO6; shared rooms use SUMO6X10 for synchronized 10× playback. SUMO2/3/4/5 replays and existing room versions remain preserved. Horn lift, spring jump and cartoon bombardier puff are automatic, inherited grappling moves. No KO or health bar is used. Ring-outs and the existing center tiebreak decide matches, with full recovery afterward.
 
@@ -190,4 +190,4 @@ Chromosome J adds eighteen quantitative factors (power, reach, control, efficien
 
 A lift requires horn reach and frontal positioning; bracing, grip and a lower body resist it. A successful lift briefly reduces support and pushing. A jump breaks contact, avoids puffs while airborne and cannot push; good control favors an inward landing, while poor control can stumble or exit the ring. Puffs need range and facing, can miss, briefly disrupt steering/pushing and have two charges. Wind-ups weaken the attacker’s movement/pushing, every attempt costs energy, and recovery delays prevent repeated use. Actions and temporary effects are fully seeded and tick-based. Replays save the exact adaptation event list. Portraits/reports retain existing visibility permissions; stores still reveal appearance only.
 
-The full report now has 110 paired factors; the simple report includes expressed adaptation bars. The student raw notebook remains a 48-trait table with strength/hidden copies excluded. Match notebooks list move times and outcomes. The [adaptation audit](https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/adaptations-report.html) reports 7,200 controlled matches across nine builds, both corners and 100 seeds per pairing. This establishes functional effects and counters, not universal competitive balance or biological accuracy. All 186 automated checks pass.
+The full report now has 110 paired factors; the simple report includes expressed adaptation bars. The student raw notebook remains a 48-trait table with strength/hidden copies excluded. Match notebooks list move times and outcomes. The [adaptation audit](https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/adaptations-report.html) reports 7,200 controlled matches across nine builds, both corners and 100 seeds per pairing. This establishes functional effects and counters, not universal competitive balance or biological accuracy. All 187 automated checks pass.
