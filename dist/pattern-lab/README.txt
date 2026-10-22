@@ -38,6 +38,16 @@ Both screens use the same seed, physics and result. Each new match has fresh dec
 Only the selected beetle's anonymous genetic packet is sent, not names, notes or the rest of the tank.
 Codes expire in two hours. Create a new code to change the shared beetles. The code service needs internet.
 
+STUDENT TRAIT NOTEBOOK
+Open trait notebook lets students choose one of 40 expressed measurements. Read individual values,
+generation or breeding-round means and ranges, and filter by parent jar or imported/local origin.
+Repeated broods of the same parents are siblings in the same lineage generation. Each beetle counts once.
+Download individual measurements CSV or summary CSV exports only that selected trait, never strength
+or hidden gene copies. Displayed numbers round to four decimals; CSV keeps full stored precision.
+Archived measurements remain after beetles leave and are saved in the tank file. Older missing records
+are marked unavailable; they are not counted as zero or reconstructed. Dimensions use relative game
+scales and indices, not real-species measurements. Body RGB channels use 0–255 values.
+
 PORTABLE BEETLES
 In the enlarged inspector, Export beetle JSON downloads a single beetle. Export beetle document creates a
 printable HTML document that embeds the same genetic packet. Import beetle file accepts either file and adds
