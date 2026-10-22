@@ -385,7 +385,7 @@ globalThis.PatternSharingConfig={"url":"https://znrlzfzjbzebojxxswrf.supabase.co
 (function(){
 'use strict';
 const G=PatternGenetics,B=PatternBeetles,$=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const SAVE='leaf-lineage-pattern-PL1',MAX=3000,views=new Map(),motionRandom=()=>Math.random();
+const SAVE='leaf-lineage-pattern-PL1',MAX=3000,views=new Map(),motionRandom=G.seeded(crypto.getRandomValues(new Uint32Array(1))[0]),inheritanceRandom=G.seeded(crypto.getRandomValues(new Uint32Array(1))[0]);
 let state,selected=null,running=!matchMedia('(prefers-reduced-motion: reduce)').matches,animationSpeed=1,last=0,toastTimer,saveTimer,browseType='all',browsePage=0,dragId=null,classConfig=null,resumeState=null,storageKey=SAVE,blocked=false;
 const hash=G.checksum,validConfig=G.validConfig,encode=G.encodeConfig,decode=G.decodeConfig;
 function newState(config){const s=G.createState(config?.seed||42);if(config)Object.assign(s.settings,{mutation:config.mutation,showStats:config.stats,allowBackdrop:config.environment,backdrop:config.backdrop,allowSumo:config.sumo!==false});return s;}
@@ -482,7 +482,7 @@ $('motion').onclick=()=>running?cool():run();$('speed').onchange=()=>animationSp
 $('backdrop').onchange=()=>{if(!state.settings.allowBackdrop)return;state.settings.backdrop=$('backdrop').value;renderTank();saveSoon();};
 $('breed').onclick=()=>safely(()=>{
  if(blocked)return;if(Object.keys(state.beetles).length>MAX-20)throw Error('Save your tank, then start a new one. This save is at its beetle limit.');
- const h=G.breedRound(state);render();saveSoon();const text=h.total+' babies born! '+h.allocations.map(a=>a.jarId.replace('-',' ')+' → '+a.count).join(' · ')+(state.nursery.length?' · Extra babies are safe in the nursery.':'');$('last-brood').textContent=text;$('last-brood').hidden=false;toast(text);
+ const h=G.breedRound(state,{rng:inheritanceRandom});render();saveSoon();const text=h.total+' babies born! '+h.allocations.map(a=>a.jarId.replace('-',' ')+' → '+a.count).join(' · ')+(state.nursery.length?' · Extra babies are safe in the nursery.':'');$('last-brood').textContent=text;$('last-brood').hidden=false;toast(text);
 });
 $('jars').addEventListener('change',e=>{if(e.target.dataset.active){state.jars.find(j=>j.id===e.target.dataset.active).active=e.target.checked;renderJars();saveSoon();}});
 $('jars').addEventListener('click',e=>{const inspectButton=e.target.closest('[data-inspect]'),remove=e.target.closest('[data-remove]'),pick=e.target.closest('[data-pick]');if(inspectButton)inspect(inspectButton.dataset.inspect);if(remove)move(remove.dataset.remove,state.tank.length<48?'tank':'nursery');if(pick)browse('all',pick.dataset.pick);});
@@ -501,7 +501,7 @@ $('page-prev').onclick=()=>{browsePage--;renderBrowse();};$('page-next').onclick
 for(const button of document.querySelectorAll('[data-close]'))button.onclick=()=>$ (button.dataset.close).close();
 for(const id of ['guide','teacher'])$(id+'-open').onclick=()=>{cool(false);if(id==='teacher'){if(classConfig){toast('This is a student class link. Open the teacher edition to make a new link.');return;}$('class-seed').value=state.seed;$('class-mutation').value=state.settings.mutation*100;$('class-backdrop').value=state.settings.backdrop;$('class-stats').checked=state.settings.showStats;$('class-environment').checked=state.settings.allowBackdrop;$('class-speed').value=animationSpeed;$('class-sumo').checked=state.settings.allowSumo!==false;}$(id).showModal();};
 if(classConfig)$('teacher-open').hidden=true;
-$('create-link').onclick=()=>safely(()=>{const code=encode(configFromForm()),u=new URL(location.protocol==='file:'?'https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/':location.href);u.search='?v=PL2-20261021-3';u.hash='class='+code;$('student-link').value=u.href;$('copy-link').disabled=false;$('link-status').textContent='Ready. The link starts a fresh student tank with these presets.';});
+$('create-link').onclick=()=>safely(()=>{const code=encode(configFromForm()),u=new URL(location.protocol==='file:'?'https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/':location.href);u.search='?v=PL2-20261022-1';u.hash='class='+code;$('student-link').value=u.href;$('copy-link').disabled=false;$('link-status').textContent='Ready. The link starts a fresh student tank with these presets.';});
 $('try-settings').onclick=()=>safely(()=>{const c=configFromForm();if(!confirm('Start a new teacher tank with these presets? Save your current tank file first to keep it.'))return;state=newState(c);animationSpeed=c.speed;$('speed').value=c.speed;resumeState=null;views.clear();$('resume-banner').hidden=true;$('last-brood').hidden=true;$('teacher').close();render();cool(false);saveSoon();toast('Teacher presets applied.');});
 $('copy-link').onclick=async()=>{try{await navigator.clipboard.writeText($('student-link').value);$('link-status').textContent='Copied. Share this full link with your class.';}catch(e){$('student-link').select();$('link-status').textContent='Select and copy the link above.';}};
 $('notes').oninput=()=>{state.notes=$('notes').value.slice(0,10000);saveSoon();};$('notes').maxLength=10000;
