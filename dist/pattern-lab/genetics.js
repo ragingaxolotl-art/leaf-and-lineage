@@ -76,17 +76,45 @@ function breedRound(state,opts={}){
  const total=10+Math.min(10,Math.floor(r()*11)),broodId='brood-'+(state.round+1),extra=Math.floor(r()*active.length);
  const allocations=active.map((jar,i)=>({jar,count:Math.floor(total/active.length)+(total%active.length&&i===extra?1:0)}));
  const newborns=[];
- for(const {jar,count} of allocations){const choices=pairs(jar.members);for(let n=0;n<count;n++){let [a,b]=pick(choices,r);if(r()<.5)[a,b]=[b,a];const id='B'+state.nextId++;const child=baby(state.beetles[a],state.beetles[b],id,{rate:state.settings.mutation,rng:r,jarId:jar.id,broodId});state.beetles[id]=child;newborns.push(id);}}
+ for(const {jar,count} of allocations){const choices=pairs(jar.members);for(let n=0;n<count;n++){let [a,b]=pick(choices,r);if(r()<.5)[a,b]=[b,a];const id='B'+state.nextId++;const child=baby(state.beetles[a],state.beetles[b],id,{rate:state.settings.mutation,rng:r,jarId:jar.id,broodId});child.arrivedRound=state.round+1;state.beetles[id]=child;newborns.push(id);}}
  for(let i=newborns.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[newborns[i],newborns[j]]=[newborns[j],newborns[i]];}
  for(const id of newborns)(state.tank.length<48?state.tank:state.nursery).push(id);
- state.round++;state.history.push({broodId,total,allocations:allocations.map(a=>({jarId:a.jar.id,count:a.count,parents:a.jar.members.slice()})),offspring:newborns.slice()});
+ state.round++;cleanup(state);state.history.push({broodId,total,allocations:allocations.map(a=>({jarId:a.jar.id,count:a.count,parents:a.jar.members.slice()})),offspring:newborns.slice()});
  return state.history[state.history.length-1];
 }
-function createState(seed=42){const r=seeded(seed),s={version:'PL2',round:0,nextId:17,seed,settings:{mutation:.005,showStats:false,backdrop:'moss',allowBackdrop:true,allowSumo:true},beetles:{},tank:[],nursery:[],collection:[],keepLayout:{},jars:[{id:'jar-1',active:true,members:[]},{id:'jar-2',active:false,members:[]}],history:[],matchHistory:[],notes:''};for(let i=0;i<16;i++){const id='B'+(i+1);s.beetles[id]=founder(id,r,i);s.tank.push(id);}return s;}
+function createState(seed=42){const r=seeded(seed),s={version:'PL2',round:0,nextId:17,seed,settings:{mutation:.005,showStats:false,backdrop:'moss',allowBackdrop:true,allowSumo:true},beetles:{},retired:{},tradeLocks:[],tradeReceipts:[],tank:[],nursery:[],collection:[],keepLayout:{},jars:[{id:'jar-1',active:true,members:[]},{id:'jar-2',active:false,members:[]}],history:[],matchHistory:[],notes:''};for(let i=0;i<16;i++){const id='B'+(i+1);s.beetles[id]=founder(id,r,i);s.tank.push(id);}return s;}
 function container(s,id){if(s.tank.includes(id))return 'tank';if(s.nursery.includes(id))return 'nursery';if(s.collection.includes(id))return 'collection';return s.jars.find(j=>j.members.includes(id))?.id||null;}
+// Retired beetles retain only family labels, never a playable genome.
+function record(s,id){return s.beetles[id]||s.retired?.[id];}
+function retire(s,id,reason='released'){
+ const b=s.beetles[id];if(!b)return false;
+ if((s.tradeLocks||[]).includes(id))throw Error('Finish or cancel this beetle’s trade first.');
+ s.retired=s.retired||{};s.retired[id]={id:b.id,name:b.name,parents:b.parents.slice(),sourceJarId:b.sourceJarId,broodId:b.broodId,lineageGeneration:b.lineageGeneration,reason};
+ for(const list of [s.tank,s.nursery,s.collection,...s.jars.map(j=>j.members)]){const i=list.indexOf(id);if(i>=0)list.splice(i,1);}
+ delete s.beetles[id];delete s.keepLayout?.[id];return true;
+}
+function cleanup(s,{all=false}={}){
+ const removed=[];
+ for(const id of [...s.tank,...s.nursery]){const b=s.beetles[id];if((s.tradeLocks||[]).includes(id))continue;
+  const arrival=b.arrivedRound??(b.broodId?Number(b.broodId.split('-')[1]):0);
+  if(all||arrival<s.round-1){retire(s,id,all?'released':'older brood');removed.push(id);}
+ }
+ while(s.tank.length<48&&s.nursery.length)s.tank.push(s.nursery.shift());
+ return removed;
+}
+function fingerprint(b){return checksum(JSON.stringify(b.genome)+'|'+b.developmentSeed);}
+function finishTrade(s,{code,outgoing,fingerprint:expected,incoming}){
+ if(s.tradeReceipts.includes(code))return null;
+ const data=validatePacket(incoming),b=s.beetles[outgoing];
+ if(!b||fingerprint(b)!==expected)throw Error('Open the original tank to collect this trade. Your receipt is safe.');
+ const kept=s.collection.includes(outgoing),position=clone(s.keepLayout[outgoing]||null);
+ s.tradeLocks=s.tradeLocks.filter(id=>id!==outgoing);retire(s,outgoing,'traded');
+ const received=importPacket(s,data);if(kept){move(s,received.id,'collection');if(position)s.keepLayout[received.id]=position;}
+ s.tradeReceipts.push(code);return received;
+}
 function move(s,id,target){
  if(!s.beetles[id])throw Error('This beetle is missing.');
- const current=container(s,id);if(current===target)return;
+ const current=container(s,id);if(current===target)return;if((s.tradeLocks||[]).includes(id))throw Error('Finish or cancel this beetle’s trade first.');
  const jar=s.jars.find(j=>j.id===target);
  if(jar&&jar.members.length>=4)throw Error('That jar is full. Remove a parent first.');
  if(target==='collection'&&s.collection.length>=10)throw Error('The Keep tank holds 10 favorites. Move one out before adding another.');
@@ -105,6 +133,7 @@ function upgradeState(s){
    b.upgradeNote='Behavior and sumo traits initialized deterministically during the v1-to-v2 upgrade; the original five chromosome pairs were preserved.';
   }
  }
+ s.retired=s.retired||{};s.tradeLocks=s.tradeLocks||[];s.tradeReceipts=s.tradeReceipts||[];
  s.version='PL2';if(s.settings&&s.settings.allowSumo===undefined)s.settings.allowSumo=true;s.keepLayout=s.keepLayout||{};s.matchHistory=s.matchHistory||[];
  return s;
 }
@@ -120,22 +149,32 @@ function validate(s){
   for(const e of m.events)if(!e||!Number.isFinite(e.time)||e.time<0||e.time>60.1||![0,1].includes(e.attacker)||![0,1].includes(e.defender)||e.attacker===e.defender||!['front','side','rear'].includes(e.side))throw Error('Invalid contact record.');
   if(m.participants!==undefined){if(!Array.isArray(m.participants)||m.participants.length!==2)throw Error('Invalid replay data.');m.participants.forEach(validatePacket);}
  }
- const ids=Object.keys(s.beetles);if(ids.length>3000)throw Error('This save is too large (3,000 beetles maximum).');
+ const ids=Object.keys(s.beetles);
+ if(!s.retired||typeof s.retired!=='object'||Array.isArray(s.retired)||Object.keys(s.retired).length>200000)throw Error('Invalid retired family records.');
+ if(s.pendingTrade!=null&&(!s.pendingTrade||!['host','guest'].includes(s.pendingTrade.role)||typeof s.pendingTrade.code!=='string'||!/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$/.test(s.pendingTrade.code)||!s.beetles[s.pendingTrade.outgoing]||s.tradeLocks[0]!==s.pendingTrade.outgoing||fingerprint(s.beetles[s.pendingTrade.outgoing])!==s.pendingTrade.fingerprint))throw Error('Invalid pending trade.');
+ if(!Array.isArray(s.tradeLocks)||s.tradeLocks.length>1||s.tradeLocks.some(id=>!s.beetles[id])||!Array.isArray(s.tradeReceipts)||s.tradeReceipts.length>10000||s.tradeReceipts.some(c=>typeof c!=='string'||!/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$/.test(c)))throw Error('Invalid trade records.');
+ for(const [id,b] of Object.entries(s.retired)){if(s.beetles[id]||b.id!==id||!/^B[1-9]\d*$/.test(id)||Number(id.slice(1))>=s.nextId||typeof b.name!=='string'||b.name.length>40||!Array.isArray(b.parents)||![0,2].includes(b.parents.length)||new Set(b.parents).size!==b.parents.length||!Number.isInteger(b.lineageGeneration)||b.lineageGeneration<0||!['released','older brood','traded'].includes(b.reason)||b.genome!==undefined)throw Error('Invalid retired beetle.');}
+ const family=Object.assign({},s.retired,s.beetles);
+ for(const [id,b] of Object.entries(family)){
+  if(!Array.isArray(b.parents)||b.parents.some(p=>!family[p]||p===id||family[p].lineageGeneration>=b.lineageGeneration)||b.parents.length===2&&(b.lineageGeneration!==1+Math.max(...b.parents.map(p=>family[p].lineageGeneration))||!['jar-1','jar-2'].includes(b.sourceJarId)||!/^brood-[1-9]\d*$/.test(b.broodId)))throw Error('Invalid family record.');
+ }
+ if(ids.length>3000)throw Error('This save is too large (3,000 live beetles maximum).');
  for(const [i,j] of s.jars.entries())if(j.id!=='jar-'+(i+1)||typeof j.active!=='boolean'||!Array.isArray(j.members)||j.members.length>4)throw Error('Invalid jar.');
  if(![s.tank,s.nursery,s.collection].every(Array.isArray)||s.tank.length>48||s.collection.length>10)throw Error('Invalid tank capacity.');
  if(s.keepLayout!==undefined){if(!s.keepLayout||typeof s.keepLayout!=='object'||Array.isArray(s.keepLayout)||Object.keys(s.keepLayout).length>3000)throw Error('Invalid Keep tank layout.');for(const [id,v] of Object.entries(s.keepLayout))if(!s.beetles[id]||!v||!Number.isFinite(v.x)||v.x<0||v.x>1||!Number.isFinite(v.y)||v.y<0||v.y>1||!Number.isFinite(v.angle))throw Error('Invalid Keep tank position.');}
  const all=[...s.tank,...s.nursery,...s.collection,...s.jars.flatMap(j=>j.members)];
  if(all.length!==ids.length||new Set(all).size!==ids.length||all.some(id=>!s.beetles[id]))throw Error('A beetle has a missing or duplicate container.');
  for(const id of ids){const b=s.beetles[id];if(b.id!==id||!/^B[1-9]\d*$/.test(id)||Number(id.slice(1))>=s.nextId||typeof b.name!=='string'||b.name.length>40||!Number.isInteger(b.lineageGeneration)||b.lineageGeneration<0||!Number.isInteger(b.developmentSeed)||b.developmentSeed<0||b.developmentSeed>4294967295||!Array.isArray(b.parents)||![0,2].includes(b.parents.length)||new Set(b.parents).size!==b.parents.length||!Array.isArray(b.mutations)||b.mutations.some(k=>!byKey[k])||!Array.isArray(b.genome)||b.genome.length!==chromosomes.length)throw Error('Invalid beetle record.');
-  if(b.parents.some(p=>!s.beetles[p]||p===id||s.beetles[p].lineageGeneration>=b.lineageGeneration)||b.parents.length===2&&(b.lineageGeneration!==1+Math.max(...b.parents.map(p=>s.beetles[p].lineageGeneration))||!['jar-1','jar-2'].includes(b.sourceJarId)||!/^brood-[1-9]\d*$/.test(b.broodId)))throw Error('Invalid family record.');
+  if(b.arrivedRound!==undefined&&(!Number.isInteger(b.arrivedRound)||b.arrivedRound<0||b.arrivedRound>s.round))throw Error('Invalid arrival round.');
+  if(b.parents.some(p=>!family[p]||p===id||family[p].lineageGeneration>=b.lineageGeneration)||b.parents.length===2&&(b.lineageGeneration!==1+Math.max(...b.parents.map(p=>family[p].lineageGeneration))||!['jar-1','jar-2'].includes(b.sourceJarId)||!/^brood-[1-9]\d*$/.test(b.broodId)))throw Error('Invalid family record.');
   for(let ci=0;ci<chromosomes.length;ci++){const c=chromosomes[ci],g=b.genome[ci];if(g.id!==c.id||!Array.isArray(g.copies)||g.copies.length!==2)throw Error('Invalid chromosome.');for(const cp of g.copies){if(!Array.isArray(cp)||cp.length!==c.loci.length)throw Error('Invalid gene copies.');c.loci.forEach((l,i)=>{const a=cp[i];if(l.type==='number'){if(!Number.isFinite(a)||a<l.min||a>l.max)throw Error('Invalid numeric gene.');}else{if(!a||!Number.isFinite(a.expression)||a.expression<0||a.expression>1)throw Error('Invalid expression gene.');if(l.type==='category'&&!l.values.includes(a.value))throw Error('Invalid shape gene.');if(l.type==='color'&&(!Array.isArray(a.rgb)||a.rgb.length!==3||a.rgb.some(v=>!Number.isInteger(v)||v<0||v>255)))throw Error('Invalid color gene.');}});}}
  }
  for(const [i,h] of s.history.entries()){
-  if(h.broodId!=='brood-'+(i+1)||!Number.isInteger(h.total)||h.total<10||h.total>20||!Array.isArray(h.allocations)||h.allocations.length<1||h.allocations.length>2||new Set(h.allocations.map(a=>a.jarId)).size!==h.allocations.length||!Array.isArray(h.offspring)||h.offspring.length!==h.total||new Set(h.offspring).size!==h.total||h.offspring.some(id=>!s.beetles[id]||s.beetles[id].broodId!==h.broodId))throw Error('Invalid saved brood.');
+  if(h.broodId!=='brood-'+(i+1)||!Number.isInteger(h.total)||h.total<10||h.total>20||!Array.isArray(h.allocations)||h.allocations.length<1||h.allocations.length>2||new Set(h.allocations.map(a=>a.jarId)).size!==h.allocations.length||!Array.isArray(h.offspring)||h.offspring.length!==h.total||new Set(h.offspring).size!==h.total||h.offspring.some(id=>!family[id]||family[id].broodId!==h.broodId))throw Error('Invalid saved brood.');
   if(h.allocations.reduce((n,a)=>n+a.count,0)!==h.total)throw Error('Invalid brood allocation.');
-  for(const a of h.allocations)if(!['jar-1','jar-2'].includes(a.jarId)||!Number.isInteger(a.count)||a.count<1||!Array.isArray(a.parents)||a.parents.length<2||a.parents.length>4||new Set(a.parents).size!==a.parents.length||a.parents.some(id=>!s.beetles[id])||h.offspring.filter(id=>s.beetles[id].sourceJarId===a.jarId).length!==a.count||h.offspring.some(id=>s.beetles[id].sourceJarId===a.jarId&&s.beetles[id].parents.some(p=>!a.parents.includes(p))))throw Error('Invalid saved parent group.');
+  for(const a of h.allocations)if(!['jar-1','jar-2'].includes(a.jarId)||!Number.isInteger(a.count)||a.count<1||!Array.isArray(a.parents)||a.parents.length<2||a.parents.length>4||new Set(a.parents).size!==a.parents.length||a.parents.some(id=>!family[id])||h.offspring.filter(id=>family[id].sourceJarId===a.jarId).length!==a.count||h.offspring.some(id=>family[id].sourceJarId===a.jarId&&family[id].parents.some(p=>!a.parents.includes(p))))throw Error('Invalid saved parent group.');
  }
- return s;
+ cleanup(s);return s;
 }
 function forecast(s,jar,n=240){if(jar.members.length<2)return null;const r=seeded(713),choices=pairs(jar.members),out={layers:[0,0,0],antennae:{},legs:{},speed:0,strength:0};for(let i=0;i<n;i++){let [a,b]=pick(choices,r);if(r()<.5)[a,b]=[b,a];const p=phenotype(baby(s.beetles[a],s.beetles[b],'preview',{rate:s.settings.mutation,rng:r}));out.layers[p.visibleLayers]++;out.antennae[p.antenna]=(out.antennae[p.antenna]||0)+1;out.legs[p.leg]=(out.legs[p.leg]||0)+1;out.speed+=p.speed;out.strength+=p.strengthIndex;}out.n=n;return out;}
 function checksum(s){let h=2166136261;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);return (h>>>0).toString(36);}
@@ -153,7 +192,7 @@ function validatePacket(input){
  if(!input||input.format!=='PatternLabBeetle'||![1,2].includes(input.version)||!input.beetle)throw Error('Choose a Pattern Lab beetle JSON file.');
  const source=clone(input.beetle);
  if(typeof source.id!=='string'||source.id.length>80||typeof source.name!=='string'||source.name.length>40||!Array.isArray(source.parents)||![0,2].includes(source.parents.length)||source.parents.some(x=>typeof x!=='string'||x.length>80))throw Error('Invalid beetle identity.');
- const specimen={...source,id:'B1',parents:[],sourceJarId:null,broodId:null};
+ const specimen={...source,id:'B1',parents:[],sourceJarId:null,broodId:null};delete specimen.arrivedRound;
  const state=createState(1);state.beetles={B1:specimen};state.nextId=2;state.tank=['B1'];state.jars.forEach(j=>j.members=[]);
  if(source.genome?.length===5)state.version='PL1';
  validate(state);
@@ -167,10 +206,10 @@ function packet(b,{anonymous=false}={}){
 function importPacket(s,input){
  const data=validatePacket(input),b=clone(data.beetle),source=clone(b);
  if(Object.keys(s.beetles).length>=3000)throw Error('Save this experiment and start a new tank before importing more beetles.');
- b.id='B'+s.nextId++;b.parents=[];b.sourceJarId=null;b.broodId=null;
+ b.id='B'+s.nextId++;b.arrivedRound=s.round;b.parents=[];b.sourceJarId=null;b.broodId=null;
  b.provenance={sourceId:source.id,parents:source.parents,generation:source.lineageGeneration};
  s.beetles[b.id]=b;(s.tank.length<48?s.tank:s.nursery).push(b.id);return b;
 }
-const api={chromosomes,loci,byKey,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,move,validate,upgradeState,packet,validatePacket,importPacket,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
+const api={chromosomes,loci,byKey,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,record,retire,cleanup,fingerprint,finishTrade,move,validate,upgradeState,packet,validatePacket,importPacket,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PatternGenetics=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

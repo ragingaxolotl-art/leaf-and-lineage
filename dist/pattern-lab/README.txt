@@ -11,6 +11,10 @@ PLAY OFFLINE
 Open Pattern-Lab.html in a modern browser. It includes all code and artwork, without installation.
 For a local server, serve this folder and open index.html. No dependencies or build step are needed.
 
+TANK SPACE AND TRADING
+Only two newest broods stay in the main tank and nursery. Older unsaved beetles leave automatically. Keep tank favorites (10 maximum) and jar parents are protected. The starting group counts as a brood. Clear unsaved beetles removes the main tank and nursery immediately. Family labels remain; retired beetles cannot be selected again.
+Trade with a classmate exchanges one offered beetle for one offered beetle. Create a trade code, your friend enters it and offers theirs, then the creator previews and confirms. Both devices receive the exact genes and appearance. Use the original device until complete. Offers expire after two hours; collection receipts last seven days. Internet is required for codes. Keep your own tank file backup.
+
 HOW TO PLAY
 1. Cool & pause, then click a beetle to inspect it. Add 2–4 parents to a jar.
 2. Check Use this jar. Breed selected jars makes 10–20 babies total.

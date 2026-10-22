@@ -24,10 +24,10 @@ test('Latent framework genes can reappear in descendants and rendered phenotype 
  for(let i=0;i<500;i++){const child=G.baby(a,b,'x',{rate:0,rng:r}),p=G.phenotype(child);if(p.antenna==='fan')fan++;if(p.leg==='paddle')paddle++;assert.deepEqual(G.phenotype(child),p);}
  assert.ok(fan>80&&fan<170);assert.ok(paddle>80&&paddle<170);
 });
-test('Single-jar rounds produce 10–20 babies, preserve parents, and retain overflow in nursery',()=>{
+test('Single-jar rounds produce 10–20 babies, preserve parents, and retain only two newest broods',()=>{
  const s=ready(),r=G.seeded(92),parents=s.jars[0].members.slice(),seen=new Set();let total=0;
  for(let i=0;i<15;i++){const h=G.breedRound(s,{rng:r});seen.add(h.total);total+=h.total;assert.ok(h.total>=10&&h.total<=20);assert.equal(h.allocations.length,1);assert.equal(h.allocations[0].count,h.total);for(const id of h.offspring){const b=s.beetles[id];assert.equal(new Set(b.parents).size,2);assert.ok(b.parents.every(id=>parents.includes(id)));assert.equal(b.lineageGeneration,1);}}
- assert.ok(seen.size>=7);assert.deepEqual(s.jars[0].members,parents);assert.equal(s.tank.length,48);assert.equal(s.nursery.length,total+12-48);assert.equal(Object.keys(s.beetles).length,16+total);G.validate(s);
+ assert.ok(seen.size>=7);assert.deepEqual(s.jars[0].members,parents);const recent=s.history.slice(-2).reduce((n,h)=>n+h.total,0);assert.equal(s.tank.length,recent);assert.equal(s.nursery.length,0);assert.equal(Object.keys(s.beetles).length,4+recent);assert.equal(Object.keys(s.retired).length,16+total-4-recent);G.validate(s);
 });
 test('Two jars split the total, never cross parents, and the extra is not always assigned to one jar',()=>{
  const s=ready(true),r=G.seeded(123);let extra=new Set(),pairSet=new Set();
@@ -66,7 +66,7 @@ test('The ten-favorite Keep tank stays intact across broods and file round trips
  for(let i=0;i<4;i++)G.breedRound(s,{rng:r});
  assert.deepEqual(s.collection,favorites);assert.equal(JSON.stringify(favorites.map(id=>s.beetles[id])),kept);assert.deepEqual(s.keepLayout.B5,{x:.3,y:.4,angle:.5});
  const restored=G.validate(JSON.parse(JSON.stringify(s)));assert.deepEqual(restored.collection,favorites);assert.deepEqual(restored.keepLayout,s.keepLayout);
- G.move(s,'B5','nursery');G.move(s,'B15','collection');assert.equal(s.collection.length,10);G.validate(s);
+ G.move(s,'B5','nursery');G.move(s,s.history.at(-1).offspring[0],'collection');assert.equal(s.collection.length,10);G.validate(s);
 });
 test('Classroom codes preserve zeros and permission choices and reject damaged links',()=>{
  for(const backdrop of ['moss','sand','bark','night'])for(const stats of [false,true])for(const environment of [false,true])for(const speed of [.5,1,2,5,10]){
@@ -87,4 +87,29 @@ test('Forecasts use the same fair parental-order tie rule as actual births',()=>
  const f=G.forecast(s,s.jars[0],2000);assert.ok(Math.abs(f.antennae.thread/f.n-.5)<.05);assert.ok(Math.abs(f.antennae.fan/f.n-.5)<.05);
  const r=G.seeded(431);let thread=0,total=0;for(let i=0;i<30;i++){const h=G.breedRound(s,{rng:r});for(const id of h.offspring){total++;if(G.phenotype(s.beetles[id]).antenna==='thread')thread++;}}
  assert.ok(Math.abs(thread/total-f.antennae.thread/f.n)<.08);
+});
+
+test('Older cohorts clear regardless of lineage generation; saved parents and favorites retain exact DNA',()=>{
+ const s=ready(),r=G.seeded(24);G.move(s,'B5','collection');const kept=G.clone(s.beetles.B5),parents=G.clone(s.jars[0].members.map(id=>s.beetles[id]));
+ const first=G.breedRound(s,{rng:r}).offspring.slice();G.breedRound(s,{rng:r});assert.ok(first.every(id=>s.beetles[id]));G.breedRound(s,{rng:r});assert.ok(first.every(id=>!s.beetles[id]&&s.retired[id]&&!s.retired[id].genome));
+ assert.deepEqual(s.beetles.B5,kept);assert.deepEqual(s.jars[0].members.map(id=>s.beetles[id]),parents);assert.ok(s.tank.every(id=>s.beetles[id].lineageGeneration===1));G.validate(G.clone(s));
+});
+test('Clearing unsaved removes tank and nursery, preserves family ancestry and protected containers',()=>{
+ const s=ready();G.move(s,'B5','collection');const h=G.breedRound(s,{rng:G.seeded(23)}),child=h.offspring[0];G.move(s,child,'collection');const old=G.clone(s.beetles[child]);
+ const removed=G.cleanup(s,{all:true});assert.ok(removed.length>=20);assert.equal(s.tank.length,0);assert.equal(s.nursery.length,0);assert.equal(s.collection.length,2);assert.deepEqual(s.beetles[child],old);assert.ok(s.jars[0].members.every(id=>s.beetles[id]));G.validate(G.clone(s));
+ for(const id of s.jars[0].members.slice())G.move(s,id,'tank');G.cleanup(s,{all:true});assert.ok(old.parents.every(id=>s.retired[id]));G.validate(G.clone(s));assert.throws(()=>G.move(s,old.parents[0],'tank'));
+});
+test('Repeated generations keep live genomes bounded and old saves migrate without losing kept beetles',()=>{
+ const s=ready(),r=G.seeded(48);for(let i=0;i<100;i++)G.breedRound(s,{rng:r});assert.ok(Object.keys(s.beetles).length<=44);assert.equal(s.history.length,100);G.validate(G.clone(s));
+ const legacy=ready();delete legacy.retired;delete legacy.tradeLocks;delete legacy.tradeReceipts;const restored=G.validate(legacy);assert.deepEqual(restored.retired,{});assert.deepEqual(restored.tradeLocks,[]);
+});
+test('Imports get two-brood residency and empty tanks remain valid',()=>{
+ const s=ready();G.breedRound(s,{rng:G.seeded(3)});const b=G.importPacket(s,G.packet(s.beetles.B1));assert.equal(b.arrivedRound,1);G.breedRound(s,{rng:G.seeded(4)});assert.ok(s.beetles[b.id]);G.breedRound(s,{rng:G.seeded(5)});assert.ok(!s.beetles[b.id]);const empty=G.createState();G.cleanup(empty,{all:true});G.validate(empty);assert.equal(Object.keys(empty.beetles).length,0);
+});
+test('Trades protect offers, preserve genes and appearance, replace kept slots, and apply receipts once',()=>{
+ const s=ready();G.move(s,'B5','collection');const original=G.clone(s.beetles.B5),incoming=G.packet(s.beetles.B8,{anonymous:true}),info={code:'ABCDEFGH',outgoing:'B5',fingerprint:G.fingerprint(original),incoming};
+ s.tradeLocks=['B5'];G.cleanup(s,{all:true});assert.ok(s.beetles.B5);assert.throws(()=>G.move(s,'B5','jar-2'),/trade/);assert.throws(()=>G.retire(s,'B5'),/trade/);
+ assert.throws(()=>G.finishTrade(s,{...info,fingerprint:'wrong'}));assert.deepEqual(s.beetles.B5,original);
+ const b=G.finishTrade(s,info);assert.ok(s.collection.includes(b.id));assert.ok(!s.beetles.B5);assert.equal(s.retired.B5.reason,'traded');assert.deepEqual(b.genome,incoming.beetle.genome);assert.equal(b.developmentSeed,incoming.beetle.developmentSeed);
+ const before=JSON.stringify(s);assert.equal(G.finishTrade(s,info),null);assert.equal(JSON.stringify(s),before);G.validate(G.clone(s));
 });
