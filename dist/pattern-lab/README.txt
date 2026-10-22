@@ -58,6 +58,9 @@ New founders begin with horn nubs. Six log2 growth modifiers extend body, antenn
 Larger bodies resist pushes but lose speed and agility. Extended appendages have modest benefits and costs. The arena compresses body-size differences to keep its fixed ring playable; tank size differences remain visible. Old match notebooks retain their original physics.
 Family trees display beetle portraits. New archived records retain an appearance snapshot without a playable genome. Older unavailable pictures are marked clearly. The enlarged inspector preview stays visible while its details scroll.
 
+SIMPLE TRAIT REPORT
+In the beetle inspector, Simple trait report restores the familiar horizontal trait bars for movement, body dimensions and behavior. It shows expressed traits with readable values, not paired gene tables. Index bars use 0–100; dimensions use the current model range and their own units. Longer bars do not guarantee a better beetle. Download simple report creates printable HTML. Teacher labs can always open it; student links follow Show all genetics. The raw student notebook remains a table.
+
 FULL GENETICS REPORT
 The magnifying-glass button in the beetle inspector opens a dense technical report with all 90 paired records, both copies, expression values at stored precision, mutations, gate effects and derived traits. QNT records estimate many small genetic effects; MEN records transmit actual copies. Teacher labs can always open this report. Student links follow Show all genetics. Download full report creates printable HTML; raw beetle JSON remains importable.
 
