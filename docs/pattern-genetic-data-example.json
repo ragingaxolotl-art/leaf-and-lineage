@@ -193,6 +193,71 @@
           ]
         }
       }
+    },
+    {
+      "id": "E",
+      "blocks": {
+        "legFramework": {
+          "copies": [
+            "slender",
+            "sturdy"
+          ]
+        },
+        "legLengthRatio": {
+          "copies": [
+            0.45,
+            0.6
+          ]
+        },
+        "femurThickness": {
+          "copies": [
+            0.08,
+            0.13
+          ]
+        },
+        "hindLegEmphasis": {
+          "copies": [
+            0.2,
+            0.5
+          ]
+        },
+        "footLength": {
+          "copies": [
+            0.1,
+            0.16
+          ]
+        },
+        "clawCurve": {
+          "copies": [
+            0.2,
+            0.6
+          ]
+        },
+        "legHairDensity": {
+          "copies": [
+            0.15,
+            0.55
+          ]
+        },
+        "motorSpeed": {
+          "copies": [
+            0.35,
+            0.7
+          ]
+        },
+        "strideDrive": {
+          "copies": [
+            0.4,
+            0.65
+          ]
+        },
+        "strength": {
+          "copies": [
+            0.3,
+            0.8
+          ]
+        }
+      }
     }
   ],
   "developmentSeed": 372019,
@@ -205,7 +270,20 @@
     ],
     "visiblePatternLayers": []
   },
-  "note": "Illustrative subset, not a complete executable schema. This Ss beetle looks plain and can retain hidden pattern colors; its expressed thread framework can mask comb branches, and Hh can mask hairiness. All stated expression rules are invented teaching rules. Actual homolog order, locus positions, tie handling and suppressor interactions must be specified and tested before implementation.",
+  "note": "Illustrative subset, not a complete executable schema. Hidden pattern, antenna and leg traits remain actual inherited copies. Runtime position and cooling are not genes. Speed and strength are inherited game traits; neither weights parent choice or fertility. Homolog order, locus positions, dominance/tie handling and suppressor interactions still require implementation specifications.",
   "edition": "Pattern Lab \u2014 creative jar breeding",
-  "activity": "breeding-only"
+  "activity": "breeding-only",
+  "runtime": {
+    "inherited": false,
+    "container": "tank",
+    "position": {
+      "x": 0.35,
+      "y": 0.6
+    },
+    "headingRadians": 1.2,
+    "motionState": "cooled-paused"
+  },
+  "sourceJarId": "jar-1",
+  "broodId": "brood-12",
+  "lineageGeneration": 3
 }

@@ -1,0 +1,57 @@
+{
+  "status": "design specification; group mixing and split broods chosen by user; not implemented",
+  "jarCount": 2,
+  "capacityPerJar": 4,
+  "minimumParentsPerActiveJar": 2,
+  "roundBroodSize": {
+    "minimum": 10,
+    "maximum": 20,
+    "draw": "fresh uniform integer, inclusive; total across selected complete jars"
+  },
+  "allocationRule": "One selected complete jar gets the full brood. Two split equally; for an odd total give the extra baby to a randomly chosen jar with equal probability.",
+  "incompleteJarRule": "Show before breeding and exclude from allocation. No complete selected jar means no breeding round.",
+  "parentRule": "For each baby independently choose one unordered pair uniformly within its assigned jar; randomly assign parental transmission order, then inherit one gamete from each actual parent.",
+  "crossJarMating": false,
+  "automaticTankMating": false,
+  "exclusivePairRule": "Place exactly two beetles in a separate jar. Only those two parent its assigned offspring.",
+  "parentSelectionUsesSpeedOrStrength": false,
+  "automaticallyReplaceParents": false,
+  "newbornRecordFields": [
+    "id",
+    "parents",
+    "sourceJarId",
+    "broodId",
+    "lineageGeneration",
+    "genome",
+    "developmentSeed"
+  ],
+  "arrivalRule": "Shuffle arrival order into the shared tank without changing source jar or parentage.",
+  "exampleRound": {
+    "broodId": "brood-12",
+    "totalBabies": 16,
+    "jars": [
+      {
+        "id": "jar-1",
+        "members": [
+          "beetle-821",
+          "beetle-846",
+          "beetle-803",
+          "beetle-804"
+        ],
+        "possiblePairs": 6,
+        "assignedBabies": 8
+      },
+      {
+        "id": "jar-2",
+        "members": [
+          "beetle-905",
+          "beetle-906"
+        ],
+        "possiblePairs": 1,
+        "assignedBabies": 8
+      }
+    ]
+  },
+  "tankFullRule": "Keep new offspring in the visible nursery until tank space is available.",
+  "coolingChangesGenes": false
+}
