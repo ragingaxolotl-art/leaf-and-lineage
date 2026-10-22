@@ -173,8 +173,10 @@ Shared friend battles now advance ten simulated seconds per real second, with th
 
 New friend rooms identify their synchronized presentation as SUMO5X10 while retaining SUMO5 physics. The service still accepts prior room versions, and rejects cross-version joining so an older 1× screen cannot join a new 10× room. Refresh both screens and create a new code to use the new speed. No genes, results, table permissions or rate limits change.
 
-## Appearance-only beetle store — release 20261022-15
+## Appearance-only beetle store — release 20261022-16
 
 Open **Beetle store** beside the tank controls. Five independent random founders are displayed as fitted portraits with an optional enlarged appearance-only preview. Up to two may join the tank per breeding round; acquisition is free. No trait scores, clue tags, forecasts, gene copies or report/export controls appear in the store, including in full-stat classes. After acquisition the ordinary class visibility rules apply.
 
 A round-specific random seed and claimed slots persist in device saves and tank JSON. Closing/reopening, reloading, moving or retiring an acquired beetle do not reset the allowance. Only a successful breeding round replaces the five arrivals and restores two picks; a failed cross does not refresh stock. Repeated broods from the same parents still refresh because the limit is by breeding round, not lineage depth. The stock uses a separate random stream, preserving offspring rolls. Old saves gain an empty store record on upgrade. Offers stay outside the living population and notebooks until acquired. Imported arrivals retain their exact displayed genotype/development seed, receive a local ID and arrival round, use nursery overflow if needed, and follow normal Keep/cleanup rules. Stock adds genetic variety within the existing founder model; it does not grant extreme builds or change genetics, sumo physics, sharing or classroom permissions.
+
+A save last written by an older client may retain a previous round’s valid stock record. On upgrade, that stale selection is discarded without changing the saved tank, allowing the current round’s new arrivals. Future-round and malformed records remain rejected.
