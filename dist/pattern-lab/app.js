@@ -2,7 +2,7 @@
 (function(){
 'use strict';
 const G=PatternGenetics,B=PatternBeetles,$=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const SAVE='leaf-lineage-pattern-PL1',MAX=3000,views=new Map(),keepViews=new Map(),motionRandom=G.seeded(crypto.getRandomValues(new Uint32Array(1))[0]),inheritanceRandom=G.seeded(crypto.getRandomValues(new Uint32Array(1))[0]);
+const SAVE='leaf-lineage-pattern-PL1',MAX=3000,views=new Map(),keepViews=new Map(),motionRandom=G.seeded(crypto.getRandomValues(new Uint32Array(1))[0]),inheritanceRandom=G.seeded(crypto.getRandomValues(new Uint32Array(1))[0]),storeRandom=G.seeded(crypto.getRandomValues(new Uint32Array(1))[0]);
 let state,selected=null,running=!matchMedia('(prefers-reduced-motion: reduce)').matches,animationSpeed=1,last=0,toastTimer,saveTimer,browseType='all',browsePage=0,classConfig=null,resumeState=null,storageKey=SAVE,blocked=false,held=null,suppressedClick=null,cleanupReview=null,cleanupPage=0;
 const hash=G.checksum,validConfig=G.validConfig,encode=G.encodeConfig,decode=G.decodeConfig;
 function newState(config){const s=G.createState(config?.seed||42);if(config)Object.assign(s.settings,{mutation:config.mutation,showStats:config.stats,allowBackdrop:config.environment,backdrop:config.backdrop,allowSumo:config.sumo!==false,broods:config.broods??2});return s;}
@@ -61,7 +61,19 @@ function renderJars(){
  $('jar-help').textContent=active.length?(active.length===1?'One complete jar will produce all 10–20 babies.':'Two complete jars will split 10–20 babies.')+(incomplete.length?' Incomplete jars are skipped.':''):'Add at least two beetles to a jar and check “Use this jar.”';
  if(Object.keys(state.beetles).length>MAX-20)$('jar-help').textContent='This tank has reached its 3,000-beetle save limit. Save a file before starting a new tank.';
 }
-function render(){renderTank();renderJars();renderKeepTank();$('notes').value=state.notes||'';$('hero-beetle').innerHTML=(Object.keys(state.beetles).length?B.draw(state.beetles.B7||Object.values(state.beetles)[0],'hero'):'');window.dispatchEvent(new Event('pattern-state'));}
+function render(){renderTank();renderJars();renderKeepTank();renderStore();$('notes').value=state.notes||'';$('hero-beetle').innerHTML=(Object.keys(state.beetles).length?B.draw(state.beetles.B7||Object.values(state.beetles)[0],'hero'):'');window.dispatchEvent(new Event('pattern-state'));}
+function renderStore(){
+ if(blocked){$('store-open').disabled=true;return;}
+ if(G.ensureStore(state,{rng:storeRandom}))saveSoon();
+ const chosen=state.store.claimed,remaining=2-chosen.length;
+ $('store-remaining').textContent=remaining+' left';$('store-status').textContent='Breeding round '+state.round+' · '+chosen.length+' / 2 chosen';
+ if(!$('beetle-store').open)return;
+ $('store-grid').innerHTML=G.storeStock(state).map((b,i)=>{const taken=chosen.includes(i);return `<article class="store-card ${taken?'chosen':''}"><button class="store-portrait" data-store-look="${i}" aria-label="Look closer at arrival ${i+1}">${B.draw(b,'store-'+state.round+'-'+i)}</button><h3>Arrival ${i+1}</h3><button class="primary" data-store-take="${i}" ${taken||remaining===0?'disabled':''}>${taken?'Joined your tank':'Bring to tank'}</button></article>`;}).join('');
+ $('store-limit').textContent=remaining?('Choose '+(remaining===2?'up to two beetles':'one more beetle')+' from these five.'):"You’ve chosen two. Breed your next round to meet five new arrivals.";
+}
+$('store-open').onclick=()=>{if(blocked)return;$('beetle-store').showModal();renderStore();saveNow();};
+$('store-grid').onclick=e=>{const look=e.target.closest('[data-store-look]'),take=e.target.closest('[data-store-take]');if(look){const i=Number(look.dataset.storeLook),b=G.storeStock(state)[i];$('store-look-title').textContent='Arrival '+(i+1);$('store-look-art').innerHTML=B.draw(b,'store-closeup-'+i);$('store-look').showModal();}if(take)safely(()=>{if(blocked)return;const b=G.takeStoreBeetle(state,Number(take.dataset.storeTake));render();saveNow();toast('A new beetle joined your '+(G.container(state,b.id)==='tank'?'tank':'nursery')+' as '+b.id+'.');});};
+$('store-look').addEventListener('close',()=>{$('store-look-art').innerHTML='';});
 function renderKeepTank(){
  for(const id of keepViews.keys())if(!state.beetles[id])keepViews.delete(id);
  $('collection-count').textContent=state.collection.length+' / 10';$('keep-count').textContent=state.collection.length+' / 10 favorites';$('keep-tank').className='tank keep-tank '+state.settings.backdrop+(running?'':' cooled');$('keep-motion').textContent=running?'❄ Cool & pause':'▶ Run tank';
@@ -177,7 +189,7 @@ $('page-prev').onclick=()=>{browsePage--;renderBrowse();};$('page-next').onclick
 for(const button of document.querySelectorAll('[data-close]'))button.onclick=()=>$ (button.dataset.close).close();
 for(const id of ['guide','teacher'])$(id+'-open').onclick=()=>{if(id==='teacher'){if(classConfig){toast('This is a student class link. Open the teacher edition to make a new link.');return;}$('class-seed').value=state.seed;$('class-mutation').value=state.settings.mutation*100;$('class-backdrop').value=state.settings.backdrop;$('class-stats').checked=state.settings.showStats;$('class-environment').checked=state.settings.allowBackdrop;$('class-speed').value=animationSpeed;$('class-sumo').checked=state.settings.allowSumo!==false;$('class-broods').value=String(state.settings.broods);}$(id).showModal();};
 if(classConfig)$('teacher-open').hidden=true;
-$('create-link').onclick=()=>safely(()=>{const code=encode(configFromForm()),u=new URL(location.protocol==='file:'?'https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/':location.href);u.search='?v=PL2-20261022-14';u.hash='class='+code;$('student-link').value=u.href;$('copy-link').disabled=false;$('link-status').textContent='Ready. The link starts a fresh student tank with these presets.';});
+$('create-link').onclick=()=>safely(()=>{const code=encode(configFromForm()),u=new URL(location.protocol==='file:'?'https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/':location.href);u.search='?v=PL2-20261022-15';u.hash='class='+code;$('student-link').value=u.href;$('copy-link').disabled=false;$('link-status').textContent='Ready. The link starts a fresh student tank with these presets.';});
 $('try-settings').onclick=()=>safely(()=>{noPending();const c=configFromForm();if(!confirm('Start a new teacher tank with these presets? Save your current tank file first to keep it.'))return;state=newState(c);animationSpeed=c.speed;$('speed').value=c.speed;resumeState=null;views.clear();keepViews.clear();$('resume-banner').hidden=true;$('last-brood').hidden=true;$('teacher').close();render();cool(false);saveSoon();toast('Teacher presets applied.');});
 $('copy-link').onclick=async()=>{try{await navigator.clipboard.writeText($('student-link').value);$('link-status').textContent='Copied. Share this full link with your class.';}catch(e){$('student-link').select();$('link-status').textContent='Select and copy the link above.';}};
 $('notes').oninput=()=>{state.notes=$('notes').value.slice(0,10000);saveSoon();};$('notes').maxLength=10000;
