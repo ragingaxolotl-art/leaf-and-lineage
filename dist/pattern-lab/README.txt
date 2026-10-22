@@ -5,7 +5,7 @@ https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/
 
 TEACHER SETUP
 https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/?teacher=1
-Create a student link with chosen seed, mutation, bedding permission and full-stat visibility.
+Create a student link with chosen seed, mutation, bedding permission, sumo permission and full-stat visibility.
 
 PLAY OFFLINE
 Open Pattern-Lab.html in a modern browser. It includes all code and artwork, without installation.
@@ -21,9 +21,27 @@ HOW TO PLAY
 7. Save tank file or Save Keep tank + family file downloads the whole experiment.
    Open tank file restores the file, including favorites, genes, names, parentage and notes.
 
+SUMO AND SHARING
+Choose red and blue beetles, then Start local match. Pause or adjust playback without changing the outcome.
+Tracking, reaction, focus, ring tactics, speed, grip, mass, bracing, balance and instincts are inherited spectra.
+Front, side and rear pushes use different resistance. Wander-prone beetles may explore instead of pushing.
+There are no injuries, deaths or gene changes from a match. The match notebook records replays.
+To challenge another screen, expand Challenge another screen. The host chooses its red beetle and creates a code.
+The other child chooses their red beetle, enters the code and sends it. The host starts the shared match.
+Both screens use the same seed, physics and result. Each new match has fresh decision rolls.
+Only the selected beetle's anonymous genetic packet is sent, not names, notes or the rest of the tank.
+Codes expire in two hours. Create a new code to change the shared beetles. The code service needs internet.
+
+PORTABLE BEETLES
+In the enlarged inspector, Export beetle JSON downloads a single beetle. Export beetle document creates a
+printable HTML document that embeds the same genetic packet. Import beetle file accepts either file and adds
+the specimen without replacing existing beetles. Printing the document as PDF is for reading; keep HTML or JSON
+for re-upload. Whole tank files and single beetle files use separate Open/Import controls.
+Old Pattern Lab v1 tank saves keep their original five chromosome pairs; added traits are initialized once.
+
 Movement speed controls playback only. Inherited walking speed is a separate genetic trait.
 Cooling, scenery and decorations do not change genes. No predators or automatic mating.
-Genes and mutation are an original teaching model, not real-species genetics.
+Genetics, behavior and sumo physics are original teaching models, not real-species genetics.
 Auto-save stays on the current device when available; download a file before leaving a shared computer.
 Class links share starting presets, not later babies or saves. Files contain the full genetic record.
 

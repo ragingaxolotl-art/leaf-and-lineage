@@ -6,7 +6,8 @@ function draw(b,prefix='bug'){
  const p=G.phenotype(b),r=G.seeded(b.developmentSeed),id=prefix+'-'+b.id;
  const body=rgb(p.body),limb=rgb(p.body.map(v=>v*p.appendageShade*.7+14)),line='rgba(24,42,35,.7)';
  const w=29*p.bodyWidth,parts=[];
- parts.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="-110 -175 220 265" aria-hidden="true" focusable="false"><defs><clipPath id="${id}"><ellipse cy="11" rx="${w}" ry="43"/></clipPath><linearGradient id="${id}-shine" x1="0" x2="1"><stop stop-color="#fff" stop-opacity=".32"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#152e25" stop-opacity=".22"/></linearGradient></defs>`);
+ parts.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="-110 -175 220 265" aria-hidden="true" focusable="false" style="overflow:visible;--gait-duration:${(.25+.65*(1-p.gait)).toFixed(2)}s"><defs><clipPath id="${id}"><ellipse cy="11" rx="${w}" ry="43"/></clipPath><linearGradient id="${id}-shine" x1="0" x2="1"><stop stop-color="#fff" stop-opacity=".32"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#152e25" stop-opacity=".22"/></linearGradient></defs>`);
+ parts.push(`<g transform="scale(1 ${p.bodyLength})">`);
  // Six jointed legs. Front, middle and hind modifiers preserve real leg-pair structure.
  for(const side of [-1,1])for(let pair=0;pair<3;pair++){
   const y=-14+pair*25,front=pair===0,hind=pair===2;
@@ -67,7 +68,12 @@ function draw(b,prefix='bug'){
    }
   }
  }parts.push('</g>');}
- parts.push(`<ellipse cy="11" rx="${w}" ry="43" fill="url(#${id}-shine)"/><path d="M0 -31 Q-2 12 0 54" fill="none" stroke="${line}" stroke-width="1.3"/><ellipse cy="-29" rx="${23*p.bodyWidth}" ry="15" fill="${limb}" stroke="${line}" stroke-width="1.5"/><ellipse cy="-47" rx="16" ry="13" fill="${body}" stroke="${line}" stroke-width="1.5"/><ellipse cx="-13" cy="-49" rx="3" ry="5" fill="#182a24"/><ellipse cx="13" cy="-49" rx="3" ry="5" fill="#182a24"/><path d="M-5 -60 L-3 -64 M5 -60 L3 -64" stroke="${limb}" stroke-width="2" stroke-linecap="round"/></svg>`);
+ if(p.ridges>.5){parts.push(`<g clip-path="url(#${id})" fill="none" stroke="#172e27" opacity="${.08+p.ridgeHeight*.25}" stroke-width="${.5+p.ridgeHeight}">`);for(let i=1;i<=Math.round(p.ridges);i++){const x=-w+2*w*i/(Math.round(p.ridges)+1);parts.push(`<path d="M${x} -32 Q${x*1.15} 12 ${x*.75} 54"/>`);}parts.push('</g>');}
+ if(p.gloss>.05)parts.push(`<ellipse cx="${-w*.4}" cy="0" rx="${w*.2}" ry="27" fill="#fff" opacity="${p.gloss*.45}" transform="rotate(12)"/>`);
+ if(p.metallic>.05)parts.push(`<ellipse cy="11" rx="${w}" ry="43" fill="none" stroke="${rgb(p.primary)}" stroke-width="${1+p.metallic*2}" opacity="${p.metallic*.7}"/>`);
+ if(p.horn>.05)parts.push(`<path d="M-4 -48 Q-7 ${-64-p.horn*25} 0 ${-69-p.horn*34} Q7 ${-64-p.horn*25} 4 -48Z" fill="${limb}" stroke="${line}" stroke-width="1"/>`);
+ if(p.jaw>.05)parts.push(`<path d="M-7 -57 q${-8-p.jaw*8} ${-8-p.jaw*12} ${5+p.jaw*5} ${-10-p.jaw*14} M7 -57 q${8+p.jaw*8} ${-8-p.jaw*12} ${-5-p.jaw*5} ${-10-p.jaw*14}" stroke="${limb}" stroke-width="${1+p.jaw*3}" fill="none"/>`);
+ parts.push(`<ellipse cy="11" rx="${w}" ry="43" fill="url(#${id}-shine)"/><path d="M0 -31 Q-2 12 0 54" fill="none" stroke="${line}" stroke-width="1.3"/><ellipse cy="-29" rx="${23*p.bodyWidth*p.pronotum}" ry="15" fill="${limb}" stroke="${line}" stroke-width="1.5"/><ellipse cy="-47" rx="${16*p.headWidth}" ry="13" fill="${body}" stroke="${line}" stroke-width="1.5"/><ellipse cx="-13" cy="-49" rx="3" ry="5" fill="#182a24"/><ellipse cx="13" cy="-49" rx="3" ry="5" fill="#182a24"/><path d="M-5 -60 L-3 -64 M5 -60 L3 -64" stroke="${limb}" stroke-width="2" stroke-linecap="round"/></g></svg>`);
  return parts.join('');
 }
 root.PatternBeetles={draw,rgb};

@@ -11,6 +11,9 @@ const chromosomes=[
  {id:'D',loci:[cat('antenna','Antenna framework',['thread','bead','bristle','club','knob','saw','comb','doublecomb','fan','plates','elbow','plume','aristate']),num('antennaLength','Antenna length',.05,3),num('shaftWidth','Antenna width',.7,3.5),num('segments','Antenna segments',4,16),num('beadRoundness','Bead roundness'),num('curve','Antenna curve',-.5,.7),num('elbow','Elbow angle',0,85),num('tip','Tip enlargement'),num('branches','Branch count',2,14),num('branchLength','Branch length'),num('plateWidth','Fan / plate width'),cat('hairGate','Hair suppressor',['H','h']),num('hairDensity','Fine hair density'),num('hairLength','Fine hair length'),num('spread','Antenna spread',.15,1)]},
  {id:'E',loci:[cat('leg','Leg framework',['runner','sturdy','shovel','jumper','paddle','hooked','spiny','longfoot']),num('legLength','Leg length',.55,1.5),num('femur','Thigh thickness',.7,2.4),num('tibia','Shin width',.7,2),num('foot','Foot length',.5,1.8),num('joint','Joint angle',-.4,.4),num('legSpread','Leg spread',.7,1.4),num('claw','Claw curve'),num('spines','Spine density'),num('legHair','Leg hair density'),num('hind','Hind-leg emphasis'),num('motor','Motor speed'),num('stride','Stride drive'),num('strength','Strength')]}
 ];
+// All behavior and sumo measurements are continuous game traits, not species claims.
+chromosomes.push({id:'F',loci:[num('tracking','Opponent tracking'),num('reaction','Reaction speed'),num('focus','Attention focus'),num('pushDrive','Pushing instinct'),num('wander','Wandering instinct'),num('turnRate','Turning agility'),num('tactics','Ring tactics (game intelligence)'),num('edgeSense','Edge awareness'),num('brace','Bracing instinct'),num('lateralBalance','Sideways balance'),num('grip','Foot grip'),num('endurance','Endurance'),num('recovery','Recovery'),num('mass','Body mass'),num('acceleration','Acceleration'),num('centerDrive','Center preference'),num('curiosity','Curiosity'),num('sociality','Social approach'),num('caution','Caution'),num('persistence','Persistence')]});
+chromosomes.push({id:'G',loci:[num('bodyLength','Body length',.78,1.3),num('headWidth','Head width',.65,1.4),num('horn','Horn length'),num('jaw','Jaw size'),num('gloss','Shell gloss'),num('metallic','Metallic sheen'),num('ridges','Shell ridge count',0,10),num('ridgeHeight','Shell ridge relief'),num('pronotum','Neck shield width',.75,1.3),num('gait','Gait rhythm')]});
 const loci=chromosomes.flatMap(c=>c.loci), byKey=Object.fromEntries(loci.map(l=>[l.key,l]));
 const antennaNames={thread:'Threadlike',bead:'Beaded',bristle:'Tapering bristle',club:'Gradual club',knob:'Knob-tipped',saw:'Sawtoothed',comb:'Single comb',doublecomb:'Double comb',fan:'Broad fan',plates:'Leaf-plate fan',elbow:'Elbowed',plume:'Hairy plume',aristate:'Side bristle'};
 const legNames={runner:'Slender runner',sturdy:'Sturdy walker',shovel:'Shovel forelegs',jumper:'Enlarged hind thighs',paddle:'Hairy paddles',hooked:'Hooked graspers',spiny:'Spiny legs',longfoot:'Long-toed legs'};
@@ -79,7 +82,7 @@ function breedRound(state,opts={}){
  state.round++;state.history.push({broodId,total,allocations:allocations.map(a=>({jarId:a.jar.id,count:a.count,parents:a.jar.members.slice()})),offspring:newborns.slice()});
  return state.history[state.history.length-1];
 }
-function createState(seed=42){const r=seeded(seed),s={version:'PL1',round:0,nextId:17,seed,settings:{mutation:.005,showStats:false,backdrop:'moss',allowBackdrop:true},beetles:{},tank:[],nursery:[],collection:[],keepLayout:{},jars:[{id:'jar-1',active:true,members:[]},{id:'jar-2',active:false,members:[]}],history:[],notes:''};for(let i=0;i<16;i++){const id='B'+(i+1);s.beetles[id]=founder(id,r,i);s.tank.push(id);}return s;}
+function createState(seed=42){const r=seeded(seed),s={version:'PL2',round:0,nextId:17,seed,settings:{mutation:.005,showStats:false,backdrop:'moss',allowBackdrop:true,allowSumo:true},beetles:{},tank:[],nursery:[],collection:[],keepLayout:{},jars:[{id:'jar-1',active:true,members:[]},{id:'jar-2',active:false,members:[]}],history:[],matchHistory:[],notes:''};for(let i=0;i<16;i++){const id='B'+(i+1);s.beetles[id]=founder(id,r,i);s.tank.push(id);}return s;}
 function container(s,id){if(s.tank.includes(id))return 'tank';if(s.nursery.includes(id))return 'nursery';if(s.collection.includes(id))return 'collection';return s.jars.find(j=>j.members.includes(id))?.id||null;}
 function move(s,id,target){
  if(!s.beetles[id])throw Error('This beetle is missing.');
@@ -92,10 +95,31 @@ function move(s,id,target){
  for(const list of [s.tank,s.nursery,s.collection,...s.jars.map(j=>j.members)]){const i=list.indexOf(id);if(i>=0)list.splice(i,1);}
  (jar?jar.members:s[target]).push(id);
 }
+function upgradeState(s){
+ if(!s||!['PL1','PL2'].includes(s.version)||!s.beetles)return s;
+ for(const b of Object.values(s.beetles)){
+  if(Array.isArray(b.genome)&&b.genome.length===5&&b.genome.every((g,i)=>g.id===chromosomes[i].id)){
+   const r=seeded(parseInt(checksum(JSON.stringify(b.genome)+b.developmentSeed),36));
+   for(const c of chromosomes.slice(5))b.genome.push({id:c.id,copies:[c.loci.map(l=>randomAllele(l,r)),c.loci.map(l=>randomAllele(l,r))]});
+   for(const [key,value] of Object.entries({bodyLength:1,headWidth:1,horn:0,jaw:0,gloss:0,metallic:0,ridges:0,ridgeHeight:0,pronotum:1,gait:.5}))setCopies(b,key,value);
+   b.upgradeNote='Behavior and sumo traits initialized deterministically during the v1-to-v2 upgrade; the original five chromosome pairs were preserved.';
+  }
+ }
+ s.version='PL2';if(s.settings&&s.settings.allowSumo===undefined)s.settings.allowSumo=true;s.keepLayout=s.keepLayout||{};s.matchHistory=s.matchHistory||[];
+ return s;
+}
 function validate(s){
- if(!s||s.version!=='PL1'||!s.settings||typeof s.beetles!=='object'||!Array.isArray(s.jars)||s.jars.length!==2)throw Error('This is not a Pattern Lab save.');
+ s=upgradeState(s);
+ if(!s||s.version!=='PL2'||!s.settings||typeof s.beetles!=='object'||!Array.isArray(s.jars)||s.jars.length!==2)throw Error('This is not a Pattern Lab save.');
  if(!Number.isInteger(s.nextId)||s.nextId<1||!Number.isInteger(s.round)||s.round<0||!Array.isArray(s.history)||s.history.length!==s.round||!Number.isInteger(s.seed)||s.seed<1||s.seed>2147483647||typeof s.notes!=='string'||s.notes.length>10000)throw Error('Invalid brood record.');
  if(!Number.isFinite(s.settings.mutation)||s.settings.mutation<0||s.settings.mutation>.1||!['moss','sand','bark','night'].includes(s.settings.backdrop)||typeof s.settings.showStats!=='boolean'||typeof s.settings.allowBackdrop!=='boolean')throw Error('Invalid settings.');
+ if(typeof s.settings.allowSumo!=='boolean'||!Array.isArray(s.matchHistory)||s.matchHistory.length>100)throw Error('Invalid sumo records.');
+ for(const m of s.matchHistory){
+  if(!m||m.version!=='SUMO2'||!Number.isInteger(m.seed)||m.seed<0||m.seed>4294967295||!Number.isFinite(m.seconds)||m.seconds<0||m.seconds>60.1||![null,0,1].includes(m.winner)||!['Ring-out','Both centers crossed the line','Time limit — draw'].includes(m.reason)||!Array.isArray(m.fighters)||m.fighters.length!==2||!Array.isArray(m.events)||m.events.length>120)throw Error('Invalid saved match.');
+  for(const f of m.fighters){if(!f||typeof f.id!=='string'||f.id.length>80||typeof f.name!=='string'||f.name.length>40||['wanderingSeconds','contactSeconds','sidePushes','rearPushes','frontPushes'].some(k=>!Number.isFinite(f[k])||f[k]<0||f[k]>120))throw Error('Invalid fighter record.');}
+  for(const e of m.events)if(!e||!Number.isFinite(e.time)||e.time<0||e.time>60.1||![0,1].includes(e.attacker)||![0,1].includes(e.defender)||e.attacker===e.defender||!['front','side','rear'].includes(e.side))throw Error('Invalid contact record.');
+  if(m.participants!==undefined){if(!Array.isArray(m.participants)||m.participants.length!==2)throw Error('Invalid replay data.');m.participants.forEach(validatePacket);}
+ }
  const ids=Object.keys(s.beetles);if(ids.length>3000)throw Error('This save is too large (3,000 beetles maximum).');
  for(const [i,j] of s.jars.entries())if(j.id!=='jar-'+(i+1)||typeof j.active!=='boolean'||!Array.isArray(j.members)||j.members.length>4)throw Error('Invalid jar.');
  if(![s.tank,s.nursery,s.collection].every(Array.isArray)||s.tank.length>48||s.collection.length>10)throw Error('Invalid tank capacity.');
@@ -120,10 +144,33 @@ function validConfig(c){
  if(!Number.isInteger(c.seed)||c.seed<1||c.seed>2147483647)throw Error('Population seed must be a whole number from 1 to 2147483647.');
  if(!Number.isFinite(c.mutation)||c.mutation<0||c.mutation>.1)throw Error('Mutation must be from 0 to 10 percent per gene copy.');
  if(!['moss','sand','bark','night'].includes(c.backdrop)||typeof c.stats!=='boolean'||typeof c.environment!=='boolean'||![.5,1,2,5,10].includes(c.speed))throw Error('This class link contains unsupported settings.');
+ if(c.sumo!==undefined&&typeof c.sumo!=='boolean')throw Error('Invalid sumo permission.');
  return c;
 }
 function encodeConfig(c){const data=btoa(JSON.stringify(validConfig(c))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');return 'PL1.'+data+'.'+checksum(data);}
 function decodeConfig(code){try{const a=code.split('.');if(a.length!==3||a[0]!=='PL1'||checksum(a[1])!==a[2])throw Error('This class link is incomplete or damaged. Ask for the full link.');return validConfig(JSON.parse(atob(a[1].replace(/-/g,'+').replace(/_/g,'/'))));}catch(e){throw Error(e.message||'This class link could not be read.');}}
-const api={chromosomes,loci,byKey,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,move,validate,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
+function validatePacket(input){
+ if(!input||input.format!=='PatternLabBeetle'||![1,2].includes(input.version)||!input.beetle)throw Error('Choose a Pattern Lab beetle JSON file.');
+ const source=clone(input.beetle);
+ if(typeof source.id!=='string'||source.id.length>80||typeof source.name!=='string'||source.name.length>40||!Array.isArray(source.parents)||![0,2].includes(source.parents.length)||source.parents.some(x=>typeof x!=='string'||x.length>80))throw Error('Invalid beetle identity.');
+ const specimen={...source,id:'B1',parents:[],sourceJarId:null,broodId:null};
+ const state=createState(1);state.beetles={B1:specimen};state.nextId=2;state.tank=['B1'];state.jars.forEach(j=>j.members=[]);
+ if(source.genome?.length===5)state.version='PL1';
+ validate(state);
+ return {format:'PatternLabBeetle',version:2,beetle:{...state.beetles.B1,id:source.id,parents:source.parents},model:'Invented teaching genetics; sumo traits are game measurements.'};
+}
+function packet(b,{anonymous=false}={}){
+ const specimen=clone(b);
+ if(anonymous){specimen.name='';specimen.parents=[];specimen.sourceJarId=null;specimen.broodId=null;delete specimen.provenance;delete specimen.upgradeNote;}
+ return validatePacket({format:'PatternLabBeetle',version:2,beetle:specimen});
+}
+function importPacket(s,input){
+ const data=validatePacket(input),b=clone(data.beetle),source=clone(b);
+ if(Object.keys(s.beetles).length>=3000)throw Error('Save this experiment and start a new tank before importing more beetles.');
+ b.id='B'+s.nextId++;b.parents=[];b.sourceJarId=null;b.broodId=null;
+ b.provenance={sourceId:source.id,parents:source.parents,generation:source.lineageGeneration};
+ s.beetles[b.id]=b;(s.tank.length<48?s.tank:s.nursery).push(b.id);return b;
+}
+const api={chromosomes,loci,byKey,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,move,validate,upgradeState,packet,validatePacket,importPacket,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PatternGenetics=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
