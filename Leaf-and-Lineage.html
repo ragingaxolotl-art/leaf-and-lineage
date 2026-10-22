@@ -154,10 +154,10 @@
   <noscript><p class="noscript">This interactive lab needs JavaScript enabled in your browser.</p></noscript>
   <dialog id="guide" aria-labelledby="guide-title"><button id="help-close" class="dialog-close" aria-label="Close field guide">×</button><p class="eyebrow">YOUR POCKET FIELD GUIDE</p><h2 id="guide-title">Inheritance, chance, and change.</h2>
   <h3>Rows and breeding jars</h3><p>Each row has room for eight beetles and has its own cycle counter. Choose two different living parents for a row’s jar, then Breed row. Only that row changes. Empty and unfinished jars leave their rows alone. Next generation advances all complete jars once; Play keeps making new broods from their original pairs. Saved jar parents remain until you replace or remove them, including when you switch activities. Repeated broods of the same parents are siblings, not successive descendant generations. Parents may come from any row; using the same pair in all jars explicitly prepares every population.</p>
-  <h3>Surprises inherited from parents</h3><p>Each beetle carries two inherited color recipes, and one can stay hidden. A baby receives one complete recipe from each parent. Those recipes can pass through grandchildren and later descendants. A hidden color can appear even when both parents look green. This works for every color family, with no fixed color dominance ranking.</p><p>This original teaching model has six linked binary genes encoding each recipe’s color and expression strength, plus three numeric shade genes. The stronger inherited recipe determines visible color; a tie uses parent A’s copy. A green beetle might carry a weaker red recipe, for example. Two such parents can produce red offspring if both pass that recipe, a 25% chance before mutation. Other parents have different possibilities. These are independent chances, not guaranteed proportions in a row of eight.</p><p>Try an inheritance cross selects two green carriers and turns mutation off. The offspring preview enumerates the four equally likely recipe transmissions and 64 shade transmissions, grouping duplicate RGB colors. Full stats reveals the actual recipe copies and their expression strengths; the simplified view keeps these details hidden.</p>
+  <h3>Surprises inherited from parents</h3><p>Each beetle carries two inherited color recipes, and one can stay hidden. A baby receives one complete recipe from each parent. Those recipes can pass through grandchildren and later descendants. A hidden color can appear even when both parents look green. This works for every color family, with no fixed color dominance ranking.</p><p>This original teaching model has six linked binary genes encoding each recipe’s color and expression strength, plus three numeric shade genes. The stronger inherited recipe supplies the base color; a tie uses parent A’s copy. Three shade genes vary each RGB channel across its full dark-to-bright range, so custom colors, black and white are genetically reachable. A beetle’s color name describes its actual appearance, which can differ from the base recipe. A green beetle might carry a weaker red recipe, for example. Two such parents can produce offspring expressing that red recipe if both pass it, a 25% chance before mutation. Shade genes determine the exact visible result. Other parents have different possibilities. These are independent chances, not guaranteed proportions in a row of eight.</p><p>Try an inheritance cross selects two green carriers and turns mutation off. The offspring preview enumerates the four equally likely recipe transmissions and 64 shade transmissions, grouping duplicate RGB colors. Full stats reveals the actual recipe copies and their expression strengths; the simplified view keeps these details hidden.</p>
   <h3>Mutation is separate</h3><p>Unusual offspring do not require mutation if their parents already carry the necessary copies. A mutation can also introduce a new copy: a binary switch flips, or a shade value changes by ±1–36 within 0–255. The rate applies independently to 18 inherited copies. Mutations do not aim for the environment. Genes that are no longer carried by any beetle do not return from an invisible archive; new mutation would be needed.</p>
-  <h3>Bird mode, breeding mode, or both</h3><p>In bird mode, every living beetle gets one independent survival roll. The bird may eat any number, including none or all. Each hunt uses fresh rolls, even after restarting with the same population seed. Survivors can breed across rows and habitat boundaries. Mating favors the eight surrounding leaves, including diagonals. Each farther ring has half the mating weight of the previous ring; a partner is chosen randomly within that ring. Offspring replace a surviving parent on its leaf, and nearby survivors refill vacant leaves. With no close partner, a farther survivor can mate instead. With at least two survivors on the whole board, their offspring fill all rows. One survivor stays on its original leaf without offspring; zero survivors leaves an empty board. No survivor quota or rescue reroll is used. Contrasting beetles are more likely to be eaten when selection is strong, with chance still involved. With the animation on, each beetle rolls when the bird reaches its leaf. The counter reports only completed checks; reproduction waits until all beetles have been checked. At zero selection strength, each insect has a 70% survival chance regardless of color. With stronger selection, better camouflage improves that insect’s chance. The same rule compares shade and color balance for every beetle and background; there is no preferred color name. Before the neighbor boost, full-strength survival is 10% + 80% × camouflage². Intermediate strength blends those two rules. The game then compares the eight surrounding leaves, including diagonals, on the same background. A beetle that blends in better than those neighbors gets a boost. More contrasting neighbors give greater protection; identical neighbors give none. This comparison uses the board at the start of the hunt, so the bird’s checking order does not change anyone’s odds. When all beetles match the background, their ordinary camouflage still keeps eating risk low. Chance remains, and each insect rolls once.</p><p>In breeding mode, students choose parents, with no bird selection during that breeding step. When both activities are enabled, students may switch between choosing parents and watching natural selection. Jars always replace only their own rows. Turning off the bird animation hides the animation, while bird selection still operates.</p>
-  <h3>Neapolitan habitats</h3><p>Neapolitan is an additional environment alongside Meadow, Dry leaves, and Dusk. It divides the board’s leaf area into three continuous vertical color bands of equal width. Each insect is judged against the band behind its own leaf. With eight columns, the left three leaves are in the first third, the next two in the middle, and the right three in the last third. Jars are outside these survival zones. In bird mode, offspring stay near their parents. Nearby mating spans rows, columns, and diagonals, with a lower chance in each farther ring. Partners can cross habitat boundaries. This lets matching colors gradually form bands while genes still move between zones. Each beetle’s advantage uses the actual color under its leaf, including custom habitat colors. Chance and mutation can keep the bands mixed. In jar mode, offspring fill only their jar’s row.</p><h3>Classroom links</h3><p>Classroom setup lets the teacher allow breeding only, bird only, or both, and choose whether students can change the environment. Shared links apply these permissions and starting presets automatically. The teacher may show full stats, charts, genetics, and data downloads, or keep the simplified view. Activity and environment permissions remain in effect. Start over restores the assigned starting conditions; notes remain.</p>
+  <h3>Bird mode, breeding mode, or both</h3><p>In bird mode, every living beetle gets one independent survival roll. The bird may eat any number, including none or all. Each hunt uses fresh rolls, even after restarting with the same population seed. Survivors can breed across rows and habitat boundaries. Mating favors the eight surrounding leaves, including diagonals. Distance weights apply to each individual partner: adjacent beetles have weight 1, two rings away 0.25, three rings about 0.083, and progressively less farther away. A weighted draw chooses a distinct real survivor. Movement between unlike habitat patches is also less frequent; this reduces mixing without preventing cross-boundary breeding. Identical backgrounds mix freely. This invented movement rule uses actual background colors, not beetle color names. Offspring replace a surviving parent on its leaf, and nearby survivors refill vacant leaves. With no close partner, a farther survivor can mate instead. With at least two survivors on the whole board, their offspring fill all rows. One survivor stays on its original leaf without offspring; zero survivors leaves an empty board. No survivor quota or rescue reroll is used. Contrasting beetles are more likely to be eaten when selection is strong, with chance still involved. With the animation on, each beetle rolls when the bird reaches its leaf. The counter reports only completed checks; reproduction waits until all beetles have been checked. At zero selection strength, each insect has a 70% survival chance regardless of color. With stronger selection, better camouflage improves that insect’s chance. The same rule compares shade and color balance for every beetle and background; there is no preferred color name. Before the neighbor boost, full-strength survival is 10% + 80% × camouflage². Intermediate strength blends those two rules. The game then compares the eight surrounding leaves, including diagonals, on the same background. A beetle that blends in better than those neighbors gets a boost. More contrasting neighbors give greater protection; identical neighbors give none. This comparison uses the board at the start of the hunt, so the bird’s checking order does not change anyone’s odds. When all beetles match the background, their ordinary camouflage still keeps eating risk low. Chance remains, and each insect rolls once.</p><p>In breeding mode, students choose parents, with no bird selection during that breeding step. When both activities are enabled, students may switch between choosing parents and watching natural selection. Jars always replace only their own rows. Turning off the bird animation hides the animation, while bird selection still operates.</p>
+  <h3>Neapolitan habitats</h3><p>Neapolitan is an additional environment alongside Meadow, Dry leaves, and Dusk. It divides the board’s leaf area into three continuous vertical color bands of equal width. Each insect is judged against the band behind its own leaf. With eight columns, the left three leaves are in the first third, the next two in the middle, and the right three in the last third. Jars are outside these survival zones. In bird mode, offspring stay near their parents. Nearby mating spans rows, columns, and diagonals, with lower distance weights per individual farther partner. Crossing between unlike habitat patches is less frequent but always possible. When equally near survivors refill an empty leaf, survivors from a similar habitat are more likely to supply its first parent. This lets matching colors gradually form bands while genes still move between zones. Colors are inherited and selected; the game never assigns offspring colors to match a band. Each beetle’s advantage uses the actual color under its leaf, including custom habitat colors. Chance and mutation can keep the bands mixed. In jar mode, offspring fill only their jar’s row.</p><h3>Classroom links</h3><p>Classroom setup lets the teacher allow breeding only, bird only, or both, and choose whether students can change the environment. Shared links apply these permissions and starting presets automatically. The teacher may show full stats, charts, genetics, and data downloads, or keep the simplified view. Activity and environment permissions remain in effect. Start over restores the assigned starting conditions; notes remain.</p>
   <h3>Observe and record</h3><p>Changing an environment never recolors existing beetles. It changes which colors blend in. Pause, predict, and compare the next generations. Average camouflage is a color similarity score, not a survival probability; diversity measures color spread. The teacher chart combines all rows, while each row tracks its own generation.</p>
   <h3>A simplified model</h3><p>These invented color recipes illustrate inherited variation, hidden alleles, linkage, natural selection, mutation, and drift. They do not claim to reproduce actual beetle color genetics. Each row has a capacity of eight, color genes travel together as a recipe, shade genes inherit independently, and survival depends on camouflage, nearby contrast, and chance.</p><p class="guide-end">Drag with a mouse, trackpad, pen, or touch. With a keyboard, select a beetle and activate an empty jar slot. On small screens, swipe along a row. Save observations before leaving; all state stays in this browser tab.</p></dialog>
 
@@ -221,10 +221,22 @@
     return { visible: familyKeys[mask], active: PATHWAYS.map((_, i) => Boolean(mask & (1 << i))), alleles: masks.map(value => familyKeys[value]), strengths, expressed };
   }
   const activePathways = switches => colorInfo(switches).active;
+  // Each inherited shade locus spans the whole channel: 0 is dark,
+  // 128 retains the recipe channel, and 255 is fully bright. No habitat
+  // value enters phenotype or mutation.
+  const shadeColor = (base, shade) => base.map((value, i) => shade[i] <= 128 ? value * shade[i] / 128 : value + (255 - value) * (shade[i] - 128) / 127);
   function phenotype(genes, switches) {
-    const shade = shadeMean(genes);
-    const base = PIGMENTS[colorInfo(switches).visible].color;
-    return base.map((v, i) => clamp(v + (shade[i] - 128) * .25));
+    return shadeColor(PIGMENTS[colorInfo(switches).visible].color, shadeMean(genes));
+  }
+  const APPEARANCES = { ...PIGMENTS, black: { name: 'Black', color: [24,24,24] }, white: { name: 'White', color: [244,244,244] }, gray: { name: 'Gray', color: [128,128,128] } };
+  function appearance(color) {
+    const high = Math.max(...color), low = Math.min(...color), span = high - low;
+    if (high < 48) return 'black';
+    if (low > 224 && span < 32) return 'white';
+    if (!high || span / high < .12) return 'gray';
+    let hue = high === color[0] ? (color[1] - color[2]) / span : high === color[1] ? 2 + (color[2] - color[0]) / span : 4 + (color[0] - color[1]) / span;
+    hue = (hue * 60 + 360) % 360;
+    return hue < 14 || hue >= 345 ? 'red' : hue < 38 ? 'orange' : hue < 72 ? 'yellow' : hue < 150 ? 'green' : hue < 190 ? 'teal' : hue < 260 ? 'blue' : hue < 315 ? 'purple' : 'mixed';
   }
   const hex = rgb => '#' + rgb.map(v => Math.round(clamp(v)).toString(16).padStart(2, '0')).join('');
   const fromHex = value => [1, 3, 5].map(i => parseInt(value.slice(i, i + 2), 16));
@@ -239,6 +251,11 @@
   };
   const habitatAt = (habitat, slot, rowSize = 8) => Array.isArray(habitat[0]) ? habitat[Math.min(habitat.length - 1, Math.floor(((slot % rowSize) + .5) / rowSize * habitat.length))] : habitat;
   const gridDistance = (a, b, rowSize = 8) => Math.max(Math.abs(Math.floor(a / rowSize) - Math.floor(b / rowSize)), Math.abs(a % rowSize - b % rowSize));
+  // Per individual, never per ring: farther candidates receive less weight.
+  const mateWeight = distance => distance > 0 ? .5 ** (distance - 1) / distance : 0;
+  // A simplified movement rule between habitat patches. Similar colors mix
+  // freely; unlike patches reduce crossing, but never prohibit it.
+  const habitatAffinity = (a, b) => .05 + .95 * match(a, b) ** 8;
   function adjacentSlots(slot, capacity, rowSize = 8) {
     const row = Math.floor(slot / rowSize), col = slot % rowSize, slots = [];
     for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
@@ -268,16 +285,17 @@
       const family = colorInfo(switches).visible;
       familyCounts.set(family, (familyCounts.get(family) || 0) + .25);
     }
-    const pigmentChances = familyKeys.filter(pigment => familyCounts.has(pigment)).map(pigment => ({ pigment, probability: familyCounts.get(pigment) }));
-    const pathwayChances = PATHWAYS.map((pathway, i) => ({ name: pathway.name, probability: pigmentChances.reduce((sum, outcome) => sum + (familyKeys.indexOf(outcome.pigment) & (1 << i) ? outcome.probability : 0), 0) }));
-    const outcomes = [], counts = new Map();
-    for (const outcome of pigmentChances) for (const r of loci[0]) for (const g of loci[1]) for (const blue of loci[2]) {
+    const recipeChances = familyKeys.filter(pigment => familyCounts.has(pigment)).map(pigment => ({ pigment, probability: familyCounts.get(pigment) }));
+    const pathwayChances = PATHWAYS.map((pathway, i) => ({ name: pathway.name, probability: recipeChances.reduce((sum, outcome) => sum + (familyKeys.indexOf(outcome.pigment) & (1 << i) ? outcome.probability : 0), 0) }));
+    const outcomes = [], counts = new Map(), appearanceCounts = new Map();
+    for (const outcome of recipeChances) for (const r of loci[0]) for (const g of loci[1]) for (const blue of loci[2]) {
       const base = PIGMENTS[outcome.pigment].color;
-      const color = [r.value, g.value, blue.value].map((v, i) => clamp(base[i] + (v - 128) * .25));
+      const color = shadeColor(base, [r.value, g.value, blue.value]);
       const probability = outcome.probability / 64, key = hex(color);
       outcomes.push({ color, probability }); counts.set(key, (counts.get(key) || 0) + probability);
+      const family = appearance(color); appearanceCounts.set(family, (appearanceCounts.get(family) || 0) + probability);
     }
-    return { loci, pathwayChances, pigmentChances, outcomes,
+    return { loci, pathwayChances, recipeChances, pigmentChances: Object.keys(APPEARANCES).filter(pigment => appearanceCounts.has(pigment)).map(pigment => ({ pigment, probability: appearanceCounts.get(pigment) })), outcomes,
       totalTransmissions: 4 * 4 ** 3,
       colors: Array.from(counts, ([color, probability]) => ({ color, probability })),
       mean: [0, 1, 2].map(i => outcomes.reduce((sum, o) => sum + o.color[i] * o.probability, 0))
@@ -290,8 +308,8 @@
       this.rng = random(seed); this.survivalRng = Math.random; this.generation = 0; this.nextId = 1;
       this.rowGenerations = Array(this.rows).fill(0);
       this.population = Array.from({ length: size }, (_, index) => {
-        const base = [55 + this.rng() * 155, 65 + this.rng() * 140, 35 + this.rng() * 150];
-        const genes = base.map(v => [clamp(Math.round(v + (this.rng() - .5) * 90)), clamp(Math.round(v + (this.rng() - .5) * 90))]);
+        const base = Array.from({ length: 3 }, () => 128 + (this.rng() - .5) * 32);
+        const genes = base.map(v => [clamp(Math.round(v + (this.rng() - .5) * 20)), clamp(Math.round(v + (this.rng() - .5) * 20))]);
         const switches = Array.from({ length: 6 }, () => [Number(this.rng() < .5), Number(this.rng() < .5)]);
         // Green carriers retain another real recipe. Its expression is
         // weaker here, but a descendant can inherit two hidden copies.
@@ -359,18 +377,16 @@
       let crossRowBirths = 0, crossHabitatBirths = 0, nearbyBirths = 0, fartherBirths = 0;
       const positions = new Map(breeders.map(b => [b.id, this.population.indexOf(b)]));
       const habitatKeys = new Map(breeders.map(b => [b.id, hex(habitatAt(habitat, positions.get(b.id), this.rowSize))]));
-      // Group mates by distance ring. Each farther ring has half the total
-      // weight of the preceding ring; choose uniformly within a chosen ring.
-      const matingRings = new Map(breeders.map(first => {
-        const groups = new Map();
-        breeders.forEach(second => {
-          if (first === second) return;
-          const distance = gridDistance(positions.get(first.id), positions.get(second.id), this.rowSize);
-          if (!groups.has(distance)) groups.set(distance, []);
-          groups.get(distance).push(second);
-        });
-        return [first.id, Array.from(groups, ([distance, mates]) => ({ distance, mates, weight: .5 ** (distance - 1) })).sort((a,b) => a.distance - b.distance)];
-      }));
+      const backgrounds = new Map(breeders.map(b => [b.id, habitatAt(habitat, positions.get(b.id), this.rowSize)]));
+      const weightedPick = candidates => {
+        let roll = this.rng() * candidates.reduce((sum, item) => sum + item.weight, 0);
+        for (const candidate of candidates) { roll -= candidate.weight; if (roll < 0) return candidate.beetle; }
+        return candidates[candidates.length - 1].beetle;
+      };
+      const mates = new Map(breeders.map(first => [first.id, breeders.filter(second => first !== second).map(second => ({
+        beetle: second,
+        weight: mateWeight(gridDistance(positions.get(first.id), positions.get(second.id), this.rowSize)) * habitatAffinity(backgrounds.get(first.id), backgrounds.get(second.id))
+      }))]));
       if (breeders.length >= 2) {
         for (let row = 0; row < this.rows; row++) updatedRows.push(row);
         for (let slot = 0; slot < this.capacity; slot++) {
@@ -378,17 +394,16 @@
           // from the nearest real survivor, choosing randomly between ties.
           const nearestDistance = Math.min(...breeders.map(b => gridDistance(slot, positions.get(b.id), this.rowSize)));
           const nearby = breeders.filter(b => gridDistance(slot, positions.get(b.id), this.rowSize) === nearestDistance);
-          const first = nearby[Math.floor(this.rng() * nearby.length)];
-          const rings = matingRings.get(first.id);
-          let roll = this.rng() * rings.reduce((sum, ring) => sum + ring.weight, 0), chosenRing = rings[rings.length - 1];
-          for (const ring of rings) { roll -= ring.weight; if (roll < 0) { chosenRing = ring; break; } }
-          const second = chosenRing.mates[Math.floor(this.rng() * chosenRing.mates.length)];
+          const destination = habitatAt(habitat, slot, this.rowSize);
+          const first = weightedPick(nearby.map(beetle => ({ beetle, weight: habitatAffinity(destination, backgrounds.get(beetle.id)) })));
+          const second = weightedPick(mates.get(first.id));
+          const mateDistance = gridDistance(positions.get(first.id), positions.get(second.id), this.rowSize);
           const child = this.offspring(first, second, mutationRate);
           child.parentRows = [parentRows.get(first.id), parentRows.get(second.id)];
           child.parentSlots = [positions.get(first.id), positions.get(second.id)];
-          child.mateDistance = chosenRing.distance;
+          child.mateDistance = mateDistance;
           child.dispersalDistance = nearestDistance;
-          if (chosenRing.distance === 1) nearbyBirths++; else fartherBirths++;
+          if (mateDistance === 1) nearbyBirths++; else fartherBirths++;
           child.parentHabitats = [habitatKeys.get(first.id), habitatKeys.get(second.id)];
           if (child.parentHabitats[0] !== child.parentHabitats[1]) crossHabitatBirths++;
           if (child.parentRows[0] !== child.parentRows[1]) crossRowBirths++;
@@ -437,14 +452,14 @@
     }
 
   }
-  const api = { Lab, random, phenotype, shadeMean, hex, fromHex, match, distance2, cross, PIGMENTS, PATHWAYS, colorInfo, activePathways, habitatAt, survivalChance, localSurvival, gridDistance, adjacentSlots };
+  const api = { Lab, random, phenotype, shadeMean, hex, fromHex, match, distance2, cross, PIGMENTS, PATHWAYS, colorInfo, activePathways, habitatAt, survivalChance, localSurvival, gridDistance, adjacentSlots, mateWeight, habitatAffinity, shadeColor, appearance, APPEARANCES };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.BeetleSim = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
 
 /* Portable classroom starting conditions. These codes contain no student data. */
 (function (root) {
   'use strict';
-  const release = '20261021-9';
+  const release = '20261021-10';
   const defaults = { seed: 42, rows: 6, habitat: '#8fa967', pressure: 80, mutation: 3, mode: 'natural', bird: true, speed: 1, scenario: 'mixed', activities: 'both', allowEnvironment: false, showStats: false, layout: 'solid', habitats: ['#8fa967', '#b17b56', '#7785a1'] };
   function validate(p) {
     const integer = (v, min, max) => Number.isInteger(v) && v >= min && v <= max;
@@ -485,7 +500,7 @@
 /* All state stays in this tab. No external libraries, fonts, or services. */
 (() => {
   'use strict';
-  const { Lab, hex, fromHex, match, cross, PIGMENTS, colorInfo, habitatAt } = BeetleSim;
+  const { Lab, hex, fromHex, match, cross, PIGMENTS, APPEARANCES, appearance, colorInfo, habitatAt } = BeetleSim;
   const $ = id => document.getElementById(id);
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let lab, habitat = '#8fa967', habitatName = 'Meadow', habitatLayout = 'solid', habitatColors = ['#8fa967','#b17b56','#7785a1'], mode = 'natural';
@@ -524,9 +539,9 @@
   }
 
   const alleleLabel = switches => switches.map(pair => pair.join('/')).join(' · ');
-  const isCarrier = b => { const info = colorInfo(b.switches); return info.visible === 'green' && info.alleles[0] !== info.alleles[1]; };
-  const recipeLabel = b => { const info = colorInfo(b.switches); return info.alleles.map((family, i) => `${PIGMENTS[family].name} (expression ${info.strengths[i]}${i === info.expressed ? ', shown' : ', hidden'})`).join(' · '); };
-  const carrierDescription = b => PIGMENTS[colorInfo(b.switches).visible].name + ' beetle';
+  const isCarrier = b => { const info = colorInfo(b.switches); return appearance(b.color) === 'green' && info.alleles[0] !== info.alleles[1]; };
+  const recipeLabel = b => { const info = colorInfo(b.switches); return info.alleles.map((family, i) => `${PIGMENTS[family].name} (expression ${info.strengths[i]}${i === info.expressed ? ', expressed recipe' : ', hidden recipe'})`).join(' · '); };
+  const carrierDescription = b => APPEARANCES[appearance(b.color)].name + ' beetle';
   function jarMarkup(pair, row) {
     return `<div class="jar-column jar-row ${row === activeJar ? 'active' : ''} ${pair.every(Boolean) ? 'ready' : ''}" data-jar="${row}"><button class="jar-title" data-action="inspect" aria-label="Inspect row ${row + 1} jar" aria-pressed="${row === activeJar}">ROW ${row + 1} · JAR</button><div class="jar-vessel"><div class="jar-lid"></div><div class="jar-glass">${pair.map((id, slot) => {
       const b = parentById(id);
@@ -564,7 +579,7 @@
       return;
     }
     const prediction = cross(...parents), percentage = n => (n * 100).toFixed(2).replace(/\.?0+$/, '') + '%';
-    $('genetics-content').innerHTML = `<div class="cross-parents">${parents.map((b, i) => `<div>${beetleSVG(b.color)}<p><strong>Parent ${i ? 'B' : 'A'}</strong><span>${carrierDescription(b)}</span></p></div>`).join('<span class="cross-plus">×</span>')}<p class="cross-context">${family ? `Parents of row ${activeJar + 1}, generation ${family.generation}.` : `Eight offspring for row ${activeJar + 1}.`}</p></div><div class="pigment-chances">${prediction.pigmentChances.map(o => `<div><i style="background:${hex(PIGMENTS[o.pigment].color)}"></i><span>${PIGMENTS[o.pigment].name}</span><strong>${percentage(o.probability)}</strong><span class="chance-bar" style="--chance:${o.probability * 100}%;--pigment:${hex(PIGMENTS[o.pigment].color)}"></span></div>`).join('')}</div><p class="genetics-footnote">Expected offspring, before mutation. Each parent passes one of its two complete color recipes, plus one copy of each shade gene. A hidden recipe can become visible in a baby. These are independent draws, not guaranteed proportions in eight babies.</p><details class="shade-options"><summary>See inherited color recipes</summary>${parents.map((b, i) => `<p>Parent ${i ? 'B' : 'A'}: ${recipeLabel(b)}<br>Gene copies: ${alleleLabel(b.switches)}</p>`).join('')}<p>Three linked bits encode each recipe’s color and three its expression strength. The stronger inherited recipe is shown; a tie uses the copy from parent A. Strength travels with the recipe, so no color is always dominant. The four recipe transmissions are equally likely before mutation.</p></details>`;
+    $('genetics-content').innerHTML = `<div class="cross-parents">${parents.map((b, i) => `<div>${beetleSVG(b.color)}<p><strong>Parent ${i ? 'B' : 'A'}</strong><span>${carrierDescription(b)}</span></p></div>`).join('<span class="cross-plus">×</span>')}<p class="cross-context">${family ? `Parents of row ${activeJar + 1}, generation ${family.generation}.` : `Eight offspring for row ${activeJar + 1}.`}</p></div><div class="pigment-chances">${prediction.pigmentChances.map(o => `<div><i style="background:${hex(APPEARANCES[o.pigment].color)}"></i><span>${APPEARANCES[o.pigment].name}</span><strong>${percentage(o.probability)}</strong><span class="chance-bar" style="--chance:${o.probability * 100}%;--pigment:${hex(APPEARANCES[o.pigment].color)}"></span></div>`).join('')}</div><p class="genetics-footnote">Expected offspring, before mutation. Each parent passes one of its two complete color recipes, plus one copy of each shade gene. A hidden recipe can become expressed in a baby. Shade genes can also change the visible color. The preview includes both. These are independent draws, not guaranteed proportions in eight babies.</p><details class="shade-options"><summary>See inherited color recipes</summary>${parents.map((b, i) => `<p>Parent ${i ? 'B' : 'A'}: ${recipeLabel(b)}<br>Gene copies: ${alleleLabel(b.switches)}</p>`).join('')}<p>Three linked bits encode each recipe’s color and three its expression strength. The stronger inherited recipe supplies the base color; a tie uses the copy from parent A. Three shade genes can vary each channel from fully dark to fully bright. Strength travels with the recipe, so no color is always dominant. The four recipe transmissions are equally likely before mutation.</p></details>`;
   }
 
   function assignParent(row, slot, id) {
@@ -622,7 +637,7 @@
     $('board-label').textContent = 'ROUND ' + lab.generation;
     $('experiment-settings').hidden = !studentMode || !showDetails();
     if (studentMode && showDetails()) {
-      $('experiment-settings').innerHTML = `<h3>Experiment conditions</h3><dl><div><dt>Habitat</dt><dd>${habitatName} · ${habitatLayout === 'neapolitan' ? habitatColors.join(' / ') : habitat.toUpperCase()}</dd></div><div><dt>Current activity</dt><dd>${mode === 'natural' ? 'Natural selection' : 'Breeding'}</dd></div><div><dt>Mating</dt><dd>${mode === 'natural' ? 'Nearby mating · chance halves each ring' : 'Chosen jar parents'}</dd></div><div><dt>Selection strength</dt><dd>${$('pressure').value}%${mode === 'breeding' ? ' · bird selection inactive' : ''}</dd></div><div><dt>Mutation per copy</dt><dd>${$('mutation').value}%</dd></div><div><dt>Population seed</dt><dd>${startPreset.seed}</dd></div><div><dt>Population size</dt><dd>${ROWS} row${ROWS === 1 ? '' : 's'} · ${lab.size} beetles</dd></div><div><dt>Animation speed</dt><dd>${$('speed').value}×</dd></div><div><dt>Bird animation</dt><dd>${$('bird-animation').checked ? 'On' : 'Off'}</dd></div></dl>`;
+      $('experiment-settings').innerHTML = `<h3>Experiment conditions</h3><dl><div><dt>Habitat</dt><dd>${habitatName} · ${habitatLayout === 'neapolitan' ? habitatColors.join(' / ') : habitat.toUpperCase()}</dd></div><div><dt>Current activity</dt><dd>${mode === 'natural' ? 'Natural selection' : 'Breeding'}</dd></div><div><dt>Mating</dt><dd>${mode === 'natural' ? 'Nearby mating · odds decrease per partner' : 'Chosen jar parents'}</dd></div><div><dt>Selection strength</dt><dd>${$('pressure').value}%${mode === 'breeding' ? ' · bird selection inactive' : ''}</dd></div><div><dt>Mutation per copy</dt><dd>${$('mutation').value}%</dd></div><div><dt>Population seed</dt><dd>${startPreset.seed}</dd></div><div><dt>Population size</dt><dd>${ROWS} row${ROWS === 1 ? '' : 's'} · ${lab.size} beetles</dd></div><div><dt>Animation speed</dt><dd>${$('speed').value}×</dd></div><div><dt>Bird animation</dt><dd>${$('bird-animation').checked ? 'On' : 'Off'}</dd></div></dl>`;
     }
     const previous = history.length > 1 ? history[history.length - 2] : null;
     if (!stats.count) $('match-change').textContent = 'No living beetles to measure';
@@ -662,7 +677,7 @@
     $('beetle-grid').setAttribute('aria-label', `${ROWS} rows, up to eight beetles each; bird-mode survivors breed across rows${canBreed() ? ', one parent jar per row' : ''}`);
     $('student-environment').hidden = !studentMode || !canEnvironment();
     document.querySelectorAll('[data-student-habitat],#student-habitat-color').forEach(b => b.disabled = busy || !canEnvironment());
-    $('jar-status').textContent = !canBreed() ? habitatLayout === 'neapolitan' ? 'Nearby survivors usually breed together across rows and diagonals, with lower chances in each farther ring. Offspring stay near a parent, so local colors can gradually form bands.' : 'Each beetle rolls against its own background. Better-hidden beetles gain neighbor protection. Mating favors nearby survivors, with lower chances in each farther ring.' : manual ? `${counts.ready} row${counts.ready === 1 ? '' : 's'} ready · complete jars keep their original parents for repeated broods. Empty or unfinished jars leave their rows unchanged.` : habitatLayout === 'neapolitan' ? 'Bird mode: offspring stay near a parent; mating favors nearby survivors, including diagonals, with a lower chance in each farther ring. Each jar fills its own row.' : 'Bird mode: better-hidden beetles gain neighbor protection. Mating favors nearby survivors across rows and diagonals. Each jar fills its own row.';
+    $('jar-status').textContent = !canBreed() ? habitatLayout === 'neapolitan' ? 'Nearby survivors usually breed together across rows and diagonals, with lower odds per partner at greater distances. Offspring stay near a parent, so local colors can gradually form bands.' : 'Each beetle rolls against its own background. Better-hidden beetles gain neighbor protection. Mating favors nearby survivors, with lower odds per partner at greater distances.' : manual ? `${counts.ready} row${counts.ready === 1 ? '' : 's'} ready · complete jars keep their original parents for repeated broods. Empty or unfinished jars leave their rows unchanged.` : habitatLayout === 'neapolitan' ? 'Bird mode: offspring stay near a parent; mating favors nearby survivors, including diagonals, with lower odds per partner at greater distances. Each jar fills its own row.' : 'Bird mode: better-hidden beetles gain neighbor protection. Mating favors nearby survivors across rows and diagonals. Each jar fills its own row.';
   }
   function renderSelection() {
     selected = jarParents.flat().filter(Boolean);
@@ -862,11 +877,11 @@
     lab.population.forEach((b, i) => {
       if (!b) return;
       const odds = lab.survivalDetails(b, habitatModel(), settings().pressure);
-      rows.push([i + 1, b.id, ...b.genes.flat(), b.parents[0] ?? '', b.parents[1] ?? '', b.mutations, Math.floor(i / ROW_SIZE) + 1, lab.rowGenerations[Math.floor(i / ROW_SIZE)], alleleLabel(b.switches), colorInfo(b.switches).visible, b.colorMutations, hex(beetleHabitat(i)), odds.chance, b.parentRows?.[0] === undefined ? '' : b.parentRows[0] + 1, b.parentRows?.[1] === undefined ? '' : b.parentRows[1] + 1, odds.baseChance, odds.neighborBoost, odds.neighborCount, b.parentHabitats?.[0] ?? '', b.parentHabitats?.[1] ?? '', b.parentSlots?.[0] === undefined ? '' : b.parentSlots[0] + 1, b.parentSlots?.[1] === undefined ? '' : b.parentSlots[1] + 1, b.mateDistance ?? '', b.dispersalDistance ?? '']);
+      rows.push([i + 1, b.id, ...b.genes.flat(), b.parents[0] ?? '', b.parents[1] ?? '', b.mutations, Math.floor(i / ROW_SIZE) + 1, lab.rowGenerations[Math.floor(i / ROW_SIZE)], alleleLabel(b.switches), appearance(b.color), b.colorMutations, hex(beetleHabitat(i)), odds.chance, b.parentRows?.[0] === undefined ? '' : b.parentRows[0] + 1, b.parentRows?.[1] === undefined ? '' : b.parentRows[1] + 1, odds.baseChance, odds.neighborBoost, odds.neighborCount, b.parentHabitats?.[0] ?? '', b.parentHabitats?.[1] ?? '', b.parentSlots?.[0] === undefined ? '' : b.parentSlots[0] + 1, b.parentSlots?.[1] === undefined ? '' : b.parentSlots[1] + 1, b.mateDistance ?? '', b.dispersalDistance ?? '']);
     });
     if (!showDetails()) {
       rows = [['Leaf & Lineage observations'], ['Student notes', $('notes').value], [], ['round', 'row', 'row_generation', 'beetle_id', 'visible_color', 'hex_color', 'leaf_background']];
-      lab.population.forEach((b, i) => { if (!b) return; const row = Math.floor(i / ROW_SIZE); rows.push([lab.generation, row + 1, lab.rowGenerations[row], b.id, PIGMENTS[colorInfo(b.switches).visible].name, hex(b.color), hex(beetleHabitat(i))]); });
+      lab.population.forEach((b, i) => { if (!b) return; const row = Math.floor(i / ROW_SIZE); rows.push([lab.generation, row + 1, lab.rowGenerations[row], b.id, APPEARANCES[appearance(b.color)].name, hex(b.color), hex(beetleHabitat(i))]); });
     }
     const blob = new Blob(['\uFEFF' + rows.map(row => row.map(quote).join(',')).join('\r\n')], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob), link = document.createElement('a');
@@ -980,7 +995,7 @@
       $('download-student').textContent = startPreset.showStats ? 'Save full data' : 'Save observations';
       $('classroom-badge').hidden = false;
       $('classroom-badge').textContent = startPreset.showStats ? 'CLASSROOM INVESTIGATION · FULL STATS' : 'CLASSROOM INVESTIGATION';
-      $('guide').innerHTML = `<button id="student-guide-close" class="dialog-close" aria-label="Close instructions">×</button><p class="eyebrow">YOUR INVESTIGATION</p><h2 id="guide-title">Observe, predict, and experiment.</h2><p>Each row has room for eight beetles. Next generation advances once; Play keeps going until you pause.</p>${canBreed() ? '<p>Drag two beetles into a row’s jar, or select a beetle then click a + slot. The jar keeps the original parents. Each step replaces only that row with a new brood of their offspring. Play keeps repeating that pair until you replace or remove a parent.</p>' : ''}${canBird() ? '<p>Use Play or Next generation to watch the bird select survivors. Each insect gets a fresh survival roll against the color behind its leaf, including after a restart. A beetle that blends in better than its adjacent neighbors on the same background gets extra protection. When neighbors look alike, this extra boost fades; ordinary camouflage still protects matching beetles. Survivors breed mostly with the eight surrounding leaves, including diagonals. Each farther ring has a lower mating chance, so partners can come from two or more rings away. Offspring stay on a surviving parent’s leaf or a nearby empty leaf. On Neapolitan, local colors can gradually form bands while genes still move between zones. With at least two survivors on the whole board, their offspring fill every row. A lone survivor stays on its leaf without offspring; zero survivors leaves the board empty.</p>' : ''}${canBreed() && canBird() ? '<p>Choose Bird mode or Breeding mode to switch activities.</p>' : ''}${canEnvironment() ? '<p>You can change the environment whenever a generation is not in progress. Existing beetles keep their colors. Neapolitan is another environment choice: three continuous vertical color bands across the leaf area. Each column uses its own background for survival rolls.</p>' : ''}${startPreset.showStats ? '<h3>Read the results</h3><p>Average camouflage is a 0–100% similarity score, not a survival probability. Diversity measures color spread. The chart combines all rows after each round; each row also tracks its own generation.</p><p>Select a beetle and open Inherited genes and family to see its gene copies and parents. In an allowed breeding activity, a complete jar shows offspring probabilities before mutation. Each baby is an independent draw. Full data downloads include settings, measurements, gene copies, parentage, and your notes.</p><p>This invented teaching model carries two color recipes. Six linked binary genes encode each recipe’s color and expression strength; three independent genes vary shade. Each parent passes one recipe. The stronger recipe is visible; equal strengths use parent A’s copy. A hidden recipe can appear in descendants even with no mutation. No color is always dominant. Mutation acts on each of 18 inherited copies and does not target the habitat.</p>' : ''}<p>Color genes come from parents and can be passed on again. Different combinations sometimes produce surprising offspring. Record what you notice and save your observations. Start over returns to the class preset.</p>`;
+      $('guide').innerHTML = `<button id="student-guide-close" class="dialog-close" aria-label="Close instructions">×</button><p class="eyebrow">YOUR INVESTIGATION</p><h2 id="guide-title">Observe, predict, and experiment.</h2><p>Each row has room for eight beetles. Next generation advances once; Play keeps going until you pause.</p>${canBreed() ? '<p>Drag two beetles into a row’s jar, or select a beetle then click a + slot. The jar keeps the original parents. Each step replaces only that row with a new brood of their offspring. Play keeps repeating that pair until you replace or remove a parent.</p>' : ''}${canBird() ? '<p>Use Play or Next generation to watch the bird select survivors. Each insect gets a fresh survival roll against the color behind its leaf, including after a restart. A beetle that blends in better than its adjacent neighbors on the same background gets extra protection. When neighbors look alike, this extra boost fades; ordinary camouflage still protects matching beetles. Survivors breed mostly with the eight surrounding leaves, including diagonals. Every individual farther partner receives a lower distance weight, so partners can still come from two or more rings away. Unlike habitat patches also reduce crossing without blocking it. Offspring stay on a surviving parent’s leaf or a nearby empty leaf. On Neapolitan, crossing between unlike habitat patches is less frequent, so local colors can form bands while genes still move between zones. With at least two survivors on the whole board, their offspring fill every row. A lone survivor stays on its leaf without offspring; zero survivors leaves the board empty.</p>' : ''}${canBreed() && canBird() ? '<p>Choose Bird mode or Breeding mode to switch activities.</p>' : ''}${canEnvironment() ? '<p>You can change the environment whenever a generation is not in progress. Existing beetles keep their colors. Neapolitan is another environment choice: three continuous vertical color bands across the leaf area. Each column uses its own background for survival rolls.</p>' : ''}${startPreset.showStats ? '<h3>Read the results</h3><p>Average camouflage is a 0–100% similarity score, not a survival probability. Diversity measures color spread. The chart combines all rows after each round; each row also tracks its own generation.</p><p>Select a beetle and open Inherited genes and family to see its gene copies and parents. In an allowed breeding activity, a complete jar shows offspring probabilities before mutation. Each baby is an independent draw. Full data downloads include settings, measurements, gene copies, parentage, and your notes.</p><p>This invented teaching model carries two color recipes. Six linked binary genes encode each recipe’s color and expression strength; three independent genes vary shade across the full RGB range. Each parent passes one recipe. The stronger recipe supplies the base color; equal strengths use parent A’s copy. Shade genes can make that color darker, brighter, or a different hue. The color name describes its actual appearance. A hidden recipe can appear in descendants even with no mutation. No color is always dominant. Mutation acts on each of 18 inherited copies and does not target the habitat.</p>' : ''}<p>Color genes come from parents and can be passed on again. Different combinations sometimes produce surprising offspring. Record what you notice and save your observations. Start over returns to the class preset.</p>`;
       $('student-guide-close').addEventListener('click', () => $('guide').close());
     }
     $('reset-student').addEventListener('click', reset);

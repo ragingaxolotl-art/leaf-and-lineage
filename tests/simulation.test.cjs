@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { Lab, phenotype, fromHex, cross, hex, colorInfo, PIGMENTS, habitatAt, survivalChance, match, random, distance2, localSurvival, gridDistance, adjacentSlots } = require('../dist/simulation.js');
+const { Lab, phenotype, fromHex, cross, hex, colorInfo, PIGMENTS, habitatAt, survivalChance, match, random, distance2, localSurvival, gridDistance, adjacentSlots, appearance, APPEARANCES, mateWeight, habitatAffinity } = require('../dist/simulation.js');
 const config = { habitat: fromHex('#8fa967'), pressure: .8, mutationRate: .03 };
 const emptyJars = lab => Array.from({ length: lab.rows }, () => []);
 // Inject predictable hunt rolls only in tests; the browser uses fresh randomness.
@@ -41,7 +41,8 @@ test('green parents can produce contrasting offspring without mutation from real
   assert.equal(colorInfo(a.switches).visible,'green');
   assert.deepEqual(colorInfo(a.switches).alleles,['green','red']);
   const prediction=cross(a,b);
-  assert.deepEqual(prediction.pigmentChances,[{pigment:'green',probability:.75},{pigment:'red',probability:.25}]);
+  assert.deepEqual(prediction.recipeChances,[{pigment:'green',probability:.75},{pigment:'red',probability:.25}]);
+  assert.equal(prediction.pigmentChances.reduce((n,o)=>n+o.probability,0),1);
   const children=Array.from({length:12000},()=>lab.offspring(a,b,0));
   const count=children.filter(c=>colorInfo(c.switches).visible==='red').length;
   assert.ok(count>2800&&count<3200,`red offspring: ${count}/12000`);
@@ -67,7 +68,9 @@ test('teacher probabilities match the four linked recipe crosses and all shade t
   const prediction=cross(a,b);
   assert.equal(prediction.totalTransmissions,256);
   assert.equal(prediction.pigmentChances.reduce((sum,c)=>sum+c.probability,0),1);
-  prediction.pigmentChances.forEach(p=>assert.equal(p.probability,counts[p.pigment]/4));
+  prediction.recipeChances.forEach(p=>assert.equal(p.probability,counts[p.pigment]/4));
+  const expectedAppearances=new Map();prediction.outcomes.forEach(o=>expectedAppearances.set(appearance(o.color),(expectedAppearances.get(appearance(o.color))||0)+o.probability));
+  prediction.pigmentChances.forEach(o=>assert.equal(o.probability,expectedAppearances.get(o.pigment)));
   assert.ok(Math.abs(prediction.colors.reduce((sum,c)=>sum+c.probability,0)-1)<1e-12);
   prediction.mean.forEach((v,i)=>assert.ok(Math.abs(v-prediction.outcomes.reduce((sum,o)=>sum+o.color[i]*o.probability,0))<1e-12));
   for(let i=0;i<500;i++){ const child=lab.offspring(a,b,0);assert.ok(prediction.colors.some(o=>o.color===hex(child.color))); }
@@ -454,13 +457,60 @@ test('Dusk and Neapolitan favor local colors without forcing a sorted board',()=
   const bands=Array.from({length:3},()=>({n:0,green:0,blue:0,warm:0,match:0,shuffled:0}));
   for(let seed=1;seed<=16;seed++){
     const lab=trial(seed);for(let g=0;g<60;g++)lab.commit(lab.plan({habitat,pressure:.8,mutationRate:.03}));
-    lab.population.forEach((b,slot)=>{if(!b)return;const r=bands[Math.floor(((slot%8)+.5)/8*3)],family=colorInfo(b.switches).visible;
+    lab.population.forEach((b,slot)=>{if(!b)return;const r=bands[Math.floor(((slot%8)+.5)/8*3)],family=appearance(b.color);
       r.n++;r.green+=family==='green';r.blue+=family==='blue';r.warm+=['red','orange','yellow'].includes(family);r.match+=match(b.color,habitatAt(habitat,slot));r.shuffled+=habitat.reduce((n,bg)=>n+match(b.color,bg),0)/3;
     });
   }
   bands.forEach(r=>{for(const key of ['green','blue','warm','match','shuffled'])r[key]/=r.n;});
-  assert.ok(bands[0].green>bands[1].green+.1&&bands[1].green>bands[2].green+.05,JSON.stringify(bands));
-  assert.ok(bands[2].blue>bands[1].blue+.15,JSON.stringify(bands));
-  assert.ok(bands[1].warm>bands[0].warm+.05&&bands[1].warm>bands[2].warm+.05,JSON.stringify(bands));
-  assert.ok(bands.reduce((n,r)=>n+r.match-r.shuffled,0)>.2,JSON.stringify(bands));
+  assert.ok(bands[0].green>bands[1].green+.15&&bands[0].green>bands[2].green+.15,JSON.stringify(bands));
+  assert.ok(bands[2].blue>bands[1].blue+.2&&bands[2].blue>bands[0].blue+.2,JSON.stringify(bands));
+  assert.ok(bands[1].warm>bands[0].warm+.2&&bands[1].warm>bands[2].warm+.2,JSON.stringify(bands));
+  assert.ok(bands[1].match>.65,JSON.stringify(bands));
+  assert.ok(bands.reduce((n,r)=>n+r.match-r.shuffled,0)>.5,JSON.stringify(bands));
+});
+
+
+test('shade genes can reach every sampled RGB target from every inherited recipe',()=>{
+  const levels=[0,32,64,128,192,224,255];
+  for(let mask=0;mask<8;mask++)for(const r of levels)for(const g of levels)for(const b of levels){
+    const target=[r,g,b],base=Object.values(PIGMENTS)[mask].color;
+    const genes=target.map((value,i)=>{const shade=value<=base[i]?128*value/base[i]:128+127*(value-base[i])/(255-base[i]);const encoded=Math.round(shade*2)/2;return [Math.floor(encoded),Math.ceil(encoded)];});
+    const color=phenotype(genes,recipes(mask,mask));
+    color.forEach((value,i)=>assert.ok(Math.abs(value-target[i])<=.5,`${mask}: ${color} versus ${target}`));
+  }
+  for(let mask=0;mask<8;mask++){
+    assert.deepEqual(phenotype([[0,0],[0,0],[0,0]],recipes(mask,mask)),[0,0,0]);
+    assert.deepEqual(phenotype([[255,255],[255,255],[255,255]],recipes(mask,mask)),[255,255,255]);
+  }
+});
+test('visible color names and cross forecasts include inherited black, white, and gray shades',()=>{
+  assert.equal(appearance([0,0,0]),'black');assert.equal(appearance([255,255,255]),'white');assert.equal(appearance([128,128,128]),'gray');
+  for(const [family,{color}] of Object.entries(PIGMENTS))assert.equal(appearance(color),family);
+  const lab=trial(1),[a,b]=lab.population;
+  a.switches=b.switches=recipes(0,0);
+  for(const value of [0,255]){
+    a.genes=b.genes=[[value,value],[value,value],[value,value]];
+    const family=value?'white':'black';assert.deepEqual(cross(a,b).pigmentChances,[{pigment:family,probability:1}]);
+    for(let i=0;i<30;i++)assert.equal(appearance(lab.offspring(a,b,0).color),family);
+  }
+});
+test('distance weight belongs to each beetle, including a sparse farther ring',()=>{
+  for(let distance=1;distance<7;distance++)assert.ok(mateWeight(distance)>mateWeight(distance+1)&&mateWeight(distance+1)>0);
+  const lab=trial(42),center=18,nearby=adjacentSlots(center,48),farther=20;
+  const survivors=[lab.population[center],...nearby.map(i=>lab.population[i]),lab.population[farther]],counts=new Map();
+  for(let i=0;i<2400;i++){
+    const child=lab.plan({...config,pressure:0,mutationRate:0,survivors}).children[center];
+    counts.set(child.parentSlots[1],(counts.get(child.parentSlots[1])||0)+1);
+  }
+  assert.ok(nearby.every(slot=>counts.get(slot)>counts.get(farther)*2),JSON.stringify([...counts]));
+  const expectedFar=.25/(8+.25);assert.ok(Math.abs(counts.get(farther)/2400-expectedFar)<.015);
+});
+test('habitat crossing is symmetric and reduced continuously without blocking any partner',()=>{
+  const backgrounds=['#8fa967','#b17b56','#7785a1','#000000','#ffffff'].map(fromHex);
+  for(const a of backgrounds)for(const b of backgrounds){
+    assert.ok(habitatAffinity(a,b)>=.05&&habitatAffinity(a,b)<=1);
+    assert.equal(habitatAffinity(a,a),1);assert.equal(habitatAffinity(a,b),habitatAffinity(b,a));
+  }
+  assert.ok(habitatAffinity(backgrounds[0],backgrounds[1])<.1);
+  const close=[...backgrounds[0]];close[0]++;assert.ok(habitatAffinity(backgrounds[0],close)>.99);
 });

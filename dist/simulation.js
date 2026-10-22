@@ -31,10 +31,22 @@
     return { visible: familyKeys[mask], active: PATHWAYS.map((_, i) => Boolean(mask & (1 << i))), alleles: masks.map(value => familyKeys[value]), strengths, expressed };
   }
   const activePathways = switches => colorInfo(switches).active;
+  // Each inherited shade locus spans the whole channel: 0 is dark,
+  // 128 retains the recipe channel, and 255 is fully bright. No habitat
+  // value enters phenotype or mutation.
+  const shadeColor = (base, shade) => base.map((value, i) => shade[i] <= 128 ? value * shade[i] / 128 : value + (255 - value) * (shade[i] - 128) / 127);
   function phenotype(genes, switches) {
-    const shade = shadeMean(genes);
-    const base = PIGMENTS[colorInfo(switches).visible].color;
-    return base.map((v, i) => clamp(v + (shade[i] - 128) * .25));
+    return shadeColor(PIGMENTS[colorInfo(switches).visible].color, shadeMean(genes));
+  }
+  const APPEARANCES = { ...PIGMENTS, black: { name: 'Black', color: [24,24,24] }, white: { name: 'White', color: [244,244,244] }, gray: { name: 'Gray', color: [128,128,128] } };
+  function appearance(color) {
+    const high = Math.max(...color), low = Math.min(...color), span = high - low;
+    if (high < 48) return 'black';
+    if (low > 224 && span < 32) return 'white';
+    if (!high || span / high < .12) return 'gray';
+    let hue = high === color[0] ? (color[1] - color[2]) / span : high === color[1] ? 2 + (color[2] - color[0]) / span : 4 + (color[0] - color[1]) / span;
+    hue = (hue * 60 + 360) % 360;
+    return hue < 14 || hue >= 345 ? 'red' : hue < 38 ? 'orange' : hue < 72 ? 'yellow' : hue < 150 ? 'green' : hue < 190 ? 'teal' : hue < 260 ? 'blue' : hue < 315 ? 'purple' : 'mixed';
   }
   const hex = rgb => '#' + rgb.map(v => Math.round(clamp(v)).toString(16).padStart(2, '0')).join('');
   const fromHex = value => [1, 3, 5].map(i => parseInt(value.slice(i, i + 2), 16));
@@ -49,6 +61,11 @@
   };
   const habitatAt = (habitat, slot, rowSize = 8) => Array.isArray(habitat[0]) ? habitat[Math.min(habitat.length - 1, Math.floor(((slot % rowSize) + .5) / rowSize * habitat.length))] : habitat;
   const gridDistance = (a, b, rowSize = 8) => Math.max(Math.abs(Math.floor(a / rowSize) - Math.floor(b / rowSize)), Math.abs(a % rowSize - b % rowSize));
+  // Per individual, never per ring: farther candidates receive less weight.
+  const mateWeight = distance => distance > 0 ? .5 ** (distance - 1) / distance : 0;
+  // A simplified movement rule between habitat patches. Similar colors mix
+  // freely; unlike patches reduce crossing, but never prohibit it.
+  const habitatAffinity = (a, b) => .05 + .95 * match(a, b) ** 8;
   function adjacentSlots(slot, capacity, rowSize = 8) {
     const row = Math.floor(slot / rowSize), col = slot % rowSize, slots = [];
     for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
@@ -78,16 +95,17 @@
       const family = colorInfo(switches).visible;
       familyCounts.set(family, (familyCounts.get(family) || 0) + .25);
     }
-    const pigmentChances = familyKeys.filter(pigment => familyCounts.has(pigment)).map(pigment => ({ pigment, probability: familyCounts.get(pigment) }));
-    const pathwayChances = PATHWAYS.map((pathway, i) => ({ name: pathway.name, probability: pigmentChances.reduce((sum, outcome) => sum + (familyKeys.indexOf(outcome.pigment) & (1 << i) ? outcome.probability : 0), 0) }));
-    const outcomes = [], counts = new Map();
-    for (const outcome of pigmentChances) for (const r of loci[0]) for (const g of loci[1]) for (const blue of loci[2]) {
+    const recipeChances = familyKeys.filter(pigment => familyCounts.has(pigment)).map(pigment => ({ pigment, probability: familyCounts.get(pigment) }));
+    const pathwayChances = PATHWAYS.map((pathway, i) => ({ name: pathway.name, probability: recipeChances.reduce((sum, outcome) => sum + (familyKeys.indexOf(outcome.pigment) & (1 << i) ? outcome.probability : 0), 0) }));
+    const outcomes = [], counts = new Map(), appearanceCounts = new Map();
+    for (const outcome of recipeChances) for (const r of loci[0]) for (const g of loci[1]) for (const blue of loci[2]) {
       const base = PIGMENTS[outcome.pigment].color;
-      const color = [r.value, g.value, blue.value].map((v, i) => clamp(base[i] + (v - 128) * .25));
+      const color = shadeColor(base, [r.value, g.value, blue.value]);
       const probability = outcome.probability / 64, key = hex(color);
       outcomes.push({ color, probability }); counts.set(key, (counts.get(key) || 0) + probability);
+      const family = appearance(color); appearanceCounts.set(family, (appearanceCounts.get(family) || 0) + probability);
     }
-    return { loci, pathwayChances, pigmentChances, outcomes,
+    return { loci, pathwayChances, recipeChances, pigmentChances: Object.keys(APPEARANCES).filter(pigment => appearanceCounts.has(pigment)).map(pigment => ({ pigment, probability: appearanceCounts.get(pigment) })), outcomes,
       totalTransmissions: 4 * 4 ** 3,
       colors: Array.from(counts, ([color, probability]) => ({ color, probability })),
       mean: [0, 1, 2].map(i => outcomes.reduce((sum, o) => sum + o.color[i] * o.probability, 0))
@@ -100,8 +118,8 @@
       this.rng = random(seed); this.survivalRng = Math.random; this.generation = 0; this.nextId = 1;
       this.rowGenerations = Array(this.rows).fill(0);
       this.population = Array.from({ length: size }, (_, index) => {
-        const base = [55 + this.rng() * 155, 65 + this.rng() * 140, 35 + this.rng() * 150];
-        const genes = base.map(v => [clamp(Math.round(v + (this.rng() - .5) * 90)), clamp(Math.round(v + (this.rng() - .5) * 90))]);
+        const base = Array.from({ length: 3 }, () => 128 + (this.rng() - .5) * 32);
+        const genes = base.map(v => [clamp(Math.round(v + (this.rng() - .5) * 20)), clamp(Math.round(v + (this.rng() - .5) * 20))]);
         const switches = Array.from({ length: 6 }, () => [Number(this.rng() < .5), Number(this.rng() < .5)]);
         // Green carriers retain another real recipe. Its expression is
         // weaker here, but a descendant can inherit two hidden copies.
@@ -169,18 +187,16 @@
       let crossRowBirths = 0, crossHabitatBirths = 0, nearbyBirths = 0, fartherBirths = 0;
       const positions = new Map(breeders.map(b => [b.id, this.population.indexOf(b)]));
       const habitatKeys = new Map(breeders.map(b => [b.id, hex(habitatAt(habitat, positions.get(b.id), this.rowSize))]));
-      // Group mates by distance ring. Each farther ring has half the total
-      // weight of the preceding ring; choose uniformly within a chosen ring.
-      const matingRings = new Map(breeders.map(first => {
-        const groups = new Map();
-        breeders.forEach(second => {
-          if (first === second) return;
-          const distance = gridDistance(positions.get(first.id), positions.get(second.id), this.rowSize);
-          if (!groups.has(distance)) groups.set(distance, []);
-          groups.get(distance).push(second);
-        });
-        return [first.id, Array.from(groups, ([distance, mates]) => ({ distance, mates, weight: .5 ** (distance - 1) })).sort((a,b) => a.distance - b.distance)];
-      }));
+      const backgrounds = new Map(breeders.map(b => [b.id, habitatAt(habitat, positions.get(b.id), this.rowSize)]));
+      const weightedPick = candidates => {
+        let roll = this.rng() * candidates.reduce((sum, item) => sum + item.weight, 0);
+        for (const candidate of candidates) { roll -= candidate.weight; if (roll < 0) return candidate.beetle; }
+        return candidates[candidates.length - 1].beetle;
+      };
+      const mates = new Map(breeders.map(first => [first.id, breeders.filter(second => first !== second).map(second => ({
+        beetle: second,
+        weight: mateWeight(gridDistance(positions.get(first.id), positions.get(second.id), this.rowSize)) * habitatAffinity(backgrounds.get(first.id), backgrounds.get(second.id))
+      }))]));
       if (breeders.length >= 2) {
         for (let row = 0; row < this.rows; row++) updatedRows.push(row);
         for (let slot = 0; slot < this.capacity; slot++) {
@@ -188,17 +204,16 @@
           // from the nearest real survivor, choosing randomly between ties.
           const nearestDistance = Math.min(...breeders.map(b => gridDistance(slot, positions.get(b.id), this.rowSize)));
           const nearby = breeders.filter(b => gridDistance(slot, positions.get(b.id), this.rowSize) === nearestDistance);
-          const first = nearby[Math.floor(this.rng() * nearby.length)];
-          const rings = matingRings.get(first.id);
-          let roll = this.rng() * rings.reduce((sum, ring) => sum + ring.weight, 0), chosenRing = rings[rings.length - 1];
-          for (const ring of rings) { roll -= ring.weight; if (roll < 0) { chosenRing = ring; break; } }
-          const second = chosenRing.mates[Math.floor(this.rng() * chosenRing.mates.length)];
+          const destination = habitatAt(habitat, slot, this.rowSize);
+          const first = weightedPick(nearby.map(beetle => ({ beetle, weight: habitatAffinity(destination, backgrounds.get(beetle.id)) })));
+          const second = weightedPick(mates.get(first.id));
+          const mateDistance = gridDistance(positions.get(first.id), positions.get(second.id), this.rowSize);
           const child = this.offspring(first, second, mutationRate);
           child.parentRows = [parentRows.get(first.id), parentRows.get(second.id)];
           child.parentSlots = [positions.get(first.id), positions.get(second.id)];
-          child.mateDistance = chosenRing.distance;
+          child.mateDistance = mateDistance;
           child.dispersalDistance = nearestDistance;
-          if (chosenRing.distance === 1) nearbyBirths++; else fartherBirths++;
+          if (mateDistance === 1) nearbyBirths++; else fartherBirths++;
           child.parentHabitats = [habitatKeys.get(first.id), habitatKeys.get(second.id)];
           if (child.parentHabitats[0] !== child.parentHabitats[1]) crossHabitatBirths++;
           if (child.parentRows[0] !== child.parentRows[1]) crossRowBirths++;
@@ -247,6 +262,6 @@
     }
 
   }
-  const api = { Lab, random, phenotype, shadeMean, hex, fromHex, match, distance2, cross, PIGMENTS, PATHWAYS, colorInfo, activePathways, habitatAt, survivalChance, localSurvival, gridDistance, adjacentSlots };
+  const api = { Lab, random, phenotype, shadeMean, hex, fromHex, match, distance2, cross, PIGMENTS, PATHWAYS, colorInfo, activePathways, habitatAt, survivalChance, localSurvival, gridDistance, adjacentSlots, mateWeight, habitatAffinity, shadeColor, appearance, APPEARANCES };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.BeetleSim = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);
