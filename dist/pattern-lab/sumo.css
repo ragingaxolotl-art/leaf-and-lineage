@@ -10,3 +10,6 @@
 @keyframes sumoVictoryDance{0%,100%{transform:translate(-50%,-69%) rotate(0) scale(1)}20%{transform:translate(-50%,-77%) rotate(-13deg) scale(1.06)}45%{transform:translate(-50%,-69%) rotate(12deg) scale(1)}70%{transform:translate(-50%,-80%) rotate(-7deg) scale(1.07)}}
 @media(prefers-reduced-motion:reduce){.confetti-bit{display:none}.fighter.victory-dance svg,.fighter.victory-dance .leg-swing{animation:none!important}.victory-banner{box-shadow:0 0 0 2px #f3d78066}}
 @media(max-width:560px){.victory-banner{bottom:4%;padding:6px 8px;left:10%;right:10%}.victory-banner span{font-size:6px}.confetti-bit{width:5px;height:8px}}
+
+.tree-node>button{display:flex;flex-direction:column;align-items:center;min-width:116px;max-width:170px;padding:8px 12px;gap:4px}.tree-node>button svg{display:block;width:112px;height:142px;overflow:hidden}.tree-node>button:disabled{opacity:.8;cursor:default}.tree-node>button small{max-width:145px}.missing-portrait{font-size:44px;color:#9ba78d;line-height:130px}.tree-parents{gap:18px}.tree-node{flex-shrink:0}#family-tree-content{overflow:auto;padding:12px}.tree-node .leg-swing{animation:none}
+.tree-node>button{margin-inline:auto}

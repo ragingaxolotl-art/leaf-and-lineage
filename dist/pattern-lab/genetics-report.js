@@ -13,7 +13,9 @@ function snapshot(beetle){
   rows.push({record:c.id+'.'+String(index+1).padStart(2,'0'),chromosome:c.id,key:l.key,label:l.label,type:l.type,model:l.model==='quantitative'?'QNT · many-gene estimate':'MEN · inherited copies',copies:cp,effect,mutated:b.mutations.includes(l.key),range:l.type==='number'?[l.min,l.max]:null});
  }
  return {beetle:b,rows,derived:[
-  {key:'size',label:'Overall body size',value:p.size,rule:'sqrt(bodyLength × bodyWidth); continuous relative scale'},
+  {key:'size',label:'Overall body size',value:p.size,rule:'sqrt(bodyLength × bodyWidth) × 2^bodyGrowth; continuous relative scale'},
+  ...['body','antenna','leg','horn','head','jaw'].map(part=>({key:part+'Factor',label:part+' growth multiplier',value:p[part+'Factor'],rule:'2 raised to the mean log2 growth contribution'})),
+  {key:'visibleHorns',label:'Visible horn count',value:p.visibleHorns,rule:'Horn count allele expressed when horn length exceeds nub threshold'},
   {key:'speed',label:'Walking speed',value:p.speed,rule:'Derived from motor, stride and legLength; body lengths per second'},
   {key:'strengthIndex',label:'Displayed strength index',value:p.strengthIndex,rule:'round(1 + 99 × strength); game index'},
   {key:'visibleLayers',label:'Visible pattern colors',value:p.visibleLayers,rule:'S suppresses marks; ss permits marks; T caps at one color; tt permits two'},

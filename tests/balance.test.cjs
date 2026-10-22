@@ -1,6 +1,6 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),G=require('../dist/pattern-lab/genetics.js'),S=require('../dist/pattern-lab/sumo.js'),Legacy=require('../dist/pattern-lab/sumo-legacy.js');
-function beetle(id,mods={}){const b=G.createState(42).beetles.B3;b.id=id;for(const l of G.loci)if(l.type==='number')G.setCopies(b,l.key,(l.min+l.max)/2);for(const[k,v]of Object.entries(mods))G.setCopies(b,k,v);return b;}
+function beetle(id,mods={}){const b=G.createState(42).beetles.B3;b.id=id;for(const l of G.loci)if(l.type==='number')G.setCopies(b,l.key,G.growthKeys.has(l.key)?0:(l.min+l.max)/2);for(const[k,v]of Object.entries(mods))G.setCopies(b,k,v);return b;}
 function duel(a,b,n=100){let wins=0,losses=0,draws=0;for(let seed=0;seed<n;seed++)for(const swap of [false,true]){const m=S.run(swap?b:a,swap?a:b,seed*401+8167);if(m.winner===null)draws++;else if((swap?1-m.winner:m.winner)===0)wins++;else losses++;}return {wins,losses,draws,score:(wins+.5*draws)/(2*n)};}
 test('A sustained head-on push moves both touching bodies in the stronger effort direction',()=>{
  const m=S.create(beetle('A',{strength:.9}),beetle('B',{strength:.1}),37);m.contact=true;for(const [i,f]of m.fighters.entries()){f.x=i?23:-23;f.y=0;f.vx=f.vy=0;f.heading=f.targetHeading=i?Math.PI:0;f.engaged=true;f.think=100;}
@@ -23,7 +23,7 @@ test('Endurance preserves energy during the same sustained effort',()=>{
  for(let n=0;n<180&&!m.done;n++)S.step(m);assert.ok(m.fighters[0].energy>m.fighters[1].energy+.01);
 });
 test('Old SUMO2 notebooks replay with their original physics and both versions save correctly',()=>{
- const s=G.createState(),a=s.beetles.B3,b=s.beetles.B7;const old=S.run(a,b,753,{version:'SUMO2'}),expected=Legacy.run(a,b,753),current=S.run(a,b,753);assert.deepEqual(S.record(old),Legacy.record(expected));assert.equal(current.version,'SUMO4');s.matchHistory=[S.record(old),S.record(current)];G.validate(G.clone(s));
+ const s=G.createState(),a=s.beetles.B3,b=s.beetles.B7;const old=S.run(a,b,753,{version:'SUMO2'}),expected=Legacy.run(a,b,753),current=S.run(a,b,753);assert.deepEqual(S.record(old),Legacy.record(expected));assert.equal(current.version,'SUMO5');s.matchHistory=[S.record(old),S.record(current)];G.validate(G.clone(s));
 });
 test('Mutation-free strength stays within 3.5 points of the parental mean, including extreme hidden values',()=>{
  const a=beetle('A'),b=beetle('B'),r=G.seeded(672);G.setCopies(a,'strength',0,1);G.setCopies(b,'strength',0,1);let above=0,below=0;

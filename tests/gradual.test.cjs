@@ -2,7 +2,7 @@
 const test=require('node:test'),assert=require('node:assert/strict'),G=require('../dist/pattern-lab/genetics.js'),S=require('../dist/pattern-lab/sumo.js'),V3=require('../dist/pattern-lab/sumo-v3.js');
 function parents(){const s=G.createState(32);return [s.beetles.B1,s.beetles.B2];}
 test('Every continuous physical and behavior value has bounded gradual inheritance, even with extreme hidden copies',()=>{
- const[a,b]=parents(),r=G.seeded(77);assert.equal(G.quantitativeKeys.size,53);for(const key of G.quantitativeKeys){const l=G.byKey[key];G.setCopies(a,key,l.min,l.max);G.setCopies(b,key,l.min,l.max);}const signs=Object.fromEntries([...G.quantitativeKeys].map(k=>[k,[0,0]]));
+ const[a,b]=parents(),r=G.seeded(77);assert.equal(G.quantitativeKeys.size,59);for(const key of G.quantitativeKeys){const l=G.byKey[key];G.setCopies(a,key,l.min,l.max);G.setCopies(b,key,l.min,l.max);}const signs=Object.fromEntries([...G.quantitativeKeys].map(k=>[k,[0,0]]));
  for(let n=0;n<1200;n++){const child=G.baby(a,b,'C',{rate:0,rng:r});assert.equal(child.mutations.length,0);for(const key of G.quantitativeKeys){const l=G.byKey[key],mean=(l.min+l.max)/2,v=G.expressed(child,key);assert.ok(Math.abs(v-mean)<=.035000001*(l.max-l.min),key);signs[key][v>mean?0:1]++;}}
  for(const[key,[above,below]]of Object.entries(signs))assert.ok(above>400&&below>400,key);
 });
@@ -12,7 +12,7 @@ test('Large continuous changes require mutations in that specific trait, and mos
  assert.ok(totals.largeTraits>20&&totals.largeBabies/totals.births<.04,JSON.stringify(totals));assert.ok(totals.smallMutations>totals.largeTraits*8,JSON.stringify(totals));
 });
 test('Color, marking placement, pattern gates and categorical forms retain real transmitted copies',()=>{
- const[a,b]=parents(),r=G.seeded(199),appearance=G.loci.filter(l=>l.model!=='quantitative');assert.equal(appearance.length,27);for(let n=0;n<600;n++){const c=G.baby(a,b,'C',{rate:0,rng:r});for(const l of appearance)for(let i=0;i<2;i++)assert.ok(G.copies(i?b:a,l.key).some(copy=>JSON.stringify(copy)===JSON.stringify(G.copies(c,l.key)[i])),l.key);}
+ const[a,b]=parents(),r=G.seeded(199),appearance=G.loci.filter(l=>l.model!=='quantitative');assert.equal(appearance.length,31);for(let n=0;n<600;n++){const c=G.baby(a,b,'C',{rate:0,rng:r});for(const l of appearance)for(let i=0;i<2;i++)assert.ok(G.copies(i?b:a,l.key).some(copy=>JSON.stringify(copy)===JSON.stringify(G.copies(c,l.key)[i])),l.key);}
 });
 test('Hidden colors and pattern gates still produce contrasting and newly visible offspring at zero mutation',()=>{
  const[a,b]=parents(),r=G.seeded(231);for(const p of [a,b]){G.setCopies(p,'body',{rgb:[50,150,70],expression:.9},{rgb:[220,55,65],expression:.2});G.setCopies(p,'plain',{value:'S',expression:.5},{value:'s',expression:.5});G.setCopies(p,'layers',{value:'T',expression:.5},{value:'t',expression:.5});}

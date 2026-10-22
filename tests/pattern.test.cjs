@@ -3,7 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict');
 const G=require('../dist/pattern-lab/genetics.js');
 const ready=(two=false)=>{const s=G.createState(42);for(const id of ['B1','B2','B3','B4'])G.move(s,id,'jar-1');if(two){for(const id of ['B5','B6'])G.move(s,id,'jar-2');s.jars[1].active=true;}return s;};
 test('Pattern Lab has 80 paired loci, seven chromosomes, and reproducible founders',()=>{
- const s=G.createState(42);assert.equal(G.loci.length,80);assert.equal(s.tank.length,16);assert.deepEqual(s,G.createState(42));assert.notDeepEqual(s,G.createState(43));G.validate(s);
+ const s=G.createState(42);assert.equal(G.loci.length,90);assert.equal(s.tank.length,16);assert.deepEqual(s,G.createState(42));assert.notDeepEqual(s,G.createState(43));G.validate(s);
 });
 test('Mendelian loci transmit actual parental alleles; continuous traits have bounded quantitative segregation',()=>{
  const s=G.createState(),a=s.beetles.B1,b=s.beetles.B2,r=G.seeded(1);

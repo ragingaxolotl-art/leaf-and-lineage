@@ -1,0 +1,66 @@
+[
+  {
+    "a": "tiny",
+    "b": "huge",
+    "wins": 87,
+    "losses": 113,
+    "draws": 0,
+    "score": 0.435
+  },
+  {
+    "a": "small",
+    "b": "large",
+    "wins": 87,
+    "losses": 113,
+    "draws": 0,
+    "score": 0.435
+  },
+  {
+    "a": "standard",
+    "b": "huge",
+    "wins": 86,
+    "losses": 114,
+    "draws": 0,
+    "score": 0.43
+  },
+  {
+    "a": "agile",
+    "b": "huge",
+    "wins": 126,
+    "losses": 74,
+    "draws": 0,
+    "score": 0.63
+  },
+  {
+    "a": "agile",
+    "b": "power",
+    "wins": 146,
+    "losses": 54,
+    "draws": 0,
+    "score": 0.73
+  },
+  {
+    "a": "standard",
+    "b": "horns",
+    "wins": 99,
+    "losses": 101,
+    "draws": 0,
+    "score": 0.495
+  },
+  {
+    "a": "standard",
+    "b": "longlegs",
+    "wins": 104,
+    "losses": 96,
+    "draws": 0,
+    "score": 0.52
+  },
+  {
+    "a": "standard",
+    "b": "longantennae",
+    "wins": 94,
+    "losses": 106,
+    "draws": 0,
+    "score": 0.47
+  }
+]

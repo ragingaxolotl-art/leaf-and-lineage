@@ -12,9 +12,15 @@ async function rpc(name:string,body:unknown){
  const response=await fetch(base+'/rest/v1/rpc/'+name,{method:'POST',headers,body:JSON.stringify(body)}),value=await response.json();
  if(!response.ok){const e:any=new Error(value.message||'The room service is unavailable.');e.code=value.code;throw e;}return value;
 }
-function cleanPacket(input:any){
+function cleanPacket(input:any,model:string='SUMO5'){
  const raw=input?.beetle;if(!raw)throw Error('Choose a beetle before sharing.');
  const packet=G.validatePacket({format:'PatternLabBeetle',version:2,beetle:{id:'B1',name:'',parents:[],sourceJarId:null,broodId:null,lineageGeneration:raw.lineageGeneration,developmentSeed:raw.developmentSeed,genome:raw.genome,mutations:Array.isArray(raw.mutations)?raw.mutations:[]}});
+ const genome=packet.beetle.genome,body=genome[0].copies.map((cp:any[])=>cp[0]),colors=genome[8];
+ const neutralColors=colors&&colors.copies.every((cp:any[],i:number)=>cp.every((a:any)=>JSON.stringify(a)===JSON.stringify(body[i])));
+ if(neutralColors)genome.pop();
+ const h=genome[7],neutralGrowth=h&&h.copies.every((cp:any[])=>cp.every((a:any,i:number)=>i<6?a===0:a.value===(i===6?'single':'spike')&&a.expression===.5));
+ if(model!=='SUMO5'&&(!neutralGrowth||!neutralColors))throw Error('This beetle needs the latest battle rules. Refresh both screens.');
+ if(neutralGrowth&&neutralColors){genome.pop();packet.version=2;}
  if(JSON.stringify(packet).length>24000)throw Error('This beetle file is too large.');return packet;
 }
 Deno.serve(async(req:Request)=>{
@@ -28,14 +34,14 @@ Deno.serve(async(req:Request)=>{
  try{
   if(Number(req.headers.get('content-length')||0)>48000)return reply({error:'Request too large.'},413);
   const text=await req.text();if(text.length>48000)return reply({error:'Request too large.'},413);
-  const data=JSON.parse(text),action=data.action,model=data.model||'SUMO2';if(!['SUMO2','SUMO3','SUMO4'].includes(model))throw Error('Invalid battle model.');
+  const data=JSON.parse(text),action=data.action,model=data.model||'SUMO2';if(!['SUMO2','SUMO3','SUMO4','SUMO5'].includes(model))throw Error('Invalid battle model.');
   if(!['create','join','read','start','close'].includes(action))return reply({error:'Unknown room action.'},400);
   const token=data.token;if(typeof token!=='string'||!/^[A-Za-z0-9_-]{43}$/.test(token))return reply({error:'This device needs a fresh room connection.'},400);
   const tokenHash=await digest(token),ip=(req.headers.get('x-forwarded-for')||'unknown').split(',')[0];
   const bucket=await digest(secret+'|'+action+'|'+(['create','join'].includes(action)?ip:tokenHash)+'|'+Math.floor(Date.now()/60000));
   const allowed=await rpc('pattern_sumo_rate',{p_bucket:bucket,p_limit:action==='create'?60:action==='join'?120:90});
   if(!allowed)return reply({error:'A few too many requests. Wait a minute, then try again.'},429);
-  const beetle=['create','join'].includes(action)?cleanPacket(data.beetle):null;
+  const beetle=['create','join'].includes(action)?cleanPacket(data.beetle,model):null;
   let code=action==='create'?randomCode():String(data.code||'').toUpperCase().replace(/[-\s]/g,'');
   if(!/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$/.test(code))return reply({error:'Enter the full eight-character room code.'},400);
   const seed=action==='start'?crypto.getRandomValues(new Uint32Array(1))[0]:null;
