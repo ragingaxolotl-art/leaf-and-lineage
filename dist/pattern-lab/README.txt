@@ -43,7 +43,7 @@ Only the selected beetle's anonymous genetic packet is sent, not names, notes or
 Codes expire in two hours. Create a new code to change the shared beetles. The code service needs internet.
 
 STUDENT TRAIT NOTEBOOK
-Open trait notebook lets students choose one of 40 expressed measurements. Read a raw data table,
+Overall body size is a continuous measurement derived as sqrt(inherited body length × inherited body width). Those dimensions and body mass breed gradually; most babies stay close to the parental average, with rare larger mutations. Select descendants as new parents to accumulate changes over generations. Open trait notebook lets students choose one of 41 expressed measurements. Read a raw data table,
 sort by generation or breeding round, and filter by parent jar or imported/local origin.
 There are no graphs or precomputed summaries in the student notebook.
 Repeated broods of the same parents are siblings in the same lineage generation. Each beetle counts once.
@@ -52,6 +52,9 @@ or hidden gene copies. Displayed numbers round to four decimals; CSV keeps full 
 Archived measurements remain after beetles leave and are saved in the tank file. Older missing records
 are marked unavailable; they are not counted as zero or reconstructed. Dimensions use relative game
 scales and indices, not real-species measurements. Body RGB channels use 0–255 values.
+
+FULL GENETICS REPORT
+The magnifying-glass button in the beetle inspector opens a dense technical report with all 80 paired records, both copies, expression values at stored precision, mutations, gate effects and derived traits. QNT records estimate many small genetic effects; MEN records transmit actual copies. Teacher labs can always open this report. Student links follow Show all genetics. Download full report creates printable HTML; raw beetle JSON remains importable.
 
 PORTABLE BEETLES
 In the enlarged inspector, Export beetle JSON downloads a single beetle. Export beetle document creates a
@@ -63,7 +66,7 @@ Old Pattern Lab v1 tank saves keep their original five chromosome pairs; added t
 Movement speed controls playback only. Inherited walking speed is a separate genetic trait.
 Cooling, scenery and decorations do not change genes. No predators or automatic mating.
 Genetics, behavior and sumo physics are original teaching models, not real-species genetics.
-Auto-save stays on the current device when available; download a file before leaving a shared computer.
+Auto-save automatically reopens the last tank for this class link in the same browser and device. New tank remains an explicit confirmed choice. Different class codes have separate saves; a release-version update does not reset them. Download a file before leaving a shared computer or changing devices.
 Class links share starting presets, not later babies or saves. Files contain the full genetic record.
 
 Copyright 2026. Original vector artwork and implementation. See the repository LICENSE.

@@ -61,11 +61,13 @@ function phenotype(b){
  p.visibleLayers=copies(b,'plain').some(a=>a.value==='S')?0:copies(b,'layers').some(a=>a.value==='T')?1:2;
  p.hairs=copies(b,'hairGate').some(a=>a.value==='H')?0:p.hairDensity;
  p.speed=Number((.25+1.7*(.6*p.motor+.4*p.stride)*(.85+.15*(p.legLength-.55)/.95)).toFixed(2));
+ p.size=Math.sqrt(p.bodyWidth*p.bodyLength);
  p.strengthIndex=Math.round(1+99*p.strength);
  return p;
 }
 // Student measurement allowlist: expressed model traits only, never strength or gene copies.
 const studentTraits=[
+ {key:'size',label:'Overall body size',unit:'relative body scale (sqrt(length × width))',group:'Body and legs',min:Math.sqrt(.72*.78),max:1.3},
  {key:'speed',label:'Walking speed',unit:'body lengths / second',group:'Movement',min:.25,max:1.95},
  ...['endurance','recovery','grip','acceleration','turnRate'].map(key=>({key,label:{endurance:'Stamina',recovery:'Recovery',grip:'Foot grip',acceleration:'Acceleration',turnRate:'Turning agility'}[key],unit:'model index (0–1)',group:'Movement',min:0,max:1})),
  ...['bodyLength','bodyWidth','headWidth','legLength','femur','foot','horn','jaw','antennaLength','shaftWidth','segments','branchLength','hairLength','gloss','metallic'].map(key=>({key,label:byKey[key].label,unit:key==='segments'?'segments (rounded)':key==='antennaLength'?'body lengths':key==='bodyLength'||key==='bodyWidth'||key==='headWidth'||key==='legLength'||key==='femur'||key==='foot'||key==='shaftWidth'?'relative model scale':'model index (0–1)',group:['antennaLength','shaftWidth','segments','branchLength','hairLength'].includes(key)?'Antennae':'Body and legs',min:byKey[key].min,max:byKey[key].max})),
@@ -172,6 +174,8 @@ function upgradeState(s){
    b.upgradeNote='Behavior and sumo traits initialized deterministically during the v1-to-v2 upgrade; the original five chromosome pairs were preserved.';
   }
  }
+ // Older archives already measured both dimensions, so overall size needs no guessed genes.
+ for(const b of Object.values(s.retired||{})){const m=b.measurements;if(m&&!Object.hasOwn(m,'size')&&Number.isFinite(m.bodyWidth)&&Number.isFinite(m.bodyLength))m.size=Math.sqrt(m.bodyWidth*m.bodyLength);}
  if(s.cleanupExcluded===undefined)s.cleanupExcluded=Object.values(s.beetles).filter(b=>typeof b.name==='string'&&b.name.trim()).map(b=>b.id);
  s.retired=s.retired||{};s.tradeLocks=s.tradeLocks||[];s.tradeReceipts=s.tradeReceipts||[];
  if(s.settings&&s.settings.broods===undefined)s.settings.broods=2;
