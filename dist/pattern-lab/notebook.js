@@ -2,15 +2,16 @@
 'use strict';
 const G=typeof module!=='undefined'&&module.exports?require('./genetics.js'):root.PatternGenetics;
 const traits=G.studentTraits,byKey=Object.fromEntries(traits.map(t=>[t.key,t]));
-function rows(state,key,{jar='all',origin='all'}={}){
+function rows(state,key,{jar='all',origin='all',order='generation'}={}){
  if(!Object.hasOwn(byKey,key))throw Error('Choose a supported student measurement.');
+ if(!['generation','round'].includes(order))throw Error('Choose generation or breeding round.');
  if(!['all','jar-1','jar-2'].includes(jar)||!['all','local','imported'].includes(origin))throw Error('Choose a valid notebook filter.');
  return Object.values({...state.retired,...state.beetles}).map(b=>{
   const live=!!state.beetles[b.id],source=b.origin||(b.provenance?'imported':b.parents.length?'bred':live?'founder':'unknown');
   if(jar!=='all'&&b.sourceJarId!==jar||origin==='local'&&!['bred','founder'].includes(source)||origin==='imported'&&source!=='imported')return null;
   const data=live?G.measurements(b):b.measurements;
   return {id:b.id,name:b.name,generation:b.lineageGeneration,round:b.broodId?Number(b.broodId.slice(6)):source==='founder'?0:source==='imported'?(b.arrivedRound??null):null,jar:b.sourceJarId||'',origin:source,status:live?G.container(state,b.id):b.reason||'left tank',parent1:b.parents[0]||'',parent2:b.parents[1]||'',value:data?.[key]??null};
- }).filter(Boolean).sort((a,b)=>a.generation-b.generation||(a.round??0)-(b.round??0)||Number(a.id.slice(1))-Number(b.id.slice(1)));
+ }).filter(Boolean).sort((a,b)=>(a[order]??Infinity)-(b[order]??Infinity)||a.generation-b.generation||(a.round??0)-(b.round??0)||Number(a.id.slice(1))-Number(b.id.slice(1)));
 }
 function summarize(data,group='generation'){
  if(!['generation','round'].includes(group))throw Error('Choose generation or breeding round.');

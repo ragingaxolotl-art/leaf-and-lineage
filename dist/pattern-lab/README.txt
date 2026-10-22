@@ -39,10 +39,11 @@ Only the selected beetle's anonymous genetic packet is sent, not names, notes or
 Codes expire in two hours. Create a new code to change the shared beetles. The code service needs internet.
 
 STUDENT TRAIT NOTEBOOK
-Open trait notebook lets students choose one of 40 expressed measurements. Read individual values,
-generation or breeding-round means and ranges, and filter by parent jar or imported/local origin.
+Open trait notebook lets students choose one of 40 expressed measurements. Read a raw data table,
+sort by generation or breeding round, and filter by parent jar or imported/local origin.
+There are no graphs or precomputed summaries in the student notebook.
 Repeated broods of the same parents are siblings in the same lineage generation. Each beetle counts once.
-Download individual measurements CSV or summary CSV exports only that selected trait, never strength
+Download raw data CSV exports only that selected trait, never strength
 or hidden gene copies. Displayed numbers round to four decimals; CSV keeps full stored precision.
 Archived measurements remain after beetles leave and are saved in the tank file. Older missing records
 are marked unavailable; they are not counted as zero or reconstructed. Dimensions use relative game
