@@ -14,7 +14,7 @@ test('class codes round-trip every preset, preserving zero and false settings',(
 });
 test('incomplete and changed codes are rejected instead of silently applying defaults',()=>{
   const code=encode(defaults);
-  for(const bad of ['', 'LL1.',code.slice(0,-1),code+'x',code.replace('LL4.','LL5.'),'x'.repeat(401),'https://example.org/']) assert.throws(()=>decode(bad));
+  for(const bad of ['', 'LL1.',code.slice(0,-1),code+'x',code.replace('LL4.','LL6.'),'x'.repeat(401),'https://example.org/']) assert.throws(()=>decode(bad));
 });
 test('all starting conditions are strictly validated',()=>{
   for(const [key,value] of [['seed',0],['seed',2.5],['rows',0],['rows',7],['habitat','<script>'],['pressure',101],['pressure',-1],['mutation',21],['mutation',3.2],['mode','other'],['bird',1],['speed',3],['scenario','other'],['activities','other'],['allowEnvironment',1],['showStats',1],['layout','other'],['habitats',[]],['habitats',['#000000','#ffffff','wrong']]]) assert.throws(()=>validate({...defaults,[key]:value}),`${key}=${value}`);
@@ -89,7 +89,7 @@ test('student links request the current release and preserve the complete preset
 });
 test('a newer class-code version gets a version message, while corrupted codes remain rejected',()=>{
   const code=encode(defaults);
-  assert.throws(()=>decode(code.replace('LL4.','LL5.')),/newer version/);
+  assert.throws(()=>decode(code.replace('LL4.','LL6.')),/newer version/);
   assert.throws(()=>decode(code+'x'),/incomplete or mistyped/);
 });
 
@@ -100,4 +100,18 @@ test('5x and 10x speeds survive classroom links in every activity and environmen
     assert.deepEqual(decode(encode(p)),p);
     assert.deepEqual(decode(studentLink(p,'https://ragingaxolotl-art.github.io/leaf-and-lineage/?teacher=1')),p);
   }
+});
+
+
+test('Next-generation-only links preserve all permissions in both simple editions',()=>{
+ for(const edition of ['../dist/presets.js','../dist/simplified/presets.js']){
+  const P=require(edition);
+  for(const activities of ['bird','breeding','both']){
+   const p={...P.defaults,allowPlay:false,activities,mode:activities==='breeding'?'breeding':'natural',allowEnvironment:true,showStats:true,speed:10};
+   const code=P.encode(p);assert.match(code,/^LL5\./);assert.deepEqual(P.decode(code),p);
+   const link=P.studentLink(p,'https://example.org/simplified/?teacher=1');assert.equal(new URL(link).pathname,'/simplified/');assert.deepEqual(P.decode(link),p);
+  }
+  const old={...P.defaults};delete old.allowPlay;assert.equal(P.validate(old).allowPlay,true);
+  for(const value of [0,1,null,'false'])assert.throws(()=>P.validate({...P.defaults,allowPlay:value}));
+ }
 });

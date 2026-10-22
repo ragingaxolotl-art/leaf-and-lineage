@@ -154,7 +154,7 @@
     $('student-breeding').hidden = !studentMode || !canBreed() || manual;
     $('student-natural').disabled = busy; $('student-breeding').disabled = busy;
     const ready = manual ? counts.ready > 0 : lab.size > 0;
-    $('play').hidden = false; $('play').disabled = !playing && !ready;
+    $('play').hidden = !startPreset.allowPlay; $('play').disabled = !startPreset.allowPlay || (!playing && !ready);
     $('speed').disabled = false;
     $('step').disabled = busy || !ready;
     $('play').querySelector('span').textContent = playing ? 'Pause' : 'Play';
@@ -192,7 +192,7 @@
     });
     $('parent-tray').hidden = mode !== 'breeding' || !canBreed();
     if (mode === 'breeding') {
-      $('parent-tray').innerHTML = '<strong>Parents stay in the jar.</strong> Next generation makes one brood. Play keeps making broods from the original pair. Replace or remove a parent to change the pair.';
+      $('parent-tray').innerHTML = '<strong>Parents stay in the jar.</strong> Next generation makes one brood.' + (startPreset.allowPlay ? ' Play keeps making broods from the original pair.' : '') + ' Replace or remove a parent to change the pair.';
     }
     $('board-instruction').textContent = !canBreed() ? 'Watch which beetles survive' : mode === 'breeding' ? 'Drag two parents into a row’s jar' : 'Drag to breed · click to inspect';
     renderJars(); renderGenetics();
@@ -213,7 +213,7 @@
   function cancel() { pause(); clearTimeout(stageTimer); busy = false; $('bird-head').hidden = true; $('bird-head').classList.remove('pecking'); touchDrag?.ghost?.remove(); touchDrag = null; clearDropTargets(); }
   function schedule() {
     clearTimeout(playTimer);
-    if (playing) playTimer = setTimeout(() => advance(), 1900 / Number($('speed').value));
+    if (playing && startPreset.allowPlay) playTimer = setTimeout(() => advance(), 1900 / Number($('speed').value));
   }
   function animatePredation(huntSettings, done) {
     const targets = Array.from(document.querySelectorAll('.beetle')).map(element => ({ element, beetle: lab.population[Number(element.dataset.index)] }));
@@ -473,6 +473,7 @@
   $('beetle-grid').addEventListener('pointerup', event => finishTouch(event));
   $('beetle-grid').addEventListener('pointercancel', event => finishTouch(event, true));
   $('play').addEventListener('click', () => {
+    if (!startPreset.allowPlay) return;
     if (playing) pause();
     else { playing = true; renderButtons(); if (!busy) advance(); }
   });
@@ -496,7 +497,7 @@
       $('download-student').textContent = startPreset.showStats ? 'Save full data' : 'Save observations';
       $('classroom-badge').hidden = false;
       $('classroom-badge').textContent = startPreset.showStats ? 'CLASSROOM INVESTIGATION · FULL STATS' : 'CLASSROOM INVESTIGATION';
-      $('guide').innerHTML = `<button id="student-guide-close" class="dialog-close" aria-label="Close instructions">×</button><p class="eyebrow">YOUR INVESTIGATION</p><h2 id="guide-title">Observe, predict, and experiment.</h2><p>Each row has room for eight beetles. Next generation advances once; Play keeps going until you pause.</p>${canBreed() ? '<p>Drag two beetles into a row’s jar, or select a beetle then click a + slot. The jar keeps the original parents. Each step replaces only that row with a new brood of their offspring. Play keeps repeating that pair until you replace or remove a parent.</p>' : ''}${canBird() ? '<p>Use Play or Next generation to watch the bird select survivors. Each insect gets a fresh survival roll against the color behind its leaf, including after a restart. A beetle that blends in better than its adjacent neighbors on the same background gets extra protection. When neighbors look alike, this extra boost fades; ordinary camouflage still protects matching beetles. Survivors breed mostly with the eight surrounding leaves, including diagonals. Every individual farther partner receives a lower distance weight, so partners can still come from two or more rings away. Unlike habitat patches also reduce crossing without blocking it. Offspring stay on a surviving parent’s leaf or a nearby empty leaf. On Neapolitan, crossing between unlike habitat patches is less frequent, so local colors can form bands while genes still move between zones. With at least two survivors on the whole board, their offspring fill every row. A lone survivor stays on its leaf without offspring; zero survivors leaves the board empty.</p>' : ''}${canBreed() && canBird() ? '<p>Choose Bird mode or Breeding mode to switch activities.</p>' : ''}${canEnvironment() ? '<p>You can change the environment whenever a generation is not in progress. Existing beetles keep their colors. Neapolitan is another environment choice: three continuous vertical color bands across the leaf area. Each column uses its own background for survival rolls.</p>' : ''}${startPreset.showStats ? '<h3>Read the results</h3><p>Average camouflage is a 0–100% similarity score, not a survival probability. Diversity measures color spread. The chart combines all rows after each round; each row also tracks its own generation.</p><p>Select a beetle and open Inherited genes and family to see its gene copies and parents. In an allowed breeding activity, a complete jar shows offspring probabilities before mutation. Each baby is an independent draw. Full data downloads include settings, measurements, gene copies, parentage, and your notes.</p><p>This invented teaching model carries two color recipes. Six linked binary genes encode each recipe’s color and expression strength; three independent genes vary shade across the full RGB range. Each parent passes one recipe. The stronger recipe supplies the base color; equal strengths use parent A’s copy. Shade genes can make that color darker, brighter, or a different hue. The color name describes its actual appearance. A hidden recipe can appear in descendants even with no mutation. No color is always dominant. Mutation acts on each of 18 inherited copies and does not target the habitat.</p>' : ''}<p>Color genes come from parents and can be passed on again. Different combinations sometimes produce surprising offspring. Record what you notice and save your observations. Start over returns to the class preset.</p>`;
+      $('guide').innerHTML = `<button id="student-guide-close" class="dialog-close" aria-label="Close instructions">×</button><p class="eyebrow">YOUR INVESTIGATION</p><h2 id="guide-title">Observe, predict, and experiment.</h2><p>Each row has room for eight beetles. Next generation advances once.${startPreset.allowPlay ? ' Play keeps going until you pause.' : ' Take time to observe before clicking again.'}</p>${canBreed() ? '<p>Drag two beetles into a row’s jar, or select a beetle then click a + slot. The jar keeps the original parents. Each step replaces only that row with a new brood of their offspring. Each new brood uses that pair until you replace or remove a parent.</p>' : ''}${canBird() ? '<p>Use Next generation to watch the bird select survivors. Each insect gets a fresh survival roll against the color behind its leaf, including after a restart. A beetle that blends in better than its adjacent neighbors on the same background gets extra protection. When neighbors look alike, this extra boost fades; ordinary camouflage still protects matching beetles. Survivors breed mostly with the eight surrounding leaves, including diagonals. Every individual farther partner receives a lower distance weight, so partners can still come from two or more rings away. Unlike habitat patches also reduce crossing without blocking it. Offspring stay on a surviving parent’s leaf or a nearby empty leaf. On Neapolitan, crossing between unlike habitat patches is less frequent, so local colors can form bands while genes still move between zones. With at least two survivors on the whole board, their offspring fill every row. A lone survivor stays on its leaf without offspring; zero survivors leaves the board empty.</p>' : ''}${canBreed() && canBird() ? '<p>Choose Bird mode or Breeding mode to switch activities.</p>' : ''}${canEnvironment() ? '<p>You can change the environment whenever a generation is not in progress. Existing beetles keep their colors. Neapolitan is another environment choice: three continuous vertical color bands across the leaf area. Each column uses its own background for survival rolls.</p>' : ''}${startPreset.showStats ? '<h3>Read the results</h3><p>Average camouflage is a 0–100% similarity score, not a survival probability. Diversity measures color spread. The chart combines all rows after each round; each row also tracks its own generation.</p><p>Select a beetle and open Inherited genes and family to see its gene copies and parents. In an allowed breeding activity, a complete jar shows offspring probabilities before mutation. Each baby is an independent draw. Full data downloads include settings, measurements, gene copies, parentage, and your notes.</p><p>This invented teaching model carries two color recipes. Six linked binary genes encode each recipe’s color and expression strength; three independent genes vary shade across the full RGB range. Each parent passes one recipe. The stronger recipe supplies the base color; equal strengths use parent A’s copy. Shade genes can make that color darker, brighter, or a different hue. The color name describes its actual appearance. A hidden recipe can appear in descendants even with no mutation. No color is always dominant. Mutation acts on each of 18 inherited copies and does not target the habitat.</p>' : ''}<p>Color genes come from parents and can be passed on again. Different combinations sometimes produce surprising offspring. Record what you notice and save your observations. Start over returns to the class preset.</p>`;
       $('student-guide-close').addEventListener('click', () => $('guide').close());
     }
     $('reset-student').addEventListener('click', reset);
@@ -508,13 +509,13 @@
     $('neapolitan-mode').addEventListener('click', () => habitatEvent(habitat, 'Neapolitan', 'neapolitan'));
     $('student-habitat-color').addEventListener('input', event => habitatEvent(event.target.value, 'Custom')); 
     function formPreset() {
-      return LeafPresets.validate({ seed: Number($('class-seed').value), rows: Number($('class-rows').value), habitat: $('class-habitat').value, pressure: Number($('class-pressure').value), mutation: Number($('class-mutation').value), mode: $('class-activities').value === 'both' ? $('class-mode').value : $('class-activities').value === 'bird' ? 'natural' : 'breeding', activities: $('class-activities').value, allowEnvironment: $('class-environment').checked, showStats: $('class-stats').checked, layout: $('class-layout').value, habitats: [0,1,2].map(i => $('class-habitat-' + i).value), bird: $('class-bird').checked, speed: Number($('class-speed').value), scenario: $('class-scenario').value });
+      return LeafPresets.validate({ allowPlay: $('class-play').checked, seed: Number($('class-seed').value), rows: Number($('class-rows').value), habitat: $('class-habitat').value, pressure: Number($('class-pressure').value), mutation: Number($('class-mutation').value), mode: $('class-activities').value === 'both' ? $('class-mode').value : $('class-activities').value === 'bird' ? 'natural' : 'breeding', activities: $('class-activities').value, allowEnvironment: $('class-environment').checked, showStats: $('class-stats').checked, layout: $('class-layout').value, habitats: [0,1,2].map(i => $('class-habitat-' + i).value), bird: $('class-bird').checked, speed: Number($('class-speed').value), scenario: $('class-scenario').value });
     }
     function fillForm(preset) {
       for (const field of ['seed','rows','habitat','pressure','mutation','mode','speed','scenario','activities','layout']) $('class-' + field).value = String(preset[field]);
       preset.habitats.forEach((color, i) => $('class-habitat-' + i).value = color);
       $('class-tri-colors').hidden = preset.layout !== 'neapolitan';
-      $('class-bird').checked = preset.bird; $('class-environment').checked = preset.allowEnvironment; $('class-stats').checked = preset.showStats;
+      $('class-play').checked = preset.allowPlay; $('class-bird').checked = preset.bird; $('class-environment').checked = preset.allowEnvironment; $('class-stats').checked = preset.showStats;
       $('class-mode').disabled = preset.activities !== 'both';
       if (preset.activities !== 'both') $('class-mode').value = preset.activities === 'bird' ? 'natural' : 'breeding';
     }
@@ -524,6 +525,7 @@
         $('student-link').value = url; $('student-code').value = code;
         $('student-preview').href = url; $('student-preview').hidden = false;
         $('classroom-message').textContent = preset.showStats ? 'Ready. Students can see all stats, charts, genetic details, offspring odds for allowed breeding, and full data downloads. Activity and environment permissions still apply.' : 'Ready. Stats and genetics stay simplified. This link includes the activity choices and environment permission.';
+        $('classroom-message').textContent += preset.allowPlay ? ' Continuous Play is available.' : ' Next generation only; continuous Play is hidden.';
         $('copy-student-link').disabled = false;
       } catch (error) { $('classroom-message').textContent = error.message; }
     }

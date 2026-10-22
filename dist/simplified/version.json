@@ -1,16 +1,17 @@
 {
   "edition": "Simplified",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "sourceRelease": "20261021-10",
   "sourceCommit": "81346603e146ecc6dc2c7fe4638cfe754d86a4f9",
-  "frozen": true,
-  "note": "Preserved game behavior before the planned Pattern Lab. Future detailed genetics belong in a separate edition.",
+  "frozen": false,
+  "note": "Original inheritance and selection model preserved. Version 1.1 adds an optional teacher control for Next generation only; existing class links retain Play.",
   "sha256": {
-    "index.html": "aae573ff6f647aa027d8068bf0648613ab05ed5ecee5e459801d9f07c45149af",
+    "index.html": "a052a5377feca69456f7110a7e9b5d65d5e3c6ad306ecc35a4e9dc5c3286896e",
     "styles.css": "0cc436b434c6fe0a3d41f21148f2e2440990b2b4c7fd04f14a3b24a9b0d9e9b8",
     "simulation.js": "5dc95fe561b876d77f6e178bdc41cd9bc42af8c9ac0b09a9fe3122ccf11315f8",
-    "presets.js": "488bf864dc6663420a4500d6a899a033bda55f45358bbe2e24da308a6b2db603",
-    "app.js": "c91cfe3490ebcf724d281234e735cf60c7ce551c7a7b4a31fc731df7a92c6bbf",
-    "Leaf-and-Lineage-Simplified.html": "6db51316949eeb243557f1cefcca09490d5d3a5d8839252a8b1ba4d606d7912c"
-  }
+    "presets.js": "f57c772a6a4023316d8663ed573972336444677b32c25733308c649d3f3bc458",
+    "app.js": "c68c541d401f901c1c3555c564af50ac8d2c35c3f88f79c7c698756d3e56b8bd",
+    "Leaf-and-Lineage-Simplified.html": "3ee6d617c178025b5c4c443046d55286dde676aea49392fba89dec3fc15334ad"
+  },
+  "release": "20261022-8"
 }

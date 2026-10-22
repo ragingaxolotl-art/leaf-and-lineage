@@ -5,14 +5,14 @@ https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/
 
 TEACHER SETUP
 https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/?teacher=1
-Create a student link with chosen seed, mutation, bedding permission, sumo permission and full-stat visibility.
+Create a student link with chosen seed, mutation, tank cleanup, bedding permission, sumo permission and full-stat visibility.
 
 PLAY OFFLINE
 Open Pattern-Lab.html in a modern browser. It includes all code and artwork, without installation.
 For a local server, serve this folder and open index.html. No dependencies or build step are needed.
 
 TANK SPACE AND TRADING
-Only two newest broods stay in the main tank and nursery. Older unsaved beetles leave automatically. Keep tank favorites (10 maximum) and jar parents are protected. The starting group counts as a brood. Clear unsaved beetles removes the main tank and nursery immediately. Family labels remain; retired beetles cannot be selected again.
+Choose Keep newest brood only or Keep two newest broods in Automatic tank cleanup. A setting change applies when the next brood is born. Older unsaved beetles leave automatically. The default is two broods. Keep tank favorites (10 maximum) and jar parents are protected. The starting group counts as a brood. Clear unsaved beetles removes the main tank and nursery immediately. Family labels and measured trait data remain; retired beetles cannot be selected again.
 Trade with a classmate exchanges one offered beetle for one offered beetle. Create a trade code, your friend enters it and offers theirs, then the creator previews and confirms. Both devices receive the exact genes and appearance. Use the original device until complete. Offers expire after two hours; collection receipts last seven days. Internet is required for codes. Keep your own tank file backup.
 
 HOW TO PLAY

@@ -115,7 +115,7 @@ function breedRound(state,opts={}){
  state.round++;cleanup(state);state.history.push({broodId,total,allocations:allocations.map(a=>({jarId:a.jar.id,count:a.count,parents:a.jar.members.slice()})),offspring:newborns.slice()});
  return state.history[state.history.length-1];
 }
-function createState(seed=42){const r=seeded(seed),s={version:'PL2',round:0,nextId:17,seed,settings:{mutation:.005,showStats:false,backdrop:'moss',allowBackdrop:true,allowSumo:true},beetles:{},retired:{},tradeLocks:[],tradeReceipts:[],tank:[],nursery:[],collection:[],keepLayout:{},tankLayout:{},jars:[{id:'jar-1',active:true,members:[]},{id:'jar-2',active:false,members:[]}],history:[],matchHistory:[],notes:''};for(let i=0;i<16;i++){const id='B'+(i+1);s.beetles[id]=founder(id,r,i);s.tank.push(id);}return s;}
+function createState(seed=42){const r=seeded(seed),s={version:'PL2',round:0,nextId:17,seed,settings:{mutation:.005,showStats:false,backdrop:'moss',allowBackdrop:true,allowSumo:true,broods:2},beetles:{},retired:{},tradeLocks:[],tradeReceipts:[],tank:[],nursery:[],collection:[],keepLayout:{},tankLayout:{},jars:[{id:'jar-1',active:true,members:[]},{id:'jar-2',active:false,members:[]}],history:[],matchHistory:[],notes:''};for(let i=0;i<16;i++){const id='B'+(i+1);s.beetles[id]=founder(id,r,i);s.tank.push(id);}return s;}
 function container(s,id){if(s.tank.includes(id))return 'tank';if(s.nursery.includes(id))return 'nursery';if(s.collection.includes(id))return 'collection';return s.jars.find(j=>j.members.includes(id))?.id||null;}
 // Retired beetles retain only family labels, never a playable genome.
 function record(s,id){return s.beetles[id]||s.retired?.[id];}
@@ -126,11 +126,11 @@ function retire(s,id,reason='released'){
  for(const list of [s.tank,s.nursery,s.collection,...s.jars.map(j=>j.members)]){const i=list.indexOf(id);if(i>=0)list.splice(i,1);}
  delete s.beetles[id];delete s.keepLayout?.[id];delete s.tankLayout?.[id];return true;
 }
-function cleanup(s,{all=false}={}){
+function cleanup(s,{all=false,broods=s.settings.broods??2}={}){
  const removed=[];
  for(const id of [...s.tank,...s.nursery]){const b=s.beetles[id];if((s.tradeLocks||[]).includes(id))continue;
   const arrival=b.arrivedRound??(b.broodId?Number(b.broodId.split('-')[1]):0);
-  if(all||arrival<s.round-1){retire(s,id,all?'released':'older brood');removed.push(id);}
+  if(all||arrival<s.round-broods+1){retire(s,id,all?'released':'older brood');removed.push(id);}
  }
  while(s.tank.length<48&&s.nursery.length)s.tank.push(s.nursery.shift());
  return removed;
@@ -167,6 +167,7 @@ function upgradeState(s){
   }
  }
  s.retired=s.retired||{};s.tradeLocks=s.tradeLocks||[];s.tradeReceipts=s.tradeReceipts||[];
+ if(s.settings&&s.settings.broods===undefined)s.settings.broods=2;
  s.version='PL2';if(s.settings&&s.settings.allowSumo===undefined)s.settings.allowSumo=true;s.keepLayout=s.keepLayout||{};s.tankLayout=s.tankLayout||{};s.matchHistory=s.matchHistory||[];
  return s;
 }
@@ -175,6 +176,7 @@ function validate(s){
  if(!s||s.version!=='PL2'||!s.settings||typeof s.beetles!=='object'||!Array.isArray(s.jars)||s.jars.length!==2)throw Error('This is not a Pattern Lab save.');
  if(!Number.isInteger(s.nextId)||s.nextId<1||!Number.isInteger(s.round)||s.round<0||!Array.isArray(s.history)||s.history.length!==s.round||!Number.isInteger(s.seed)||s.seed<1||s.seed>2147483647||typeof s.notes!=='string'||s.notes.length>10000)throw Error('Invalid brood record.');
  if(!Number.isFinite(s.settings.mutation)||s.settings.mutation<0||s.settings.mutation>.1||!['moss','sand','bark','night'].includes(s.settings.backdrop)||typeof s.settings.showStats!=='boolean'||typeof s.settings.allowBackdrop!=='boolean')throw Error('Invalid settings.');
+ if(![1,2].includes(s.settings.broods))throw Error('Choose one or two broods to keep.');
  if(typeof s.settings.allowSumo!=='boolean'||!Array.isArray(s.matchHistory)||s.matchHistory.length>100)throw Error('Invalid sumo records.');
  for(const m of s.matchHistory){
   if(!m||!['SUMO2','SUMO3','SUMO4'].includes(m.version)||!Number.isInteger(m.seed)||m.seed<0||m.seed>4294967295||!Number.isFinite(m.seconds)||m.seconds<0||m.seconds>60.1||![null,0,1].includes(m.winner)||!['Ring-out','Both centers crossed the line','Time limit — draw','Closest to center','Center tie'].includes(m.reason)||!Array.isArray(m.fighters)||m.fighters.length!==2||!Array.isArray(m.events)||m.events.length>120)throw Error('Invalid saved match.');
@@ -209,7 +211,8 @@ function validate(s){
   if(h.allocations.reduce((n,a)=>n+a.count,0)!==h.total)throw Error('Invalid brood allocation.');
   for(const a of h.allocations)if(!['jar-1','jar-2'].includes(a.jarId)||!Number.isInteger(a.count)||a.count<1||!Array.isArray(a.parents)||a.parents.length<2||a.parents.length>4||new Set(a.parents).size!==a.parents.length||a.parents.some(id=>!family[id])||h.offspring.filter(id=>family[id].sourceJarId===a.jarId).length!==a.count||h.offspring.some(id=>family[id].sourceJarId===a.jarId&&family[id].parents.some(p=>!a.parents.includes(p))))throw Error('Invalid saved parent group.');
  }
- cleanup(s);return s;
+ // A newly selected one-brood setting applies at the next birth, not on file restore.
+ cleanup(s,{broods:2});return s;
 }
 function forecast(s,jar,n=240){if(jar.members.length<2)return null;const r=seeded(713),choices=pairs(jar.members),out={layers:[0,0,0],antennae:{},legs:{},speed:0,strength:0};for(let i=0;i<n;i++){let [a,b]=pick(choices,r);if(r()<.5)[a,b]=[b,a];const p=phenotype(baby(s.beetles[a],s.beetles[b],'preview',{rate:s.settings.mutation,rng:r}));out.layers[p.visibleLayers]++;out.antennae[p.antenna]=(out.antennae[p.antenna]||0)+1;out.legs[p.leg]=(out.legs[p.leg]||0)+1;out.speed+=p.speed;out.strength+=p.strengthIndex;}out.n=n;return out;}
 function checksum(s){let h=2166136261;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);return (h>>>0).toString(36);}
@@ -218,6 +221,7 @@ function validConfig(c){
  if(!Number.isInteger(c.seed)||c.seed<1||c.seed>2147483647)throw Error('Population seed must be a whole number from 1 to 2147483647.');
  if(!Number.isFinite(c.mutation)||c.mutation<0||c.mutation>.1)throw Error('Mutation must be from 0 to 10 percent per gene copy.');
  if(!['moss','sand','bark','night'].includes(c.backdrop)||typeof c.stats!=='boolean'||typeof c.environment!=='boolean'||![.5,1,2,5,10].includes(c.speed))throw Error('This class link contains unsupported settings.');
+ if(c.broods!==undefined&&![1,2].includes(c.broods))throw Error('Choose one or two broods to keep.');
  if(c.sumo!==undefined&&typeof c.sumo!=='boolean')throw Error('Invalid sumo permission.');
  return c;
 }
