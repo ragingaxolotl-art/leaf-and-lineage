@@ -305,6 +305,16 @@ function importPacket(s,input){
  b.provenance={sourceId:source.id,parents:source.parents,generation:source.lineageGeneration};
  s.beetles[b.id]=b;if(b.name.trim())excludeFromCleanup(s,b.id,true);(s.tank.length<48?s.tank:s.nursery).push(b.id);return b;
 }
+// Manual refresh replaces the working population, preserving favorites, parents and experiment records.
+function refreshTank(s,{rng=Math.random}={}){
+ if(s.pendingTrade||(s.tradeLocks||[]).length)throw Error('Finish or cancel your pending trade first.');
+ const ids=[...s.tank,...s.nursery];
+ if(Object.keys(s.beetles).length-ids.length+16>3000)throw Error('Save this experiment and start a new tank before adding more beetles.');
+ const fresh=Array.from({length:16},(_,i)=>{const b=founder('B'+(s.nextId+i),rng,Math.floor(rng()*104));b.arrivedRound=s.round;return b;});
+ for(const id of ids){excludeFromCleanup(s,id,false);retire(s,id,'released');}
+ for(const b of fresh){s.beetles[b.id]=b;s.tank.push(b.id);}s.nextId+=16;
+ return fresh.map(b=>b.id);
+}
 // One persistent selection per breeding round; separate randomness never changes offspring rolls.
 function ensureStore(s,{rng=Math.random}={}){if(s.store===null||s.store===undefined){s.store={round:s.round,seed:Math.floor(rng()*4294967296),claimed:[]};return true;}return false;}
 function storeStock(s){if(!s.store||s.store.round!==s.round)throw Error('Open the current beetle store first.');const r=seeded(s.store.seed);return Array.from({length:5},(_,i)=>founder('Store-'+s.round+'-'+(i+1),r,Math.floor(r()*104)));}
@@ -315,6 +325,6 @@ function takeStoreBeetle(s,index){
  if(s.store.claimed.length>=2)throw Error('You have chosen two beetles. Breed a new round for fresh arrivals.');
  const candidate=storeStock(s)[index],b=importPacket(s,packet(candidate));s.store.claimed.push(index);return b;
 }
-const api={abilityNames,abilityFactors,abilityKeys,neutralAbilities,ensureStore,storeStock,takeStoreBeetle,appearance,validateAppearance,visualPhenotype,growthKeys,studentTraits,measurements,chromosomes,loci,byKey,quantitativeKeys,observationTags,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,record,retire,cleanup,excludeFromCleanup,fingerprint,finishTrade,move,validate,upgradeState,packet,validatePacket,importPacket,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
+const api={refreshTank,abilityNames,abilityFactors,abilityKeys,neutralAbilities,ensureStore,storeStock,takeStoreBeetle,appearance,validateAppearance,visualPhenotype,growthKeys,studentTraits,measurements,chromosomes,loci,byKey,quantitativeKeys,observationTags,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,record,retire,cleanup,excludeFromCleanup,fingerprint,finishTrade,move,validate,upgradeState,packet,validatePacket,importPacket,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PatternGenetics=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
