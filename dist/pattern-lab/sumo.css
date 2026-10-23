@@ -32,3 +32,6 @@
 .fighter.flipped .leg-swing{animation:flipWriggle .22s ease-in-out infinite alternate}.resting .fighter.flipped .leg-swing{animation-play-state:paused}
 @keyframes flipWriggle{from{transform:rotate(-9deg)}to{transform:rotate(9deg)}}
 @media(prefers-reduced-motion:reduce){.fighter.flipped .leg-swing{animation:none}}
+
+/* Corner choices retain words as well as unmistakable team colors. */
+#specimen-red{background:#a43635;border-color:#a43635;color:#fff}#specimen-blue{background:#245e9b;border-color:#245e9b;color:#fff}#specimen-red:hover{background:#852827}#specimen-blue:hover{background:#194b80}#specimen-red:focus-visible,#specimen-blue:focus-visible{outline:3px solid #c49a36;outline-offset:3px}.shared-match-controls{margin:20px 0 10px;padding:16px;border:2px solid #b8c9a6;border-radius:14px;background:#eff4e5;text-align:center}.shared-match-controls[hidden]{display:none}#room-start{display:block;width:100%;min-height:64px;padding:18px 22px;font-size:clamp(20px,2vw,26px);font-weight:800;border-radius:12px}#room-start:disabled{opacity:1;background:#dfe6d5;color:#56674d;border-color:#c4d1b7;cursor:default}#shared-start-hint{margin:10px 0 0;font-size:12px;line-height:1.5}.ring-controls #sumo-start[hidden]{display:none}@media(max-width:560px){.shared-match-controls{padding:12px}#room-start{min-height:60px;font-size:20px}}
