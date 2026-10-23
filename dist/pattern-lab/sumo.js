@@ -6,16 +6,17 @@ const v3=typeof module!=='undefined'&&module.exports?require('./sumo-v3.js'):roo
 const v4=typeof module!=='undefined'&&module.exports?require('./sumo-v4.js'):root.PatternSumoV4;
 const v5=typeof module!=='undefined'&&module.exports?require('./sumo-v5.js'):root.PatternSumoV5;
 const v6=typeof module!=='undefined'&&module.exports?require('./sumo-v6.js'):root.PatternSumoV6;
+const v7=typeof module!=='undefined'&&module.exports?require('./sumo-v7.js'):root.PatternSumoV7;
 const clamp=G.clamp,TAU=Math.PI*2,wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
 const unit=a=>({x:Math.cos(a),y:Math.sin(a)}),dot=(a,b)=>a.x*b.x+a.y*b.y;
-function traits(b){const p=G.phenotype(b),g=p.bodyGrowth,leg=p.legGrowth,ant=p.antennaGrowth,hornReach=p.horn*p.hornFactor,hornLoad=Math.min(3,hornReach*(1+.15*(p.visibleHorns-1))),burden=1+.025*Math.max(0,ant)+.035*hornLoad+.025*Math.max(0,p.headGrowth+p.jawGrowth);return {...p,
+function traits(b){const p=G.phenotype(b),g=p.bodyGrowth,leg=p.legGrowth,ant=p.antennaGrowth,hornReach=p.visibleHorns?p.horn*p.hornFactor:0,hornLoad=Math.min(3,hornReach*(1+.15*(p.visibleHorns-1))),burden=1+.025*Math.max(0,ant)+.035*hornLoad+.025*Math.max(0,p.headGrowth+p.jawGrowth);return {...p,
  massValue:(1.8+1.2*p.mass+.2*p.bodyWidth)*2**(.28*g),
  maxSpeed:1.4*(42+32*p.speed)*2**(-.10*g)*2**(.09*leg),
  traction:(.8+.2*p.grip+.03*p.claw+.03*(p.legSpread-.7))*2**(.025*g-.025*Math.abs(leg)),
  turnSpeed:1.15*(2+2.5*p.turnRate)*2**(-.18*g-.045*Math.abs(leg))/burden,
  pushPower:(82.5+45*p.strength)*2**(.055*g),
  tracking:clamp(p.tracking+.035*ant),reaction:clamp(p.reaction-.015*Math.max(0,ant)),
- frontBonus:.025*hornLoad+.015*Math.max(0,p.jawGrowth),
+ frontBonus:.025*hornLoad+.015*Math.min(3,p.jaw*p.jawFactor)*Math.max(0,p.jawGrowth),
  fatigueLoad:1+.07*Math.abs(g)+.025*Math.abs(leg)+.025*hornLoad,
  bodyRadius:(21.5+2*p.bodyWidth)*2**(.40*g)};}
 
@@ -30,7 +31,8 @@ function create(a,b,seed=Math.floor(Math.random()*4294967296),options={}){
  if(options.version==='SUMO2')return legacy.create(a,b,seed,options);if(options.version==='SUMO3')return v3.create(a,b,seed,options);if(options.version==='SUMO4')return v4.create(a,b,seed,options);
  if(options.version==='SUMO5')return v5.create(a,b,seed,options);
  if(options.version==='SUMO6')return v6.create(a,b,seed,options);
- const rng=G.seeded(seed),match={version:'SUMO7',seed,rng,time:0,tick:0,radius:160,bodyRadius:24,maxSeconds:options.maxSeconds||60,done:false,winner:null,reason:null,events:[],lastContact:-10,contact:false,abilities:[],flips:[],fighters:[fighter(a,0,rng),fighter(b,1,rng)]};
+ if(options.version==='SUMO7')return v7.create(a,b,seed,options);
+ const rng=G.seeded(seed),match={version:'SUMO8',seed,rng,time:0,tick:0,radius:160,bodyRadius:24,maxSeconds:options.maxSeconds||60,done:false,winner:null,reason:null,events:[],lastContact:-10,contact:false,abilities:[],flips:[],fighters:[fighter(a,0,rng),fighter(b,1,rng)]};
  const rotation=rng()*TAU,c=Math.cos(rotation),s=Math.sin(rotation);
  for(const f of match.fighters){const x=f.x;f.x=x*c-f.y*s;f.y=x*s+f.y*c;f.heading+=rotation;f.targetHeading=f.heading;}
  return match;
@@ -62,7 +64,7 @@ function decide(m,f,other,otherVx,otherVy){
 }
 // Every action uses fixed simulation ticks and the shared seeded random stream.
 // Readiness is deliberately absent: these are temporary grappling effects, never damage.
-function windup(m,f,move){if(!['lift','jump','puff'].includes(move)||f.action||f.air>0||f.flipped>0||f.cooldowns[move]>0||move==='jump'&&!f.t.canJump||move==='puff'&&(!f.t.canPuff||f.charges<=0))return false;const t=f.t,cost=({lift:.09,jump:.12,puff:.14}[move])*(1.25-.6*t[move+'Efficiency']);if(f.energy<cost+.18)return false;
+function windup(m,f,move){if(!['lift','jump','puff'].includes(move)||f.action||f.air>0||f.flipped>0||f.cooldowns[move]>0||move==='lift'&&(!f.t.visibleHorns||f.t.horn*f.t.hornFactor<=.008)||move==='jump'&&!f.t.canJump||move==='puff'&&(!f.t.canPuff||f.charges<=0))return false;const t=f.t,cost=({lift:.09,jump:.12,puff:.14}[move])*(1.25-.6*t[move+'Efficiency']);if(f.energy<cost+.18)return false;
  f.energy-=cost;const duration=({lift:.55,jump:.4,puff:.65}[move])*(1.15-.3*t[move+'Control']);
  f.action={move,remaining:duration,heading:f.heading};f.cooldowns[move]=({lift:8,jump:10,puff:16}[move])*(1.3-.6*t[move+'Recovery']);return true;}
 function consider(m,f,o,dt){if(f.action||f.air>0||f.flipped>0||f.stumble>0||f.dizzy>.5)return;const t=f.t,d=Math.hypot(o.x-f.x,o.y-f.y),contact=t.bodyRadius+o.t.bodyRadius,near=d<contact+12;
@@ -71,17 +73,22 @@ function consider(m,f,o,dt){if(f.action||f.air>0||f.flipped>0||f.stumble>0||f.di
  const choices=[];
  if(t.canJump&&f.cooldowns.jump<=0&&(near||threat))choices.push(['jump',(.06+.5*t.jumpInstinct)*(threat?1:.08)]);
  if(t.canPuff&&f.charges>0&&f.cooldowns.puff<=0&&d<contact+18+42*t.puffReach&&face>.35)choices.push(['puff',.08+.4*t.puffInstinct]);
- if(f.engaged&&t.horn*t.hornFactor>.025&&f.cooldowns.lift<=0&&near&&face>.7)choices.push(['lift',.05+.35*t.liftInstinct]);
+ if(f.engaged&&t.visibleHorns&&t.horn*t.hornFactor>.008&&f.cooldowns.lift<=0&&near&&face>.7)choices.push(['lift',(.05+.35*t.liftInstinct)*Math.sqrt(clamp((t.horn*t.hornFactor-.008)/.55))]);
  for(const [move,hazard] of choices)if(m.rng()<1-Math.exp(-hazard*dt)){windup(m,f,move);break;}}
 // Lift height controls the flip roll continuously. A lift is not a guaranteed flip.
-function liftOdds(t,other){const reach=t.horn*t.hornFactor*(.65+.7*t.liftReach),leverage=Math.min(1,reach/.55),low=Math.min(1,other.bodyRadius/t.bodyRadius),resist=.35+.35*other.grip+.2*other.brace+.1*(1-low);
+function liftOdds(t,other){
+ // Visible horn anatomy sets the ceiling: hidden lift talent cannot replace a horn.
+ const reach=t.visibleHorns?t.horn*t.hornFactor*(.65+.7*t.liftReach):0;
+ const leverage=clamp((reach-.008)/.55),low=Math.min(1,other.bodyRadius/t.bodyRadius),resist=.35+.35*other.grip+.2*other.brace+.1*(1-low);
  const height=clamp((.18+.82*t.liftPower)*leverage/(.8+.4*other.mass));
- return {reach,leverage,height,hitChance:clamp((.35+.6*t.liftControl)*(.45+.55*leverage)*(1.25-resist),.02,.85),flipChance:clamp(.01+.65*height**1.5*(1-.45*other.lateralBalance-.15*other.grip)*(.8+.2*t.liftControl),.01,.65)};}
+ return {reach,leverage,height,hitChance:clamp((.35+.6*t.liftControl)*leverage**.85*(1.25-resist),0,.85),flipChance:clamp(.65*height**1.5*(1-.45*other.lateralBalance-.15*other.grip)*(.8+.2*t.liftControl),0,.65)};
+}
 function flip(m,attacker,target,height){if(target.flipped>0||target.flipGrace>0||target.air>0)return false;
  const t=target.t,legs=clamp((t.legLength-.55)/.95),duration=clamp((3.8-2.3*t.recovery)*(.95+.12*t.mass+.08*Math.max(0,t.bodyGrowth))/(.85+.3*legs)+.3*height,1.1,5);
  target.flipped=target.flipDuration=duration;target.flipGrace=duration+1.5;target.action=null;target.lifted=0;target.vx*=.4;target.vy*=.4;
  m.flips.push({time:Number(m.time.toFixed(3)),actor:attacker.index,defender:target.index,duration:Number(duration.toFixed(3))});return true;}
 function act(m,f,o,action=f.action){const move=action.move,t=f.t,r=m.rng,dx=o.x-f.x,dy=o.y-f.y,d=Math.hypot(dx,dy),n={x:dx/Math.max(1,d),y:dy/Math.max(1,d)},face=dot(unit(f.heading),n),contact=t.bodyRadius+o.t.bodyRadius;let hit=false;
+ if(move==='lift'&&(!t.visibleHorns||t.horn*t.hornFactor<=.008)||move==='jump'&&!t.canJump||move==='puff'&&(!t.canPuff||f.charges<=0)){const event={time:Number(m.time.toFixed(3)),actor:f.index,move,hit:false};m.abilities.push(event);f.lastMove=event;f.action=null;return;}
  if(move==='jump'){
   // Poor landing control can carry a beetle over the boundary; a good edge sense aims inward.
   const edge=Math.hypot(f.x,f.y)>m.radius*.7,controlled=r()<(.2+.75*t.jumpControl)*(edge?(.35+.65*t.edgeSense):1);
@@ -91,7 +98,7 @@ function act(m,f,o,action=f.action){const move=action.move,t=f.t,r=m.rng,dx=o.x-
  }else if(move==='lift'){
   const odds=liftOdds(t,o.t);
   hit=o.air<=0&&o.flipped<=0&&d<contact+8+Math.min(20,odds.reach*15)&&face>.72&&r()<odds.hitChance;
-  if(hit){o.lifted=Math.max(o.lifted,(.3+.9*t.liftPower)*(.25+.75*odds.leverage)/(1+.35*o.t.mass));if(o.flipGrace<=0&&r()<odds.flipChance)flip(m,f,o,odds.height);}
+  if(hit){o.lifted=Math.max(o.lifted,1.2*odds.height/(1+.35*o.t.mass));if(o.flipGrace<=0&&r()<odds.flipChance)flip(m,f,o,odds.height);}
  }else{
   f.charges--;const range=contact+18+42*t.puffReach,cone=.92-.35*t.puffControl;
   hit=o.air<=0&&d<range&&face>cone&&r()<.3+.6*t.puffControl;
@@ -112,6 +119,7 @@ function step(m){
  if(m.version==='SUMO2')return legacy.step(m);if(m.version==='SUMO3')return v3.step(m);if(m.version==='SUMO4')return v4.step(m);
  if(m.version==='SUMO5')return v5.step(m);
  if(m.version==='SUMO6')return v6.step(m);
+ if(m.version==='SUMO7')return v7.step(m);
  if(m.done)return m;
  const dt=1/60;m.tick++;m.time=m.tick/60;
  const [a,b]=m.fighters;updateActions(m,dt);
@@ -166,6 +174,6 @@ function step(m){
  return m;
 }
 function run(a,b,seed,options){const m=create(a,b,seed,options);while(!m.done)step(m);return m;}
-function record(m){if(m.version==='SUMO2')return legacy.record(m);if(m.version==='SUMO3')return v3.record(m);if(m.version==='SUMO4')return v4.record(m);if(m.version==='SUMO5')return v5.record(m);if(m.version==='SUMO6')return v6.record(m);return {version:m.version,seed:m.seed,seconds:Number(m.time.toFixed(2)),winner:m.winner,reason:m.reason,...(m.centerDistances?{centerDistances:m.centerDistances.map(d=>Number(d.toFixed(3)))}:{}),events:m.events.slice(),abilities:m.abilities.map(e=>({...e})),flips:m.flips.map(e=>({...e})),fighters:m.fighters.map(f=>({id:f.beetle.id,name:f.beetle.name,genomeFingerprint:G.fingerprint(f.beetle),wanderingSeconds:Number(f.wanderingTime.toFixed(1)),contactSeconds:Number(f.contactTime.toFixed(1)),sidePushes:f.sideHits,rearPushes:f.rearHits,frontPushes:f.frontHits}))};}
+function record(m){if(m.version==='SUMO2')return legacy.record(m);if(m.version==='SUMO3')return v3.record(m);if(m.version==='SUMO4')return v4.record(m);if(m.version==='SUMO5')return v5.record(m);if(m.version==='SUMO6')return v6.record(m);if(m.version==='SUMO7')return v7.record(m);return {version:m.version,seed:m.seed,seconds:Number(m.time.toFixed(2)),winner:m.winner,reason:m.reason,...(m.centerDistances?{centerDistances:m.centerDistances.map(d=>Number(d.toFixed(3)))}:{}),events:m.events.slice(),abilities:m.abilities.map(e=>({...e})),flips:m.flips.map(e=>({...e})),fighters:m.fighters.map(f=>({id:f.beetle.id,name:f.beetle.name,genomeFingerprint:G.fingerprint(f.beetle),wanderingSeconds:Number(f.wanderingTime.toFixed(1)),contactSeconds:Number(f.contactTime.toFixed(1)),sidePushes:f.sideHits,rearPushes:f.rearHits,frontPushes:f.frontHits}))};}
 const api={liftOdds,flip,windup,abilityMode,traits,support,create,step,run,record};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PatternSumo=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
