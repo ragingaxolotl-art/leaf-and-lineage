@@ -252,3 +252,11 @@ Breeding now clones the candidate next state and commits the actual newborns, Ke
 The destructive reset is now labeled **Replace tank with random beetles** and atomically stores a before-replacement roster first. Ordinary browser reload remains distinct from this deliberate action. Download messages say “download requested,” since the browser—not the app—confirms whether a file reached Downloads.
 
 All 218 tests passed. Browser QA ran twelve successive brood commits, verified exactly ten named snapshots and the continuing round counter, then recovered an individual older beetle without replacing the current tank. The battle physics, inheritance rules and sharing service are unchanged.
+
+## Empty-tank refill — release 20261026-4
+
+If both the main tank and nursery are empty, **Add starter beetles** appears in the tank and **Fill empty tank with random beetles** becomes available immediately. It supplies 16 random founders even during the five-cycle replacement wait and after both store picks are spent. Keep favorites and jar parents are preserved. The breeding counter, records and store lineup/pick allowance are unchanged. Once the working tank is occupied, the normal five-cycle replacement lock applies again. The separate whole-experiment New tank control retains its cooldown. Pending trades must still finish or cancel first. Nursery beetles count as an occupied working population.
+
+Clear unsaved beetles now commits atomically with a named **Before clearing tank · saved beetles** snapshot, using the same recoverable specimen system as brood saves and random replacement. Existing exclusions, Keep favorites, parents and trade locks remain protected. Incoming trade/copy callbacks wait for an in-progress durable mutation before cloning the current state.
+
+All 221 checks passed. Browser QA reproduced the exact lockout (empty main tank/nursery, zero store picks, active replacement cooldown), refilled 16 beetles, reloaded, and verified the normal occupied-tank lock resumed.
