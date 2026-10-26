@@ -148,7 +148,7 @@ function breedRound(state,opts={}){
  state.round++;state.store=null;cleanup(state);state.history.push({broodId,total,allocations:allocations.map(a=>({jarId:a.jar.id,count:a.count,parents:a.jar.members.slice()})),offspring:newborns.slice()});
  return state.history[state.history.length-1];
 }
-function createState(seed=42){const r=seeded(seed),s={version:'PL2',round:0,nextId:17,seed,store:null,settings:{mutation:.005,showStats:false,backdrop:'moss',allowBackdrop:true,allowSumo:true,broods:2},beetles:{},retired:{},cleanupExcluded:[],tradeLocks:[],tradeReceipts:[],tank:[],nursery:[],collection:[],keepLayout:{},tankLayout:{},jars:[{id:'jar-1',active:true,members:[]},{id:'jar-2',active:false,members:[]}],history:[],matchHistory:[],notes:''};for(let i=0;i<16;i++){const id='B'+(i+1);s.beetles[id]=founder(id,r,i);s.tank.push(id);}return s;}
+function createState(seed=42){const r=seeded(seed),s={version:'PL2',round:0,lastTankRefreshRound:0,nextId:17,seed,store:null,settings:{mutation:.005,showStats:false,backdrop:'moss',allowBackdrop:true,allowSumo:true,broods:2},beetles:{},retired:{},cleanupExcluded:[],tradeLocks:[],tradeReceipts:[],battleCopies:[],tank:[],nursery:[],collection:[],keepLayout:{},tankLayout:{},jars:[{id:'jar-1',active:true,members:[]},{id:'jar-2',active:false,members:[]}],history:[],matchHistory:[],notes:''};for(let i=0;i<16;i++){const id='B'+(i+1);s.beetles[id]=founder(id,r,i);s.tank.push(id);}return s;}
 function container(s,id){if(s.tank.includes(id))return 'tank';if(s.nursery.includes(id))return 'nursery';if(s.collection.includes(id))return 'collection';return s.jars.find(j=>j.members.includes(id))?.id||null;}
 // Retired beetles retain only family labels, never a playable genome.
 function record(s,id){return s.beetles[id]||s.retired?.[id];}
@@ -175,14 +175,30 @@ function cleanup(s,{all=false,broods=s.settings.broods??2,ids=null}={}){
  return removed;
 }
 function fingerprint(b){const genome=clone(b.genome);if(genome.length===10&&JSON.stringify(genome[9])===JSON.stringify(neutralAbilities()))genome.pop();if(genome.length===9&&JSON.stringify(genome[8])===JSON.stringify(neutralColors(b)))genome.pop();if(genome.length===8&&JSON.stringify(genome[7])===JSON.stringify(neutralGrowth()))genome.pop();return checksum(JSON.stringify(genome)+'|'+b.developmentSeed);}
-function finishTrade(s,{code,outgoing,fingerprint:expected,incoming}){
+function finishTrade(s,{code,outgoing,fingerprint:expected,incoming,mode='swap'}){
  if(s.tradeReceipts.includes(code))return null;
  const data=validatePacket(incoming),b=s.beetles[outgoing];
  if(!b||fingerprint(b)!==expected)throw Error('Open the original tank to collect this trade. Your receipt is safe.');
+ if(!['swap','copy'].includes(mode))throw Error('Invalid trade mode.');
+ if(mode==='copy'){const received=importPacket(s,data);s.tradeLocks=s.tradeLocks.filter(id=>id!==outgoing);s.tradeReceipts.push(code);return received;}
  const kept=s.collection.includes(outgoing),position=clone(s.keepLayout[outgoing]||null);
  s.tradeLocks=s.tradeLocks.filter(id=>id!==outgoing);retire(s,outgoing,'traded');
  const received=importPacket(s,data);if(kept){move(s,received.id,'collection');if(position)s.keepLayout[received.id]=position;}
  s.tradeReceipts.push(code);return received;
+}
+// One copy of each opponent per friend room, retained across rematches and saved tanks.
+function battleCopyKey(record){
+ if(!record||record.source!=='shared'||!record.friend||typeof record.friend.code!=='string'||!/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$/.test(record.friend.code)||!['host','guest'].includes(record.friend.role)||!Array.isArray(record.participants)||record.participants.length!==2)throw Error('Choose a completed friend battle with saved opponent data.');
+ const packet=validatePacket(record.participants[record.friend.role==='host'?1:0]);
+ return record.friend.code+':'+record.friend.role+':'+fingerprint(packet.beetle);
+}
+function copyBattleBeetle(s,index){
+ if(!Number.isInteger(index)||index<0||index>=s.matchHistory.length)throw Error('Choose a completed friend battle.');
+ const record=s.matchHistory[index],key=battleCopyKey(record),previous=(s.battleCopies||[]).find(r=>r.key===key);
+ if(previous&&s.beetles[previous.id])return s.beetles[previous.id];
+ if(!previous&&(s.battleCopies||[]).length>=10000)throw Error('Save this experiment and start a new tank before collecting more opponents.');
+ const b=importPacket(s,record.participants[record.friend.role==='host'?1:0]);
+ s.battleCopies=s.battleCopies||[];if(previous)previous.id=b.id;else s.battleCopies.push({key,id:b.id});return b;
 }
 function move(s,id,target){
  if(!s.beetles[id])throw Error('This beetle is missing.');
@@ -212,7 +228,7 @@ function upgradeState(s){
  for(const b of Object.values(s.retired||{})){if(b.appearance?.traits){for(const key of ['legColor','thoraxColor'])if(!Object.hasOwn(b.appearance.traits,key))b.appearance.traits[key]=clone(b.appearance.traits.body);}const m=b.measurements;if(m&&b.measurementVersion===undefined){if(!Object.hasOwn(m,'size')&&Number.isFinite(m.bodyWidth)&&Number.isFinite(m.bodyLength))m.size=Math.sqrt(m.bodyWidth*m.bodyLength);m.visibleHorns=m.horn>.05?1:0;b.measurementVersion=2;}}
  if(s.cleanupExcluded===undefined)s.cleanupExcluded=Object.values(s.beetles).filter(b=>typeof b.name==='string'&&b.name.trim()).map(b=>b.id);
  if(s.store===undefined)s.store=null;
- s.retired=s.retired||{};s.tradeLocks=s.tradeLocks||[];s.tradeReceipts=s.tradeReceipts||[];
+ s.retired=s.retired||{};s.tradeLocks=s.tradeLocks||[];s.tradeReceipts=s.tradeReceipts||[];s.battleCopies=s.battleCopies||[];
  if(s.settings&&s.settings.broods===undefined)s.settings.broods=2;
  s.version='PL2';if(s.settings&&s.settings.allowSumo===undefined)s.settings.allowSumo=true;s.keepLayout=s.keepLayout||{};s.tankLayout=s.tankLayout||{};s.matchHistory=s.matchHistory||[];
  return s;
@@ -220,6 +236,8 @@ function upgradeState(s){
 function validate(s){
  s=upgradeState(s);
  if(!s||s.version!=='PL2'||!s.settings||typeof s.beetles!=='object'||!Array.isArray(s.jars)||s.jars.length!==2)throw Error('This is not a Pattern Lab save.');
+ if(s.lastTankRefreshRound===undefined)s.lastTankRefreshRound=0;
+ if(!Number.isInteger(s.lastTankRefreshRound)||s.lastTankRefreshRound<0||s.lastTankRefreshRound>s.round)throw Error('Invalid tank refresh record.');
  if(!Number.isInteger(s.nextId)||s.nextId<1||!Number.isInteger(s.round)||s.round<0||!Array.isArray(s.history)||s.history.length!==s.round||!Number.isInteger(s.seed)||s.seed<1||s.seed>2147483647||typeof s.notes!=='string'||s.notes.length>10000)throw Error('Invalid brood record.');
  if(!Number.isFinite(s.settings.mutation)||s.settings.mutation<0||s.settings.mutation>.1||!['moss','sand','bark','night'].includes(s.settings.backdrop)||typeof s.settings.showStats!=='boolean'||typeof s.settings.allowBackdrop!=='boolean')throw Error('Invalid settings.');
  if(![1,2].includes(s.settings.broods))throw Error('Choose one or two broods to keep.');
@@ -228,20 +246,23 @@ function validate(s){
  if(s.store&&s.store.round<s.round)s.store=null;
  if(typeof s.settings.allowSumo!=='boolean'||!Array.isArray(s.matchHistory)||s.matchHistory.length>100)throw Error('Invalid sumo records.');
  for(const m of s.matchHistory){
-  if(!m||!['SUMO2','SUMO3','SUMO4','SUMO5','SUMO6'].includes(m.version)||!Number.isInteger(m.seed)||m.seed<0||m.seed>4294967295||!Number.isFinite(m.seconds)||m.seconds<0||m.seconds>60.1||![null,0,1].includes(m.winner)||!['Ring-out','Both centers crossed the line','Time limit — draw','Closest to center','Center tie'].includes(m.reason)||!Array.isArray(m.fighters)||m.fighters.length!==2||!Array.isArray(m.events)||m.events.length>120)throw Error('Invalid saved match.');
+  if(!m||!['SUMO2','SUMO3','SUMO4','SUMO5','SUMO6','SUMO7','SUMO8'].includes(m.version)||!Number.isInteger(m.seed)||m.seed<0||m.seed>4294967295||!Number.isFinite(m.seconds)||m.seconds<0||m.seconds>60.1||![null,0,1].includes(m.winner)||!['Ring-out','Both centers crossed the line','Time limit — draw','Closest to center','Center tie'].includes(m.reason)||!Array.isArray(m.fighters)||m.fighters.length!==2||!Array.isArray(m.events)||m.events.length>120)throw Error('Invalid saved match.');
   if(m.centerDistances!==undefined&&(!Array.isArray(m.centerDistances)||m.centerDistances.length!==2||m.centerDistances.some(d=>!Number.isFinite(d)||d<0||d>1000)))throw Error('Invalid center distances.');
   for(const f of m.fighters){if(!f||typeof f.id!=='string'||f.id.length>80||typeof f.name!=='string'||f.name.length>40||['wanderingSeconds','contactSeconds','sidePushes','rearPushes','frontPushes'].some(k=>!Number.isFinite(f[k])||f[k]<0||f[k]>120))throw Error('Invalid fighter record.');}
   for(const e of m.events)if(!e||!Number.isFinite(e.time)||e.time<0||e.time>60.1||![0,1].includes(e.attacker)||![0,1].includes(e.defender)||e.attacker===e.defender||!['front','side','rear'].includes(e.side))throw Error('Invalid contact record.');
   if(m.abilities!==undefined){if(!Array.isArray(m.abilities)||m.abilities.length>120)throw Error('Invalid adaptation record.');for(const e of m.abilities)if(!e||!Number.isFinite(e.time)||e.time<0||e.time>60.1||![0,1].includes(e.actor)||!['lift','jump','puff'].includes(e.move)||typeof e.hit!=='boolean')throw Error('Invalid adaptation event.');}
+  if(m.flips!==undefined){if(!Array.isArray(m.flips)||m.flips.length>120)throw Error('Invalid flip records.');for(const e of m.flips)if(!e||!Number.isFinite(e.time)||e.time<0||e.time>60.1||![0,1].includes(e.actor)||![0,1].includes(e.defender)||e.actor===e.defender||!Number.isFinite(e.duration)||e.duration<1||e.duration>5)throw Error('Invalid flip event.');}
+  if(m.friend!==undefined&&(m.source!=='shared'||!m.friend||typeof m.friend.code!=='string'||!/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$/.test(m.friend.code)||!['host','guest'].includes(m.friend.role)||!Array.isArray(m.participants)||m.participants.length!==2))throw Error('Invalid friend-battle record.');
   if(m.participants!==undefined){if(!Array.isArray(m.participants)||m.participants.length!==2)throw Error('Invalid replay data.');m.participants.forEach(validatePacket);}
  }
  const ids=Object.keys(s.beetles);
  if(!s.retired||typeof s.retired!=='object'||Array.isArray(s.retired)||Object.keys(s.retired).length>200000)throw Error('Invalid retired family records.');
- if(s.pendingTrade!=null&&(!s.pendingTrade||!['host','guest'].includes(s.pendingTrade.role)||typeof s.pendingTrade.code!=='string'||!/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$/.test(s.pendingTrade.code)||!s.beetles[s.pendingTrade.outgoing]||s.tradeLocks[0]!==s.pendingTrade.outgoing||fingerprint(s.beetles[s.pendingTrade.outgoing])!==s.pendingTrade.fingerprint))throw Error('Invalid pending trade.');
+ if(s.pendingTrade!=null&&(!s.pendingTrade||s.pendingTrade.mode!==undefined&&!['copy','swap'].includes(s.pendingTrade.mode)||!['host','guest'].includes(s.pendingTrade.role)||typeof s.pendingTrade.code!=='string'||!/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$/.test(s.pendingTrade.code)||!s.beetles[s.pendingTrade.outgoing]||s.tradeLocks[0]!==s.pendingTrade.outgoing||fingerprint(s.beetles[s.pendingTrade.outgoing])!==s.pendingTrade.fingerprint))throw Error('Invalid pending trade.');
  if(!Array.isArray(s.tradeLocks)||s.tradeLocks.length>1||s.tradeLocks.some(id=>!s.beetles[id])||!Array.isArray(s.tradeReceipts)||s.tradeReceipts.length>10000||s.tradeReceipts.some(c=>typeof c!=='string'||!/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$/.test(c)))throw Error('Invalid trade records.');
  for(const [id,b] of Object.entries(s.retired)){if(s.beetles[id]||b.id!==id||!/^B[1-9]\d*$/.test(id)||Number(id.slice(1))>=s.nextId||typeof b.name!=='string'||b.name.length>40||!Array.isArray(b.parents)||![0,2].includes(b.parents.length)||new Set(b.parents).size!==b.parents.length||!Number.isInteger(b.lineageGeneration)||b.lineageGeneration<0||!['released','older brood','traded'].includes(b.reason)||b.genome!==undefined)throw Error('Invalid retired beetle.');}
  for(const b of Object.values(s.retired)){if(b.measurements!==undefined)validateMeasurements(b.measurements);if(b.appearance!==undefined)validateAppearance(b.appearance);if(b.origin!==undefined&&!['imported','bred','founder'].includes(b.origin))throw Error('Invalid measurement origin.');if(b.arrivedRound!==undefined&&(!Number.isInteger(b.arrivedRound)||b.arrivedRound<0||b.arrivedRound>s.round))throw Error('Invalid archived arrival round.');}
  const family=Object.assign({},s.retired,s.beetles);
+ if(!Array.isArray(s.battleCopies)||s.battleCopies.length>10000||new Set(s.battleCopies.map(r=>r?.key)).size!==s.battleCopies.length||s.battleCopies.some(r=>!r||typeof r.key!=='string'||!/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}:(host|guest):[a-z0-9]{1,12}$/.test(r.key)||typeof r.id!=='string'||!/^B[1-9]\d*$/.test(r.id)||!Object.hasOwn(family,r.id)))throw Error('Invalid battle-copy receipts.');
  for(const [id,b] of Object.entries(family)){
   if(!Array.isArray(b.parents)||b.parents.some(p=>!family[p]||p===id||family[p].lineageGeneration>=b.lineageGeneration)||b.parents.length===2&&(b.lineageGeneration!==1+Math.max(...b.parents.map(p=>family[p].lineageGeneration))||!['jar-1','jar-2'].includes(b.sourceJarId)||!/^brood-[1-9]\d*$/.test(b.broodId)))throw Error('Invalid family record.');
  }
@@ -304,6 +325,18 @@ function importPacket(s,input){
  b.provenance={sourceId:source.id,parents:source.parents,generation:source.lineageGeneration};
  s.beetles[b.id]=b;if(b.name.trim())excludeFromCleanup(s,b.id,true);(s.tank.length<48?s.tank:s.nursery).push(b.id);return b;
 }
+// Manual refresh replaces the working population, preserving favorites, parents and experiment records.
+function refreshWait(s){return Math.max(0,5-(s.round-(s.lastTankRefreshRound??0)));}
+function refreshTank(s,{rng=Math.random}={}){
+ if(s.pendingTrade||(s.tradeLocks||[]).length)throw Error('Finish or cancel your pending trade first.');
+ if(refreshWait(s))throw Error('Breed '+refreshWait(s)+' more successful cycles before refreshing the tank.');
+ const ids=[...s.tank,...s.nursery];
+ if(Object.keys(s.beetles).length-ids.length+16>3000)throw Error('Save this experiment and start a new tank before adding more beetles.');
+ const fresh=Array.from({length:16},(_,i)=>{const b=founder('B'+(s.nextId+i),rng,Math.floor(rng()*104));b.arrivedRound=s.round;return b;});
+ for(const id of ids){excludeFromCleanup(s,id,false);retire(s,id,'released');}
+ for(const b of fresh){s.beetles[b.id]=b;s.tank.push(b.id);}s.nextId+=16;s.lastTankRefreshRound=s.round;
+ return fresh.map(b=>b.id);
+}
 // One persistent selection per breeding round; separate randomness never changes offspring rolls.
 function ensureStore(s,{rng=Math.random}={}){if(s.store===null||s.store===undefined){s.store={round:s.round,seed:Math.floor(rng()*4294967296),claimed:[]};return true;}return false;}
 function storeStock(s){if(!s.store||s.store.round!==s.round)throw Error('Open the current beetle store first.');const r=seeded(s.store.seed);return Array.from({length:5},(_,i)=>founder('Store-'+s.round+'-'+(i+1),r,Math.floor(r()*104)));}
@@ -314,6 +347,6 @@ function takeStoreBeetle(s,index){
  if(s.store.claimed.length>=2)throw Error('You have chosen two beetles. Breed a new round for fresh arrivals.');
  const candidate=storeStock(s)[index],b=importPacket(s,packet(candidate));s.store.claimed.push(index);return b;
 }
-const api={abilityNames,abilityFactors,abilityKeys,neutralAbilities,ensureStore,storeStock,takeStoreBeetle,appearance,validateAppearance,visualPhenotype,growthKeys,studentTraits,measurements,chromosomes,loci,byKey,quantitativeKeys,observationTags,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,record,retire,cleanup,excludeFromCleanup,fingerprint,finishTrade,move,validate,upgradeState,packet,validatePacket,importPacket,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
+const api={battleCopyKey,copyBattleBeetle,refreshWait,refreshTank,abilityNames,abilityFactors,abilityKeys,neutralAbilities,ensureStore,storeStock,takeStoreBeetle,appearance,validateAppearance,visualPhenotype,growthKeys,studentTraits,measurements,chromosomes,loci,byKey,quantitativeKeys,observationTags,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,record,retire,cleanup,excludeFromCleanup,fingerprint,finishTrade,move,validate,upgradeState,packet,validatePacket,importPacket,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PatternGenetics=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

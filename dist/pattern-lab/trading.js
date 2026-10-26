@@ -1,4 +1,4 @@
-/* Classroom one-for-one exchange. Server receipts + local checkpoints make retries safe. */
+/* Classroom copy sharing with legacy swap recovery. Server receipts + local checkpoints make retries safe. */
 (function(){
 'use strict';
 const A=PatternLabApp,G=PatternGenetics,B=PatternBeetles,$=id=>document.getElementById(id);
@@ -15,11 +15,12 @@ function render(){
  for(const id of ['trade-create','trade-join'])$(id).disabled=!!p||busy||!eligible.length||A.isBlocked();
  $('trade-active').hidden=!p;$('trade-join-code').disabled=!!p||busy;
  if(!p)return;
+ $('trade-accept').textContent=p.mode==='copy'?'Share copies with both students':'Confirm legacy swap';
  $('trade-code').value=p.code.slice(0,4)+'-'+p.code.slice(4);
  $('trade-accept').hidden=p.role!=='host'||room?.code!==p.code||room.status!=='offered';
  $('trade-accept').disabled=busy;$('trade-cancel').disabled=busy;$('trade-check').disabled=busy;
  if(room?.code===p.code){const incoming=p.role==='host'?room.guest:room.host,own=s.beetles[p.outgoing];
-  $('trade-preview').innerHTML=`<figure>${B.draw(own,'trade-own')}<figcaption>You offer ${esc(own.name||own.id)}</figcaption></figure>`+(incoming?`<figure>${B.draw(G.validatePacket(incoming).beetle,'trade-incoming')}<figcaption>You receive this beetle</figcaption></figure>`:'<p>Waiting for your classmate’s offer…</p>');
+  $('trade-preview').innerHTML=`<figure>${B.draw(own,'trade-own')}<figcaption>${p.mode==='copy'?'You keep':'You offer'} ${esc(own.name||own.id)}</figcaption></figure>`+(incoming?`<figure>${B.draw(G.validatePacket(incoming).beetle,'trade-incoming')}<figcaption>You receive ${p.mode==='copy'?'a copy of ':''}this beetle</figcaption></figure>`:'<p>Waiting for your classmate’s offer…</p>');
  }else $('trade-preview').innerHTML='';
 }
 async function request(action,p){
@@ -27,18 +28,18 @@ async function request(action,p){
  if(!cfg?.url)throw Error('Online trading is not configured.');
  if(!cap)throw Error('Return to the original device and browser to collect or cancel this trade.');
  const beetle=['create','join'].includes(action)?G.packet(A.getState().beetles[p.outgoing],{anonymous:true}):undefined;
- const response=await fetch(cfg.url.replace(/pattern-sumo$/,'pattern-trade'),{method:'POST',headers:{'Content-Type':'application/json',apikey:cfg.publishableKey},body:JSON.stringify({action,code:p.code,token:cap,beetle}),signal:AbortSignal.timeout(15000)});
+ const response=await fetch(cfg.url.replace(/pattern-sumo$/,'pattern-trade'),{method:'POST',headers:{'Content-Type':'application/json',apikey:cfg.publishableKey},body:JSON.stringify({action,code:p.code,token:cap,beetle,mode:p.mode||'swap'}),signal:AbortSignal.timeout(15000)});
  const data=await response.json();if(!response.ok)throw Error(data.error||'The trade service could not respond.');return data.room;
 }
 function apply(value){
- room=value;const p=A.getState().pendingTrade;if(!p||p.code!==room.code)return;
+ room=value;const p=A.getState().pendingTrade;if(!p||p.code!==room.code)return;if((room.mode||'swap')!==(p.mode||'swap'))throw Error('These screens use different trade rules. Refresh both screens and create a new sharing code.');
  if(room.status==='complete'){
   const b=A.tradeComplete(p.role==='host'?room.guest:room.host);localStorage.removeItem(key(p));
-  $('trade-status').textContent='Trade complete! Your new beetle '+(b?.id||'')+' is '+(b&&A.getState().collection.includes(b.id)?'in your Keep tank.':'in the tank or nursery.')+' Your offered beetle moved to your classmate.';
-  A.toast('Trade complete. Exact genes and appearance received.');
+  $('trade-status').textContent='Trade complete! Your new beetle '+(b?.id||'')+' is '+(b&&A.getState().collection.includes(b.id)?'in your Keep tank.':'in the tank or nursery.')+' '+(p.mode==='copy'?'You kept your original beetle. Both students now have both offered beetles.':'Your offered beetle moved to your classmate.');
+  A.toast(p.mode==='copy'?'Copies shared. Your original beetle stays with you.':'Trade complete. Exact genes and appearance received.');
  }else if(['cancelled','expired'].includes(room.status)){
   A.tradeCancel();localStorage.removeItem(key(p));$('trade-status').textContent='Trade '+room.status+'. Your original beetle stays with you.';
- }else $('trade-status').textContent=room.status==='open'?'Code ready. Share this trade code with one classmate. Your offered beetle is protected.':p.role==='host'?'Your classmate’s offer is here. Preview both beetles, then Confirm this swap or Cancel trade.':'Your offer is sent. Wait for the code creator to confirm, or cancel before they confirm.';
+ }else $('trade-status').textContent=room.status==='open'?'Code ready. Share this trade code with one classmate. Your offered beetle stays protected until sharing finishes.':p.role==='host'?'Your classmate’s offer is here. Preview both beetles, then confirm sharing or cancel.':'Your offer is sent. Wait for the code creator to confirm, or cancel before they confirm.';
  render();
 }
 async function read(p){try{return await request('read',p);}catch(e){if(/unavailable/.test(e.message)){return request(p.role==='host'?'create':'join',p);}throw e;}}
@@ -46,7 +47,7 @@ async function check(){if(busy||document.hidden||!A.getState().pendingTrade)retu
 async function begin(role){if(busy||A.isBlocked())return;const s=A.getState(),b=s.beetles[$('trade-beetle').value];if(!b)return;
  const code=role==='host'?randomCode():$('trade-join-code').value.toUpperCase().replace(/[-\s]/g,'');
  if(!/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{8}$/.test(code)){A.toast('Enter the full eight-character trade code.');return;}
- const info={code,role,outgoing:b.id,fingerprint:G.fingerprint(b)};busy=true;let started=false,createdToken=false;
+ const info={code,role,outgoing:b.id,fingerprint:G.fingerprint(b),mode:'copy'};busy=true;let started=false,createdToken=false;
  try{
   if(localStorage.getItem(key(info)))throw Error('This trade is already saved here. Return to its original tank.');localStorage.setItem(key(info),token());createdToken=true;
   A.tradeBegin(info);started=true;render();
@@ -55,7 +56,8 @@ async function begin(role){if(busy||A.isBlocked())return;const s=A.getState(),b=
   if(!started&&createdToken)localStorage.removeItem(key(info));
   $('trade-status').textContent=e.message+(started?' Your beetle is protected. Check trade to retry, or Cancel trade to keep it.':'');
   // A definitive join rejection cannot have committed this guest offer.
-  if(started&&role==='guest'&&/already has a partner|expired|unavailable|no longer open|Use another screen/.test(e.message)){A.tradeCancel();localStorage.removeItem(key(info));}
+  if(started&&/different sharing rules|code is taken/i.test(e.message)){A.tradeCancel();localStorage.removeItem(key(info));room=null;}
+  else if(started&&role==='guest'&&/already has a partner|expired|unavailable|no longer open|Use another screen/.test(e.message)){A.tradeCancel();localStorage.removeItem(key(info));}
  }finally{busy=false;render();}
 }
 $('trade-create').onclick=()=>begin('host');$('trade-join').onclick=()=>begin('guest');$('trade-check').onclick=check;
