@@ -154,6 +154,8 @@ function trimHistory(s){
  for(const b of Object.values(s.retired)){const round=b.arrivedRound??(b.broodId?Number(b.broodId.slice(6)):0);if(round<Math.max(0,s.round-9)){delete b.measurements;delete b.appearance;b.dataExpired=true;}}
  s.matchHistory=(s.matchHistory||[]).filter(m=>m.breedingRound===undefined||m.breedingRound>=Math.max(0,s.round-9)).slice(-10);return s;
 }
+// Beetle recovery snapshots retain actual living genomes without replay/measurement bulk.
+function beetleSnapshot(s){const copy=clone(s);trimHistory(copy);copy.matchHistory=[];for(const b of Object.values(copy.retired)){delete b.measurements;delete b.appearance;b.dataExpired=true;}return copy;}
 function createState(seed=42){const r=seeded(seed),s={version:'PL2',round:0,historyStartRound:0,lastTankRefreshRound:0,nextId:17,seed,store:null,settings:{mutation:.005,showStats:false,backdrop:'moss',allowBackdrop:true,allowSumo:true,broods:2},beetles:{},retired:{},cleanupExcluded:[],tradeLocks:[],tradeReceipts:[],battleCopies:[],tank:[],nursery:[],collection:[],keepLayout:{},tankLayout:{},jars:[{id:'jar-1',active:true,members:[]},{id:'jar-2',active:false,members:[]}],history:[],matchHistory:[],notes:''};for(let i=0;i<16;i++){const id='B'+(i+1);s.beetles[id]=founder(id,r,i);s.tank.push(id);}return s;}
 function container(s,id){if(s.tank.includes(id))return 'tank';if(s.nursery.includes(id))return 'nursery';if(s.collection.includes(id))return 'collection';return s.jars.find(j=>j.members.includes(id))?.id||null;}
 // Retired beetles retain only family labels, never a playable genome.
@@ -356,6 +358,6 @@ function takeStoreBeetle(s,index){
  if(s.store.claimed.length>=2)throw Error('You have chosen two beetles. Breed a new round for fresh arrivals.');
  const candidate=storeStock(s)[index],b=importPacket(s,packet(candidate));s.store.claimed.push(index);return b;
 }
-const api={trimHistory,battleCopyKey,copyBattleBeetle,refreshWait,refreshTank,abilityNames,abilityFactors,abilityKeys,neutralAbilities,ensureStore,storeStock,takeStoreBeetle,appearance,validateAppearance,visualPhenotype,growthKeys,studentTraits,measurements,chromosomes,loci,byKey,quantitativeKeys,observationTags,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,record,retire,cleanup,excludeFromCleanup,fingerprint,finishTrade,move,validate,upgradeState,packet,validatePacket,importPacket,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
+const api={beetleSnapshot,trimHistory,battleCopyKey,copyBattleBeetle,refreshWait,refreshTank,abilityNames,abilityFactors,abilityKeys,neutralAbilities,ensureStore,storeStock,takeStoreBeetle,appearance,validateAppearance,visualPhenotype,growthKeys,studentTraits,measurements,chromosomes,loci,byKey,quantitativeKeys,observationTags,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,record,retire,cleanup,excludeFromCleanup,fingerprint,finishTrade,move,validate,upgradeState,packet,validatePacket,importPacket,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PatternGenetics=api;
 })(typeof globalThis!=='undefined'?globalThis:this);
