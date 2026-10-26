@@ -338,11 +338,12 @@ function importPacket(s,input){
 }
 // Manual refresh replaces the working population, preserving favorites, parents and experiment records.
 function workingTankEmpty(s){return s.tank.length===0&&s.nursery.length===0;}
+function starterRecoveryAllowed(s){return workingTankEmpty(s)||Object.keys(s.beetles).length<2;}
 function refreshWait(s){return Math.max(0,5-(s.round-(s.lastTankRefreshRound??0)));}
 function refreshTank(s,{rng=Math.random}={}){
  if(s.pendingTrade||(s.tradeLocks||[]).length)throw Error('Finish or cancel your pending trade first.');
- if(refreshWait(s)&&!workingTankEmpty(s))throw Error('Breed '+refreshWait(s)+' more successful cycles before refreshing the tank.');
- const ids=[...s.tank,...s.nursery];
+ if(refreshWait(s)&&!starterRecoveryAllowed(s))throw Error('Breed '+refreshWait(s)+' more successful cycles before refreshing the tank.');
+ const ids=Object.keys(s.beetles).length<2?[]:[...s.tank,...s.nursery];
  if(Object.keys(s.beetles).length-ids.length+16>3000)throw Error('Save this experiment and start a new tank before adding more beetles.');
  const fresh=Array.from({length:16},(_,i)=>{const b=founder('B'+(s.nextId+i),rng,Math.floor(rng()*104));b.arrivedRound=s.round;return b;});
  for(const id of ids){excludeFromCleanup(s,id,false);retire(s,id,'released');}
@@ -359,6 +360,6 @@ function takeStoreBeetle(s,index){
  if(s.store.claimed.length>=2)throw Error('You have chosen two beetles. Breed a new round for fresh arrivals.');
  const candidate=storeStock(s)[index],b=importPacket(s,packet(candidate));s.store.claimed.push(index);return b;
 }
-const api={workingTankEmpty,beetleSnapshot,trimHistory,battleCopyKey,copyBattleBeetle,refreshWait,refreshTank,abilityNames,abilityFactors,abilityKeys,neutralAbilities,ensureStore,storeStock,takeStoreBeetle,appearance,validateAppearance,visualPhenotype,growthKeys,studentTraits,measurements,chromosomes,loci,byKey,quantitativeKeys,observationTags,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,record,retire,cleanup,excludeFromCleanup,fingerprint,finishTrade,move,validate,upgradeState,packet,validatePacket,importPacket,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
+const api={starterRecoveryAllowed,workingTankEmpty,beetleSnapshot,trimHistory,battleCopyKey,copyBattleBeetle,refreshWait,refreshTank,abilityNames,abilityFactors,abilityKeys,neutralAbilities,ensureStore,storeStock,takeStoreBeetle,appearance,validateAppearance,visualPhenotype,growthKeys,studentTraits,measurements,chromosomes,loci,byKey,quantitativeKeys,observationTags,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,record,retire,cleanup,excludeFromCleanup,fingerprint,finishTrade,move,validate,upgradeState,packet,validatePacket,importPacket,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PatternGenetics=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

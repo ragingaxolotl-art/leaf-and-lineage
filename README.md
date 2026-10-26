@@ -260,3 +260,7 @@ If both the main tank and nursery are empty, **Add starter beetles** appears in 
 Clear unsaved beetles now commits atomically with a named **Before clearing tank · saved beetles** snapshot, using the same recoverable specimen system as brood saves and random replacement. Existing exclusions, Keep favorites, parents and trade locks remain protected. Incoming trade/copy callbacks wait for an in-progress durable mutation before cloning the current state.
 
 All 221 checks passed. Browser QA reproduced the exact lockout (empty main tank/nursery, zero store picks, active replacement cooldown), refilled 16 beetles, reloaded, and verified the normal occupied-tank lock resumed.
+
+## One-beetle recovery — release 20261026-5
+
+Starter recovery also unlocks when fewer than two living beetles remain anywhere in the experiment. It adds sixteen starters **alongside** the remaining beetle, retaining its original ID, genes, container, name and exclusion flags. The occupied-population cooldown still applies when a breeding pair is available; the empty-working-tank exception continues to protect Keep/jar collections. This covers collecting one opponent after clearing the population without trapping that sole beetle behind the five-cycle rule.
