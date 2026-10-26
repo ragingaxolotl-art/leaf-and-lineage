@@ -1,9 +1,9 @@
 (function(root){
 'use strict';
-const SHARED_SPEED=10,SHARED_MODEL='SUMO8X10';
-function sharedModel(speed=10){if(![2,10].includes(Number(speed)))throw Error('Choose 2× or 10× for a shared match.');return Number(speed)===2?'SUMO8X2':'SUMO8X10';}
-function sharedSpeed(room){return room?.physicsVersion==='SUMO8X2'?2:10;}
-function supportedRoom(room){return ['SUMO8X2','SUMO8X10'].includes(room?.physicsVersion);}
+const SHARED_SPEED=10,SHARED_MODEL='SUMO9X10';
+function sharedModel(speed=10){if(![2,10].includes(Number(speed)))throw Error('Choose 2× or 10× for a shared match.');return Number(speed)===2?'SUMO9X2':'SUMO9X10';}
+function sharedSpeed(room){return room?.physicsVersion==='SUMO9X2'?2:10;}
+function supportedRoom(room){return ['SUMO9X2','SUMO9X10'].includes(room?.physicsVersion);}
 const G=typeof module!=='undefined'&&module.exports?require('./genetics.js'):root.PatternGenetics;
 // A monotonic server-time estimate. Prefer short round trips over delayed replies.
 function createClock({wallNow=()=>Date.now(),monoNow=()=>performance.now()}={}){

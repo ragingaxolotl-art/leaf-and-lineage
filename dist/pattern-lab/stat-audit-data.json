@@ -1,0 +1,2405 @@
+{
+  "date": "2026-10-26",
+  "engine": "SUMO9",
+  "allInheritedRecords": {
+    "loci": 110,
+    "rows": [
+      {
+        "chromosome": "A",
+        "key": "body",
+        "label": "Body color",
+        "type": "color",
+        "gate": null,
+        "expressedValues": [
+          [
+            25,
+            40,
+            55
+          ],
+          [
+            225,
+            170,
+            95
+          ]
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "A",
+        "key": "plain",
+        "label": "Pattern suppressor",
+        "type": "category",
+        "gate": null,
+        "expressedValues": [
+          "S",
+          "s"
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "A",
+        "key": "density",
+        "label": "Mark density",
+        "type": "number",
+        "gate": "Visible pattern",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "A",
+        "key": "radius",
+        "label": "Mark size",
+        "type": "number",
+        "gate": "Visible pattern",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "A",
+        "key": "softness",
+        "label": "Soft edges",
+        "type": "number",
+        "gate": "Visible pattern",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "A",
+        "key": "symmetry",
+        "label": "Pattern symmetry",
+        "type": "number",
+        "gate": "Visible pattern",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "A",
+        "key": "jitter",
+        "label": "Mark irregularity",
+        "type": "number",
+        "gate": "Visible pattern",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "A",
+        "key": "bodyWidth",
+        "label": "Body width",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0.72,
+          1.3
+        ],
+        "renderChanged": true,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "B",
+        "key": "primary",
+        "label": "First pattern color",
+        "type": "color",
+        "gate": "Visible pattern",
+        "expressedValues": [
+          [
+            25,
+            40,
+            55
+          ],
+          [
+            225,
+            170,
+            95
+          ]
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "B",
+        "key": "layers",
+        "label": "Second-color gate",
+        "type": "category",
+        "gate": null,
+        "expressedValues": [
+          "T",
+          "t"
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "B",
+        "key": "shape",
+        "label": "Mark shape",
+        "type": "category",
+        "gate": "Visible pattern",
+        "expressedValues": [
+          "spot",
+          "mottle",
+          "stripe",
+          "speckle"
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "B",
+        "key": "frontBias",
+        "label": "Front / back placement",
+        "type": "number",
+        "gate": "Visible pattern",
+        "expressedValues": [
+          -1,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "B",
+        "key": "edgeBias",
+        "label": "Center / edge placement",
+        "type": "number",
+        "gate": "Visible pattern",
+        "expressedValues": [
+          -1,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "B",
+        "key": "cluster",
+        "label": "Clustering",
+        "type": "number",
+        "gate": "Visible pattern",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "B",
+        "key": "patternStretch",
+        "label": "Mark stretch",
+        "type": "number",
+        "gate": "Visible pattern",
+        "expressedValues": [
+          0.5,
+          1.8
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "C",
+        "key": "secondary",
+        "label": "Second pattern color",
+        "type": "color",
+        "gate": "Two pattern layers",
+        "expressedValues": [
+          [
+            25,
+            40,
+            55
+          ],
+          [
+            225,
+            170,
+            95
+          ]
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "C",
+        "key": "secondaryDensity",
+        "label": "Second-layer density",
+        "type": "number",
+        "gate": "Two pattern layers",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "C",
+        "key": "secondarySize",
+        "label": "Second-layer size",
+        "type": "number",
+        "gate": "Two pattern layers",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "C",
+        "key": "secondaryBias",
+        "label": "Second-layer placement",
+        "type": "number",
+        "gate": "Two pattern layers",
+        "expressedValues": [
+          -1,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "C",
+        "key": "appendageShade",
+        "label": "Appendage brightness",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0.35,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "C",
+        "key": "banding",
+        "label": "Appendage bands",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "antenna",
+        "label": "Antenna framework",
+        "type": "category",
+        "gate": null,
+        "expressedValues": [
+          "thread",
+          "bead",
+          "bristle",
+          "club",
+          "knob",
+          "saw",
+          "comb",
+          "doublecomb",
+          "fan",
+          "plates",
+          "elbow",
+          "plume",
+          "aristate"
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "antennaLength",
+        "label": "Antenna length",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0.05,
+          3
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "shaftWidth",
+        "label": "Antenna width",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0.7,
+          3.5
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "segments",
+        "label": "Antenna segments",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          4,
+          16
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "beadRoundness",
+        "label": "Bead roundness",
+        "type": "number",
+        "gate": "Beaded antenna",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "curve",
+        "label": "Antenna curve",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          -0.5,
+          0.7
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "elbow",
+        "label": "Elbow angle",
+        "type": "number",
+        "gate": "Elbowed antenna",
+        "expressedValues": [
+          0,
+          85
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "tip",
+        "label": "Tip enlargement",
+        "type": "number",
+        "gate": "Club / knob antenna",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "branches",
+        "label": "Branch count",
+        "type": "number",
+        "gate": "Branched antenna",
+        "expressedValues": [
+          2,
+          14
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "branchLength",
+        "label": "Branch length",
+        "type": "number",
+        "gate": "Branched antenna",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "plateWidth",
+        "label": "Fan / plate width",
+        "type": "number",
+        "gate": "Fan / plate antenna",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "hairGate",
+        "label": "Hair suppressor",
+        "type": "category",
+        "gate": null,
+        "expressedValues": [
+          "H",
+          "h"
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "hairDensity",
+        "label": "Fine hair density",
+        "type": "number",
+        "gate": "Unsuppressed fine hair",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "hairLength",
+        "label": "Fine hair length",
+        "type": "number",
+        "gate": "Unsuppressed fine hair",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "D",
+        "key": "spread",
+        "label": "Antenna spread",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0.15,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "leg",
+        "label": "Leg framework",
+        "type": "category",
+        "gate": null,
+        "expressedValues": [
+          "runner",
+          "sturdy",
+          "shovel",
+          "jumper",
+          "paddle",
+          "hooked",
+          "spiny",
+          "longfoot"
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "legLength",
+        "label": "Leg length",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0.55,
+          1.5
+        ],
+        "renderChanged": true,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "femur",
+        "label": "Thigh thickness",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0.7,
+          2.4
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "tibia",
+        "label": "Shin width",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0.7,
+          2
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "foot",
+        "label": "Foot length",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0.5,
+          1.8
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "joint",
+        "label": "Joint angle",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          -0.4,
+          0.4
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "legSpread",
+        "label": "Leg spread",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0.7,
+          1.4
+        ],
+        "renderChanged": true,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "claw",
+        "label": "Claw curve",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "spines",
+        "label": "Spine density",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "legHair",
+        "label": "Leg hair density",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "hind",
+        "label": "Hind-leg emphasis",
+        "type": "number",
+        "gate": "Jumper leg framework",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "motor",
+        "label": "Motor speed",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "stride",
+        "label": "Stride drive",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "E",
+        "key": "strength",
+        "label": "Strength breeding value",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "tracking",
+        "label": "Opponent tracking",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "reaction",
+        "label": "Reaction speed",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "focus",
+        "label": "Attention focus",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "pushDrive",
+        "label": "Pushing instinct",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "wander",
+        "label": "Wandering instinct",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "turnRate",
+        "label": "Turning agility",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "tactics",
+        "label": "Ring tactics (game intelligence)",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "edgeSense",
+        "label": "Edge awareness",
+        "type": "number",
+        "gate": "Near the boundary",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "brace",
+        "label": "Bracing instinct",
+        "type": "number",
+        "gate": "Front push",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "lateralBalance",
+        "label": "Sideways balance",
+        "type": "number",
+        "gate": "Side push or rotation",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "grip",
+        "label": "Foot grip",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "endurance",
+        "label": "Endurance",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "recovery",
+        "label": "Recovery",
+        "type": "number",
+        "gate": "Recovering from disruption, resting or resisting a rear shove",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "mass",
+        "label": "Body mass",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "acceleration",
+        "label": "Acceleration",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "centerDrive",
+        "label": "Center preference",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "curiosity",
+        "label": "Curiosity",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "sociality",
+        "label": "Social approach",
+        "type": "number",
+        "gate": "Exploring while separated from the other beetle",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "caution",
+        "label": "Caution",
+        "type": "number",
+        "gate": "Walking outward near the boundary",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "F",
+        "key": "persistence",
+        "label": "Persistence",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "G",
+        "key": "bodyLength",
+        "label": "Body length",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0.78,
+          1.3
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "G",
+        "key": "headWidth",
+        "label": "Head width",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0.65,
+          1.4
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "G",
+        "key": "horn",
+        "label": "Horn length",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "G",
+        "key": "jaw",
+        "label": "Jaw size",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "G",
+        "key": "gloss",
+        "label": "Shell gloss",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "G",
+        "key": "metallic",
+        "label": "Metallic sheen",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "G",
+        "key": "ridges",
+        "label": "Shell ridge count",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          10
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "G",
+        "key": "ridgeHeight",
+        "label": "Shell ridge relief",
+        "type": "number",
+        "gate": "Nonzero shell ridges",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "G",
+        "key": "pronotum",
+        "label": "Neck shield width",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0.75,
+          1.3
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "G",
+        "key": "gait",
+        "label": "Gait rhythm",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "H",
+        "key": "bodyGrowth",
+        "label": "Body growth modifier",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          -3,
+          2
+        ],
+        "renderChanged": true,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "H",
+        "key": "antennaGrowth",
+        "label": "Antenna growth modifier",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          -2,
+          2
+        ],
+        "renderChanged": true,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "H",
+        "key": "legGrowth",
+        "label": "Leg growth modifier",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          -1.5,
+          1.5
+        ],
+        "renderChanged": true,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "H",
+        "key": "hornGrowth",
+        "label": "Horn growth modifier",
+        "type": "number",
+        "gate": "Visible horn",
+        "expressedValues": [
+          -2,
+          3
+        ],
+        "renderChanged": true,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "H",
+        "key": "headGrowth",
+        "label": "Head growth modifier",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          -1,
+          1
+        ],
+        "renderChanged": true,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "H",
+        "key": "jawGrowth",
+        "label": "Jaw growth modifier",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          -1,
+          2
+        ],
+        "renderChanged": true,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "H",
+        "key": "hornCount",
+        "label": "Horn number",
+        "type": "category",
+        "gate": "Visible horn",
+        "expressedValues": [
+          "single",
+          "double",
+          "triple"
+        ],
+        "renderChanged": true,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "H",
+        "key": "hornShape",
+        "label": "Horn framework",
+        "type": "category",
+        "gate": "Visible horn",
+        "expressedValues": [
+          "spike",
+          "curved",
+          "forked"
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "I",
+        "key": "legColor",
+        "label": "Leg color",
+        "type": "color",
+        "gate": null,
+        "expressedValues": [
+          [
+            25,
+            40,
+            55
+          ],
+          [
+            225,
+            170,
+            95
+          ]
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "I",
+        "key": "thoraxColor",
+        "label": "Thorax color",
+        "type": "color",
+        "gate": null,
+        "expressedValues": [
+          [
+            25,
+            40,
+            55
+          ],
+          [
+            225,
+            170,
+            95
+          ]
+        ],
+        "renderChanged": true,
+        "battleChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "jumpGate",
+        "label": "Spring-joint suppressor",
+        "type": "category",
+        "gate": null,
+        "expressedValues": [
+          "N",
+          "n"
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "puffGate",
+        "label": "Puff-gland suppressor",
+        "type": "category",
+        "gate": null,
+        "expressedValues": [
+          "N",
+          "n"
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "liftPower",
+        "label": "Horn lift \u00b7 power",
+        "type": "number",
+        "gate": "Functional visible horn",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "liftReach",
+        "label": "Horn lift \u00b7 reach",
+        "type": "number",
+        "gate": "Functional visible horn",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "liftControl",
+        "label": "Horn lift \u00b7 aim / landing control",
+        "type": "number",
+        "gate": "Functional visible horn",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "liftEfficiency",
+        "label": "Horn lift \u00b7 efficiency",
+        "type": "number",
+        "gate": "Functional visible horn",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "liftRecovery",
+        "label": "Horn lift \u00b7 recovery speed",
+        "type": "number",
+        "gate": "Functional visible horn",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "liftInstinct",
+        "label": "Horn lift \u00b7 use instinct",
+        "type": "number",
+        "gate": "Functional visible horn",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "jumpPower",
+        "label": "Spring jump \u00b7 power",
+        "type": "number",
+        "gate": "Expressed spring joint",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "jumpReach",
+        "label": "Spring jump \u00b7 reach",
+        "type": "number",
+        "gate": "Expressed spring joint",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "jumpControl",
+        "label": "Spring jump \u00b7 aim / landing control",
+        "type": "number",
+        "gate": "Expressed spring joint",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "jumpEfficiency",
+        "label": "Spring jump \u00b7 efficiency",
+        "type": "number",
+        "gate": "Expressed spring joint",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "jumpRecovery",
+        "label": "Spring jump \u00b7 recovery speed",
+        "type": "number",
+        "gate": "Expressed spring joint",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "jumpInstinct",
+        "label": "Spring jump \u00b7 use instinct",
+        "type": "number",
+        "gate": "Expressed spring joint",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "puffPower",
+        "label": "Bombardier puff \u00b7 power",
+        "type": "number",
+        "gate": "Expressed puff gland",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "puffReach",
+        "label": "Bombardier puff \u00b7 reach",
+        "type": "number",
+        "gate": "Expressed puff gland",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "puffControl",
+        "label": "Bombardier puff \u00b7 aim / landing control",
+        "type": "number",
+        "gate": "Expressed puff gland",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "puffEfficiency",
+        "label": "Bombardier puff \u00b7 efficiency",
+        "type": "number",
+        "gate": "Expressed puff gland",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "puffRecovery",
+        "label": "Bombardier puff \u00b7 recovery speed",
+        "type": "number",
+        "gate": "Expressed puff gland",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "J",
+        "key": "puffInstinct",
+        "label": "Bombardier puff \u00b7 use instinct",
+        "type": "number",
+        "gate": "Expressed puff gland",
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": true,
+        "covered": true
+      }
+    ],
+    "unexpressed": [],
+    "method": "For each locus vary both expressed copies across the full legal range; hold every other trait fixed. Enable matching anatomy and expression gates. Compare actual SVG rendering and actual battle trajectories, energy, decisions and temporary effects across four seeds."
+  },
+  "before": {
+    "engine": "SUMO8",
+    "samplePerTrait": 600,
+    "results": {
+      "strength": {
+        "wins": 400,
+        "losses": 200,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.6666666666666666,
+        "meanSeconds": 32.4380277777778,
+        "contactSeconds": 29.921305555554742,
+        "wandering": [
+          8.23836111111122,
+          8.104916666666758
+        ],
+        "energy": [
+          0.4127030226757363,
+          0.4947182997732234
+        ]
+      },
+      "grip": {
+        "wins": 421,
+        "losses": 179,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.7016666666666667,
+        "meanSeconds": 31.659694444444455,
+        "contactSeconds": 29.15861111111036,
+        "wandering": [
+          8.095916666666756,
+          8.060833333333417
+        ],
+        "energy": [
+          0.4418910408163177,
+          0.4456524818594019
+        ]
+      },
+      "mass": {
+        "wins": 349,
+        "losses": 251,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.5816666666666667,
+        "meanSeconds": 33.58516666666666,
+        "contactSeconds": 30.96580555555472,
+        "wandering": [
+          8.66069444444455,
+          8.807861111111214
+        ],
+        "energy": [
+          0.4231095430838921,
+          0.4257059353741415
+        ]
+      },
+      "endurance": {
+        "wins": 351,
+        "losses": 249,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.585,
+        "meanSeconds": 32.787833333333346,
+        "contactSeconds": 30.238055555554812,
+        "wandering": [
+          8.304861111111224,
+          8.302305555555654
+        ],
+        "energy": [
+          0.4482574042145605,
+          0.36792791242186756
+        ]
+      },
+      "recovery": {
+        "wins": 321,
+        "losses": 279,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.535,
+        "meanSeconds": 36.38830555555555,
+        "contactSeconds": 33.77522222222126,
+        "wandering": [
+          9.263805555555683,
+          9.463222222222349
+        ],
+        "energy": [
+          0.4012980816326536,
+          0.3856111623129245
+        ]
+      },
+      "tracking": {
+        "wins": 363,
+        "losses": 237,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.605,
+        "meanSeconds": 32.18680555555553,
+        "contactSeconds": 29.593083333332544,
+        "wandering": [
+          8.357111111111214,
+          8.2015000000001
+        ],
+        "energy": [
+          0.44886676757368726,
+          0.45090434693876735
+        ]
+      },
+      "reaction": {
+        "wins": 403,
+        "losses": 197,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.6716666666666666,
+        "meanSeconds": 39.610833333333346,
+        "contactSeconds": 37.2873055555545,
+        "wandering": [
+          10.079750000000173,
+          10.092166666666753
+        ],
+        "energy": [
+          0.3466568083900171,
+          0.3543757539682484
+        ]
+      },
+      "focus": {
+        "wins": 517,
+        "losses": 83,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.8616666666666667,
+        "meanSeconds": 25.115222222222226,
+        "contactSeconds": 22.73463888888835,
+        "wandering": [
+          2.4414722222222145,
+          10.888194444444418
+        ],
+        "energy": [
+          0.5189086768707386,
+          0.570917667800445
+        ]
+      },
+      "pushDrive": {
+        "wins": 526,
+        "losses": 74,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.8766666666666667,
+        "meanSeconds": 18.622166666666654,
+        "contactSeconds": 16.213138888888572,
+        "wandering": [
+          1.9027777777777684,
+          9.412888888888856
+        ],
+        "energy": [
+          0.6127418990929582,
+          0.6828787641723253
+        ]
+      },
+      "wander": {
+        "wins": 53,
+        "losses": 547,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.08833333333333333,
+        "meanSeconds": 15.685083333333335,
+        "contactSeconds": 12.93913888888869,
+        "wandering": [
+          7.147472222222226,
+          2.003111111111106
+        ],
+        "energy": [
+          0.7201983900226648,
+          0.6589052108843413
+        ]
+      },
+      "turnRate": {
+        "wins": 376,
+        "losses": 224,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.6266666666666667,
+        "meanSeconds": 33.067250000000044,
+        "contactSeconds": 30.140694444443646,
+        "wandering": [
+          8.443611111111215,
+          8.460250000000098
+        ],
+        "energy": [
+          0.43462024716552417,
+          0.43721164625849507
+        ]
+      },
+      "tactics": {
+        "wins": 415,
+        "losses": 185,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.6916666666666667,
+        "meanSeconds": 35.15127777777778,
+        "contactSeconds": 32.45719444444357,
+        "wandering": [
+          9.093305555555673,
+          8.941222222222324
+        ],
+        "energy": [
+          0.40604181746030926,
+          0.4090817902494255
+        ]
+      },
+      "edgeSense": {
+        "wins": 304,
+        "losses": 296,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.5066666666666667,
+        "meanSeconds": 37.07461111111112,
+        "contactSeconds": 34.47472222222126,
+        "wandering": [
+          9.424083333333458,
+          9.59052777777791
+        ],
+        "energy": [
+          0.3839542630385421,
+          0.3825045997732362
+        ]
+      },
+      "brace": {
+        "wins": 317,
+        "losses": 283,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.5283333333333333,
+        "meanSeconds": 34.9993611111111,
+        "contactSeconds": 32.44319444444355,
+        "wandering": [
+          9.090888888889001,
+          8.792527777777886
+        ],
+        "energy": [
+          0.41263842176869975,
+          0.4104706224489717
+        ]
+      },
+      "lateralBalance": {
+        "wins": 311,
+        "losses": 289,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.5183333333333333,
+        "meanSeconds": 35.06430555555558,
+        "contactSeconds": 32.47094444444352,
+        "wandering": [
+          9.051972222222343,
+          8.915305555555669
+        ],
+        "energy": [
+          0.4089591757369538,
+          0.4106140102040741
+        ]
+      },
+      "acceleration": {
+        "wins": 318,
+        "losses": 282,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.53,
+        "meanSeconds": 34.09975,
+        "contactSeconds": 31.30008333333247,
+        "wandering": [
+          8.750222222222346,
+          8.718611111111217
+        ],
+        "energy": [
+          0.42905977551019664,
+          0.42694262471654565
+        ]
+      },
+      "centerDrive": {
+        "wins": 378,
+        "losses": 222,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.63,
+        "meanSeconds": 35.89547222222221,
+        "contactSeconds": 33.28236111111022,
+        "wandering": [
+          9.222305555555684,
+          9.2552777777779
+        ],
+        "energy": [
+          0.3950966814058882,
+          0.398602082766433
+        ]
+      },
+      "curiosity": {
+        "wins": 316,
+        "losses": 283,
+        "ties": 1,
+        "n": 600,
+        "winRate": 0.5266666666666666,
+        "meanSeconds": 35.67644444444442,
+        "contactSeconds": 33.16344444444353,
+        "wandering": [
+          7.9415277777778845,
+          10.360305555555692
+        ],
+        "energy": [
+          0.4013499455782244,
+          0.4039931655328729
+        ]
+      },
+      "sociality": {
+        "wins": 300,
+        "losses": 300,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.5,
+        "meanSeconds": 35.92150000000005,
+        "contactSeconds": 33.3459999999991,
+        "wandering": [
+          9.22211111111123,
+          9.222111111111232
+        ],
+        "energy": [
+          0.39700217687074146,
+          0.3970021768707414
+        ]
+      },
+      "caution": {
+        "wins": 303,
+        "losses": 297,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.505,
+        "meanSeconds": 36.52897222222226,
+        "contactSeconds": 33.941694444443534,
+        "wandering": [
+          9.360277777777902,
+          9.375638888889016
+        ],
+        "energy": [
+          0.38841578911563956,
+          0.38822555668933556
+        ]
+      },
+      "persistence": {
+        "wins": 431,
+        "losses": 168,
+        "ties": 1,
+        "n": 600,
+        "winRate": 0.7183333333333334,
+        "meanSeconds": 33.83972222222222,
+        "contactSeconds": 31.222722222221407,
+        "wandering": [
+          5.56155555555559,
+          12.258861111111159
+        ],
+        "energy": [
+          0.41089716780044594,
+          0.44164387528343935
+        ]
+      },
+      "speed": {
+        "wins": 298,
+        "losses": 302,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.49666666666666665,
+        "meanSeconds": 35.70094444444443,
+        "contactSeconds": 32.73166666666577,
+        "wandering": [
+          9.19044444444457,
+          9.105000000000116
+        ],
+        "energy": [
+          0.4021326031745957,
+          0.4020165793650716
+        ]
+      }
+    }
+  },
+  "after": {
+    "engine": "SUMO9",
+    "samplePerTrait": 600,
+    "results": {
+      "strength": {
+        "wins": 576,
+        "losses": 24,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.96,
+        "meanSeconds": 7.808166666666674,
+        "contactSeconds": 5.7524444444444605,
+        "wandering": [
+          1.5115833333333297,
+          1.4058611111111068
+        ],
+        "energy": [
+          0.8282832564800663,
+          0.8784865349770227
+        ]
+      },
+      "grip": {
+        "wins": 583,
+        "losses": 17,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.9716666666666667,
+        "meanSeconds": 6.19897222222222,
+        "contactSeconds": 4.208000000000006,
+        "wandering": [
+          1.2393333333333292,
+          1.0994444444444413
+        ],
+        "energy": [
+          0.8905650518538465,
+          0.8894644114074748
+        ]
+      },
+      "mass": {
+        "wins": 536,
+        "losses": 64,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.8933333333333333,
+        "meanSeconds": 29.250222222222206,
+        "contactSeconds": 26.417861111110525,
+        "wandering": [
+          5.7242500000000645,
+          5.567500000000044
+        ],
+        "energy": [
+          0.5078766071419551,
+          0.5084502064204759
+        ]
+      },
+      "endurance": {
+        "wins": 573,
+        "losses": 27,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.955,
+        "meanSeconds": 22.85866666666666,
+        "contactSeconds": 20.50752777777771,
+        "wandering": [
+          4.422555555555573,
+          4.039861111111116
+        ],
+        "energy": [
+          0.7018638686457641,
+          0.19052277594643416
+        ]
+      },
+      "recovery": {
+        "wins": 417,
+        "losses": 182,
+        "ties": 1,
+        "n": 600,
+        "winRate": 0.695,
+        "meanSeconds": 49.49141666666666,
+        "contactSeconds": 46.5391388888874,
+        "wandering": [
+          9.653833333333456,
+          9.544638888889004
+        ],
+        "energy": [
+          0.26206895216061526,
+          0.2298602647327597
+        ]
+      },
+      "tracking": {
+        "wins": 514,
+        "losses": 86,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.8566666666666667,
+        "meanSeconds": 40.74149999999998,
+        "contactSeconds": 37.58044444444339,
+        "wandering": [
+          7.908305555555644,
+          7.888333333333422
+        ],
+        "energy": [
+          0.3622885800511131,
+          0.36202729242975207
+        ]
+      },
+      "reaction": {
+        "wins": 443,
+        "losses": 157,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.7383333333333333,
+        "meanSeconds": 49.91425000000001,
+        "contactSeconds": 47.554166666665125,
+        "wandering": [
+          9.685222222222322,
+          9.915444444444525
+        ],
+        "energy": [
+          0.24544173279071133,
+          0.2477257940816523
+        ]
+      },
+      "focus": {
+        "wins": 504,
+        "losses": 95,
+        "ties": 1,
+        "n": 600,
+        "winRate": 0.84,
+        "meanSeconds": 43.94116666666665,
+        "contactSeconds": 41.021111111109846,
+        "wandering": [
+          3.0008055555555573,
+          14.19075000000012
+        ],
+        "energy": [
+          0.31877202564866847,
+          0.3309647359274832
+        ]
+      },
+      "pushDrive": {
+        "wins": 511,
+        "losses": 89,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.8516666666666667,
+        "meanSeconds": 39.78880555555554,
+        "contactSeconds": 36.71149999999895,
+        "wandering": [
+          2.9889999999999985,
+          15.040000000000006
+        ],
+        "energy": [
+          0.3733278710346602,
+          0.3921209585757341
+        ]
+      },
+      "wander": {
+        "wins": 108,
+        "losses": 492,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.18,
+        "meanSeconds": 39.8866388888889,
+        "contactSeconds": 35.502694444443414,
+        "wandering": [
+          13.752527777777841,
+          3.756472222222223
+        ],
+        "energy": [
+          0.4052057091225428,
+          0.3842065462203808
+        ]
+      },
+      "turnRate": {
+        "wins": 578,
+        "losses": 22,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.9633333333333334,
+        "meanSeconds": 11.349333333333343,
+        "contactSeconds": 7.485111111111047,
+        "wandering": [
+          2.1529166666666737,
+          2.018388888888892
+        ],
+        "energy": [
+          0.8381501230505563,
+          0.8371470879005584
+        ]
+      },
+      "tactics": {
+        "wins": 411,
+        "losses": 188,
+        "ties": 1,
+        "n": 600,
+        "winRate": 0.685,
+        "meanSeconds": 51.37938888888892,
+        "contactSeconds": 48.317305555553965,
+        "wandering": [
+          10.057750000000132,
+          9.975916666666794
+        ],
+        "energy": [
+          0.23236091704062914,
+          0.23248161760680774
+        ]
+      },
+      "edgeSense": {
+        "wins": 303,
+        "losses": 297,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.505,
+        "meanSeconds": 52.32413888888892,
+        "contactSeconds": 49.42619444444286,
+        "wandering": [
+          9.821972222222339,
+          10.33027777777792
+        ],
+        "energy": [
+          0.21908400455677626,
+          0.21949330081253077
+        ]
+      },
+      "brace": {
+        "wins": 466,
+        "losses": 134,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.7766666666666666,
+        "meanSeconds": 35.70441666666665,
+        "contactSeconds": 33.022277777776885,
+        "wandering": [
+          6.930805555555628,
+          6.875111111111176
+        ],
+        "energy": [
+          0.4297500838884737,
+          0.43089885846214504
+        ]
+      },
+      "lateralBalance": {
+        "wins": 360,
+        "losses": 240,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.6,
+        "meanSeconds": 48.3531111111111,
+        "contactSeconds": 45.48674999999859,
+        "wandering": [
+          9.326861111111239,
+          9.462083333333451
+        ],
+        "energy": [
+          0.2713628247031874,
+          0.27199881440720525
+        ]
+      },
+      "acceleration": {
+        "wins": 444,
+        "losses": 156,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.74,
+        "meanSeconds": 31.45074999999999,
+        "contactSeconds": 27.80144444444372,
+        "wandering": [
+          6.0768055555556115,
+          5.974638888888952
+        ],
+        "energy": [
+          0.5132973672221977,
+          0.5138141936916484
+        ]
+      },
+      "centerDrive": {
+        "wins": 448,
+        "losses": 151,
+        "ties": 1,
+        "n": 600,
+        "winRate": 0.7466666666666667,
+        "meanSeconds": 47.173166666666674,
+        "contactSeconds": 44.1604999999986,
+        "wandering": [
+          9.089694444444554,
+          9.322666666666779
+        ],
+        "energy": [
+          0.2806021936622995,
+          0.2826562191735263
+        ]
+      },
+      "curiosity": {
+        "wins": 259,
+        "losses": 341,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.43166666666666664,
+        "meanSeconds": 51.517027777777756,
+        "contactSeconds": 48.58141666666506,
+        "wandering": [
+          5.249138888888894,
+          15.016333333333499
+        ],
+        "energy": [
+          0.2294060074429603,
+          0.23001372989911875
+        ]
+      },
+      "sociality": {
+        "wins": 304,
+        "losses": 296,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.5066666666666667,
+        "meanSeconds": 52.19750000000001,
+        "contactSeconds": 49.24302777777618,
+        "wandering": [
+          10.201722222222358,
+          10.498555555555699
+        ],
+        "energy": [
+          0.22176547632954827,
+          0.22139934732796904
+        ]
+      },
+      "caution": {
+        "wins": 295,
+        "losses": 305,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.49166666666666664,
+        "meanSeconds": 51.62675000000003,
+        "contactSeconds": 48.64172222222069,
+        "wandering": [
+          10.108805555555689,
+          10.044527777777898
+        ],
+        "energy": [
+          0.22898589159073163,
+          0.22907586650691433
+        ]
+      },
+      "persistence": {
+        "wins": 442,
+        "losses": 157,
+        "ties": 1,
+        "n": 600,
+        "winRate": 0.7366666666666667,
+        "meanSeconds": 49.42291666666666,
+        "contactSeconds": 46.44991666666522,
+        "wandering": [
+          6.04169444444447,
+          13.419722222222406
+        ],
+        "energy": [
+          0.25414399712280666,
+          0.2587549452807475
+        ]
+      },
+      "speed": {
+        "wins": 329,
+        "losses": 271,
+        "ties": 0,
+        "n": 600,
+        "winRate": 0.5483333333333333,
+        "meanSeconds": 41.3003888888889,
+        "contactSeconds": 36.32183333333225,
+        "wandering": [
+          7.9458611111112125,
+          7.648166666666749
+        ],
+        "energy": [
+          0.37954435444606055,
+          0.3785388016040087
+        ]
+      }
+    }
+  },
+  "coordinatedCounterexample": {
+    "balancedTraits": {
+      "strength": 0.55,
+      "grip": 0.8,
+      "endurance": 0.8,
+      "recovery": 0.8,
+      "tracking": 0.8,
+      "reaction": 0.8,
+      "focus": 0.8,
+      "persistence": 0.8,
+      "pushDrive": 0.8,
+      "wander": 0.2,
+      "tactics": 0.8,
+      "turnRate": 0.8,
+      "lateralBalance": 0.8,
+      "brace": 0.8,
+      "acceleration": 0.8
+    },
+    "otherTraits": {
+      "strength": 0.95,
+      "remainingNumericTraits": "Midpoint; neutral growth; no horn or special ability"
+    },
+    "wins": 292,
+    "losses": 8,
+    "ties": 0,
+    "n": 300
+  },
+  "verification": {
+    "automatedChecks": 237,
+    "controlledMatchesPerEngine": 13200,
+    "conditions": "The win-rate sweep compares 1 versus 0.01 with other numeric traits at midpoints, neutral growth and no special anatomy. Motor and stride vary together for speed. Each of 300 seeds is repeated with corners swapped. Full expression tests vary every locus across its full legal range, with expression gates and relevant situations enabled.",
+    "interpretation": "Traits have distinct roles and tradeoffs. A conditional trait can have a strong direct effect without increasing overall win rate in an arbitrary neutral matchup. Appearance genes change appearance; anatomy and suppressor gates can intentionally hide inherited potential."
+  }
+}

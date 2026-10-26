@@ -1,5 +1,7 @@
 # Leaf & Lineage
 
+Complete SUMO9 trait audit: all 110 inherited records show an effect under their expression conditions (67 appearance, 55 movement or battle, with overlap). Recovery, grip, stamina, balance, behavior and anatomy have distinct measured roles. Full-stat comparison marks inactive anatomy-dependent factors and ring captions show energy and applied push. [Read the complete audit](https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/stat-audit.html). All 237 checks pass, including old replays and current brood saving. Refresh both screens and create a new friend room.
+
 
 ## Pattern Lab: creative breeding
 

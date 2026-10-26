@@ -86,7 +86,7 @@ function phenotype(b){
  p.visibleLegColor=p.legColor.map(v=>Math.round(v*p.appendageShade*.7+14));
  p.visibleThoraxColor=p.thoraxColor.map(v=>Math.round(v*p.appendageShade*.7+14));
  p.canJump=copies(b,'jumpGate').every(a=>a.value==='n');p.canPuff=copies(b,'puffGate').every(a=>a.value==='n');
- p.strengthIndex=Math.round(1+99*p.strength);
+ p.strengthIndex=Math.round(100*p.strength);
  return p;
 }
 // Student measurement allowlist: expressed model traits only, never strength or gene copies.
@@ -256,7 +256,7 @@ function validate(s){
  if(s.store&&s.store.round<s.round)s.store=null;
  if(typeof s.settings.allowSumo!=='boolean'||!Array.isArray(s.matchHistory)||s.matchHistory.length>100)throw Error('Invalid sumo records.');
  for(const m of s.matchHistory){
-  if(!m||!['SUMO2','SUMO3','SUMO4','SUMO5','SUMO6','SUMO7','SUMO8'].includes(m.version)||!Number.isInteger(m.seed)||m.seed<0||m.seed>4294967295||!Number.isFinite(m.seconds)||m.seconds<0||m.seconds>60.1||![null,0,1].includes(m.winner)||!['Ring-out','Both centers crossed the line','Time limit — draw','Closest to center','Center tie'].includes(m.reason)||!Array.isArray(m.fighters)||m.fighters.length!==2||!Array.isArray(m.events)||m.events.length>120)throw Error('Invalid saved match.');
+  if(!m||!['SUMO2','SUMO3','SUMO4','SUMO5','SUMO6','SUMO7','SUMO8','SUMO9'].includes(m.version)||!Number.isInteger(m.seed)||m.seed<0||m.seed>4294967295||!Number.isFinite(m.seconds)||m.seconds<0||m.seconds>60.1||![null,0,1].includes(m.winner)||!['Ring-out','Both centers crossed the line','Time limit — draw','Closest to center','Center tie'].includes(m.reason)||!Array.isArray(m.fighters)||m.fighters.length!==2||!Array.isArray(m.events)||m.events.length>120)throw Error('Invalid saved match.');
   if(m.breedingRound!==undefined&&(!Number.isInteger(m.breedingRound)||m.breedingRound<0||m.breedingRound>s.round))throw Error('Invalid battle breeding round.');
   if(m.centerDistances!==undefined&&(!Array.isArray(m.centerDistances)||m.centerDistances.length!==2||m.centerDistances.some(d=>!Number.isFinite(d)||d<0||d>1000)))throw Error('Invalid center distances.');
   for(const f of m.fighters){if(!f||typeof f.id!=='string'||f.id.length>80||typeof f.name!=='string'||f.name.length>40||['wanderingSeconds','contactSeconds','sidePushes','rearPushes','frontPushes'].some(k=>!Number.isFinite(f[k])||f[k]<0||f[k]>120))throw Error('Invalid fighter record.');}

@@ -18,7 +18,7 @@ function snapshot(beetle){
   ...['body','antenna','leg','horn','head','jaw'].map(part=>({key:part+'Factor',label:part+' growth multiplier',value:p[part+'Factor'],rule:'2 raised to the mean log2 growth contribution'})),
   {key:'visibleHorns',label:'Visible horn count',value:p.visibleHorns,rule:'Horn count allele expressed when horn length exceeds nub threshold'},
   {key:'speed',label:'Walking speed',value:p.speed,rule:'Derived from motor, stride and legLength; body lengths per second'},
-  {key:'strengthIndex',label:'Displayed strength index',value:p.strengthIndex,rule:'round(1 + 99 × strength); game index'},
+  {key:'strengthIndex',label:'Displayed strength index',value:p.strengthIndex,rule:'round(100 × strength); game index'},
   {key:'visibleLayers',label:'Visible pattern colors',value:p.visibleLayers,rule:'S suppresses marks; ss permits marks; T caps at one color; tt permits two'},
   ...['canJump','canPuff'].map(key=>({key,label:key==='canJump'?'Spring joint expressed':'Puff gland expressed',value:p[key],rule:'Both inherited suppressor copies must be n; N masks the structure'})),
   {key:'hairs',label:'Expressed fine-hair density',value:p.hairs,rule:'H suppresses fine hairs; hh uses hairDensity'}

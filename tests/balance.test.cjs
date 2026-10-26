@@ -6,8 +6,8 @@ test('A sustained head-on push moves both touching bodies in the stronger effort
  const m=S.create(beetle('A',{strength:.9}),beetle('B',{strength:.1}),37);m.contact=true;for(const [i,f]of m.fighters.entries()){f.x=i?23:-23;f.y=0;f.vx=f.vy=0;f.heading=f.targetHeading=i?Math.PI:0;f.engaged=true;f.think=100;}
  S.step(m);assert.ok(m.fighters[0].vx>0&&m.fighters[1].vx>0);assert.ok(Math.abs(m.fighters[0].vx-m.fighters[1].vx)<1e-9);
 });
-test('Strength matters when other traits are equal, yet does not guarantee every match',()=>{
- const out=duel(beetle('Strong',{strength:.9}),beetle('Weak',{strength:.1}),120);assert.ok(out.score>.56&&out.score<.9,JSON.stringify(out));assert.ok(out.wins>out.losses&&out.losses>0,JSON.stringify(out));
+test('Large strength differences strongly favor the stronger beetle when other traits are equal',()=>{
+ const out=duel(beetle('Strong',{strength:.9}),beetle('Weak',{strength:.1}),120);assert.ok(out.score>.85&&out.score<=1,JSON.stringify(out));assert.ok(out.wins>out.losses,JSON.stringify(out));
 });
 test('Speed alone cannot overpower a coordinated beetle; a stronger beetle can lose to a different build',()=>{
  const sprinter=beetle('Fast',{motor:.95,stride:.95,strength:.3,mass:.3,grip:.3,focus:.3});const coordinated=beetle('Steady',{motor:.4,stride:.4,tracking:.8,reaction:.8,focus:.8,tactics:.8,grip:.6,endurance:.7});
@@ -23,7 +23,7 @@ test('Endurance preserves energy during the same sustained effort',()=>{
  for(let n=0;n<180&&!m.done;n++)S.step(m);assert.ok(m.fighters[0].energy>m.fighters[1].energy+.01);
 });
 test('Old SUMO2 notebooks replay with their original physics and both versions save correctly',()=>{
- const s=G.createState(),a=s.beetles.B3,b=s.beetles.B7;const old=S.run(a,b,753,{version:'SUMO2'}),expected=Legacy.run(a,b,753),current=S.run(a,b,753);assert.deepEqual(S.record(old),Legacy.record(expected));assert.equal(current.version,'SUMO8');s.matchHistory=[S.record(old),S.record(current)];G.validate(G.clone(s));
+ const s=G.createState(),a=s.beetles.B3,b=s.beetles.B7;const old=S.run(a,b,753,{version:'SUMO2'}),expected=Legacy.run(a,b,753),current=S.run(a,b,753);assert.deepEqual(S.record(old),Legacy.record(expected));assert.equal(current.version,'SUMO9');s.matchHistory=[S.record(old),S.record(current)];G.validate(G.clone(s));
 });
 test('Mutation-free strength stays within 3.5 points of the parental mean, including extreme hidden values',()=>{
  const a=beetle('A'),b=beetle('B'),r=G.seeded(672);G.setCopies(a,'strength',0,1);G.setCopies(b,'strength',0,1);let above=0,below=0;
