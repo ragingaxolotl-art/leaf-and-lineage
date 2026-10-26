@@ -6,7 +6,7 @@ function rows(state,key,{jar='all',origin='all',order='generation'}={}){
  if(!Object.hasOwn(byKey,key))throw Error('Choose a supported student measurement.');
  if(!['generation','round'].includes(order))throw Error('Choose generation or breeding round.');
  if(!['all','jar-1','jar-2'].includes(jar)||!['all','local','imported'].includes(origin))throw Error('Choose a valid notebook filter.');
- return Object.values({...state.retired,...state.beetles}).map(b=>{
+ return Object.values({...state.retired,...state.beetles}).filter(b=>!b.dataExpired||state.beetles[b.id]).map(b=>{
   const live=!!state.beetles[b.id],source=b.origin||(b.provenance?'imported':b.parents.length?'bred':live?'founder':'unknown');
   if(jar!=='all'&&b.sourceJarId!==jar||origin==='local'&&!['bred','founder'].includes(source)||origin==='imported'&&source!=='imported')return null;
   const data=live?G.measurements(b):b.measurements;

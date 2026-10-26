@@ -1,5 +1,6 @@
-(function(){
+(async function(){
 'use strict';
+await globalThis.PatternLabReady;
 const A=PatternLabApp,L=PatternTraitLens,B=PatternBeetles,$=id=>document.getElementById(id),popup=$('trait-lens-popup'),enabled=$('trait-lens-enabled');
 const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let choices=[],keys=['size','antennaLength','horn'],selected=null,anchor={x:0,y:0},lastBox=null;

@@ -1,5 +1,6 @@
-(function(){
+(async function(){
 'use strict';
+await globalThis.PatternLabReady;
 const N=PatternNotebook,A=PatternLabApp,$=id=>document.getElementById(id),esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let page=0,data=[];const PAGE=50;
 const fmt=v=>v===null?'Unavailable':Number(v.toFixed(4)).toLocaleString('en-US',{maximumFractionDigits:4});
