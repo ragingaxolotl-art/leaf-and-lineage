@@ -1,0 +1,2 @@
+/* Keep optional habitat/expedition code and saved data, while pausing its release. */
+(function(root){'use strict';const api=Object.freeze({optionalLife:false,prepareState(s,F){if(!this.optionalLife)F.recall(s);return s;}});if(typeof module==='object'&&module.exports)module.exports=api;else {root.PatternFeatures=api;document.documentElement.classList.toggle('optional-life-off',!api.optionalLife);}})(globalThis);

@@ -1,6 +1,7 @@
 (function(root){
 'use strict';
 const FieldLife=typeof module==='object'&&module.exports?require('./field-life.js'):root.PatternFieldLife;
+const BattleTally=typeof module==='object'&&module.exports?require('./battle-tally.js'):root.PatternBattleTally;
 const Habitat=typeof module==='object'&&module.exports?require('./habitat.js'):root.PatternHabitat;
 const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
 const num=(key,label,min=0,max=1)=>({key,label,type:'number',min,max});
@@ -270,6 +271,7 @@ function validate(s){
   if(!m||!['SUMO2','SUMO3','SUMO4','SUMO5','SUMO6','SUMO7','SUMO8','SUMO9'].includes(m.version)||!Number.isInteger(m.seed)||m.seed<0||m.seed>4294967295||!Number.isFinite(m.seconds)||m.seconds<0||m.seconds>60.1||![null,0,1].includes(m.winner)||!['Ring-out','Both centers crossed the line','Time limit — draw','Closest to center','Center tie'].includes(m.reason)||!Array.isArray(m.fighters)||m.fighters.length!==2||!Array.isArray(m.events)||m.events.length>120)throw Error('Invalid saved match.');
   if(m.breedingRound!==undefined&&(!Number.isInteger(m.breedingRound)||m.breedingRound<0||m.breedingRound>s.round))throw Error('Invalid battle breeding round.');
   if(m.centerDistances!==undefined&&(!Array.isArray(m.centerDistances)||m.centerDistances.length!==2||m.centerDistances.some(d=>!Number.isFinite(d)||d<0||d>1000)))throw Error('Invalid center distances.');
+  if(m.behaviorTally!==undefined)BattleTally.validate(m.behaviorTally,m);
   for(const f of m.fighters){if(!f||typeof f.id!=='string'||f.id.length>80||typeof f.name!=='string'||f.name.length>40||['wanderingSeconds','contactSeconds','sidePushes','rearPushes','frontPushes'].some(k=>!Number.isFinite(f[k])||f[k]<0||f[k]>120))throw Error('Invalid fighter record.');}
   for(const e of m.events)if(!e||!Number.isFinite(e.time)||e.time<0||e.time>60.1||![0,1].includes(e.attacker)||![0,1].includes(e.defender)||e.attacker===e.defender||!['front','side','rear'].includes(e.side))throw Error('Invalid contact record.');
   if(m.abilities!==undefined){if(!Array.isArray(m.abilities)||m.abilities.length>120)throw Error('Invalid adaptation record.');for(const e of m.abilities)if(!e||!Number.isFinite(e.time)||e.time<0||e.time>60.1||![0,1].includes(e.actor)||!['lift','jump','puff'].includes(e.move)||typeof e.hit!=='boolean')throw Error('Invalid adaptation event.');}

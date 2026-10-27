@@ -1,6 +1,7 @@
 /* Arrange each tank with pointer or keyboard; favorite markers stay outside beetle art. */
 (async function(){
 'use strict';
+if(!globalThis.PatternFeatures?.optionalLife)return;
 await PatternLabReady;
 const H=PatternHabitat,A=PatternLabApp,$=id=>document.getElementById(id),panels={},esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let active=null,selection=null,drag=null,resume=false,lastState=null;

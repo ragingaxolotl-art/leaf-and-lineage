@@ -1,5 +1,6 @@
 (async function(){
 'use strict';
+if(!globalThis.PatternFeatures?.optionalLife)return;
 await PatternLabReady;
 const W=PatternLivingWorld,H=PatternHabitat,G=PatternGenetics,B=PatternBeetles,A=PatternLabApp,$=id=>document.getElementById(id),panels={},esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let generation=0,playing=null,playTime=0,last=0,resumeTank=false,lastAuto=performance.now()-30000;

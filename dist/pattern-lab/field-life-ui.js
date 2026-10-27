@@ -1,5 +1,6 @@
 (async function(){
 'use strict';
+if(!globalThis.PatternFeatures?.optionalLife)return;
 await PatternLabReady;
 const F=PatternFieldLife,H=PatternHabitat,G=PatternGenetics,B=PatternBeetles,A=PatternLabApp,$=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let site='log',selected=new Set(),planning=true,sceneKey='',reportKey='',teamKey='';
