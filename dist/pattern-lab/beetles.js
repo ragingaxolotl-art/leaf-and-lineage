@@ -3,7 +3,8 @@
 const G=root.PatternGenetics, rgb=a=>'rgb('+a.map(Math.round).join(',')+')';
 const round=v=>Number(v.toFixed(2));
 function bounds(p){const reachX=Math.max(70,72*p.legLength*p.legFactor*p.legSpread+30,65+(8+31*p.antennaLength*p.antennaFactor)*.3),reachTop=Math.max(95,80+31*p.antennaLength*p.antennaFactor+40,60+55*p.horn*p.hornFactor,70+32*p.jaw*p.jawFactor),bottom=Math.max(90,62*p.legLength*p.legFactor+50);return {reachX,reachTop,bottom,radius:Math.max(reachX+10,(reachTop+21)*p.bodyLength,(bottom+10)*p.bodyLength)*p.bodyFactor};}
-function draw(b,prefix='bug'){
+// V1 geometry and seed consumption are part of the PLDNA1 compatibility contract.
+function drawV1(b,prefix='bug'){
  const p=G.visualPhenotype(b),r=G.seeded(b.developmentSeed??b.appearance.developmentSeed),id=prefix+'-'+b.id;
  const body=rgb(p.body),limb=rgb(p.body.map(v=>v*p.appendageShade*.7+14)),line='rgba(24,42,35,.7)';
  const legPigment=rgb(p.legColor.map(v=>v*p.appendageShade*.7+14)),thoraxPigment=rgb(p.thoraxColor.map(v=>v*p.appendageShade*.7+14));
@@ -86,5 +87,6 @@ function draw(b,prefix='bug'){
  parts.push(`<ellipse cy="11" rx="${w}" ry="43" fill="url(#${id}-shine)"/><path d="M0 -31 Q-2 12 0 54" fill="none" stroke="${line}" stroke-width="1.3"/><ellipse cy="-29" rx="${23*p.bodyWidth*p.pronotum}" ry="15" fill="${thoraxPigment}" stroke="${line}" stroke-width="1.5"/><g class="head-pose"><g transform="translate(0 -47) scale(${p.headFactor}) translate(0 47)"><ellipse cy="-47" rx="${16*p.headWidth}" ry="13" fill="${body}" stroke="${line}" stroke-width="1.5"/><ellipse cx="-13" cy="-49" rx="3" ry="5" fill="#182a24"/><ellipse cx="13" cy="-49" rx="3" ry="5" fill="#182a24"/><path d="M-5 -60 L-3 -64 M5 -60 L3 -64" stroke="${limb}" stroke-width="2" stroke-linecap="round"/></g></g></g></svg>`);
  return parts.join('');
 }
-root.PatternBeetles={draw,rgb,bounds};
+function draw(b,prefix='bug'){if((b.appearanceVersion??1)!==1)throw Error('Unsupported beetle appearance version.');return drawV1(b,prefix);}
+root.PatternBeetles={draw,rgb,bounds,modelVersion:1};
 })(globalThis);
