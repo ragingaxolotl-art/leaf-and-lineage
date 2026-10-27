@@ -1,13 +1,13 @@
 (async function(){
 'use strict';
 await globalThis.PatternLabReady;
-const A=PatternLabApp,L=PatternTraitLens,B=PatternBeetles,$=id=>document.getElementById(id),popup=$('trait-lens-popup'),enabled=$('trait-lens-enabled');
+const A=PatternLabApp,L=PatternTraitLens,B=PatternBeetles,R=PatternSumoRating,$=id=>document.getElementById(id),popup=$('trait-lens-popup'),enabled=$('trait-lens-enabled');
 const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let choices=[],keys=['size','antennaLength','horn'],selected=null,anchor={x:0,y:0},lastBox=null;
 const full=()=>A.canViewGenetics();
 function hide(){popup.hidden=true;selected=null;}
 function position(){const w=popup.offsetWidth,h=popup.offsetHeight;popup.style.left=Math.max(8,Math.min(innerWidth-w-8,anchor.x+18))+'px';popup.style.top=Math.max(8,Math.min(innerHeight-h-8,anchor.y+14))+'px';}
-function show(id,box){if(!enabled.checked||A.isBlocked())return hide();const modal=document.querySelector('dialog[open]');if(modal&&modal.id!=='keep')return hide();const b=A.getState().beetles[id];if(!b)return hide();const parent=box.id==='keep-bugs'?$('keep'):document.body;if(popup.parentElement!==parent)parent.append(popup);selected=id;lastBox=box;const values=L.rows(b,keys.filter(Boolean),{full:full()});popup.innerHTML='<div class="lens-portrait">'+B.draw(b,'lens')+'</div><div class="lens-readings"><strong>'+esc(b.name?b.name+' · '+b.id:b.id)+'</strong><dl>'+values.map(t=>'<div><dt>'+esc(t.label)+'</dt><dd><b>'+esc(t.display)+'</b>'+(t.unit?'<small>'+esc(t.unit)+'</small>':'')+'</dd></div>').join('')+'</dl></div>';popup.hidden=false;position();}
+function show(id,box){if(!enabled.checked||A.isBlocked())return hide();const modal=document.querySelector('dialog[open]');if(modal&&modal.id!=='keep')return hide();const b=A.getState().beetles[id];if(!b)return hide();const parent=box.id==='keep-bugs'?$('keep'):document.body;if(popup.parentElement!==parent)parent.append(popup);selected=id;lastBox=box;const values=L.rows(b,keys.filter(Boolean),{full:full()});popup.innerHTML=R.markup(R.evaluate(b))+'<div class="lens-portrait">'+B.draw(b,'lens')+'</div><div class="lens-readings"><strong>'+esc(b.name?b.name+' · '+b.id:b.id)+'</strong><dl>'+values.map(t=>'<div><dt>'+esc(t.label)+'</dt><dd><b>'+esc(t.display)+'</b>'+(t.unit?'<small>'+esc(t.unit)+'</small>':'')+'</dd></div>').join('')+'</dl></div>';popup.hidden=false;position();}
 const inputs=[1,2,3].map(i=>$('lens-trait-'+i));
 let openSlot=-1,active=-1,filtered=[];
 function closeMenus(){for(let i=0;i<3;i++){inputs[i].setAttribute('aria-expanded','false');inputs[i].removeAttribute('aria-activedescendant');$('lens-options-'+(i+1)).hidden=true;}openSlot=-1;active=-1;}
