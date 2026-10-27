@@ -11,7 +11,7 @@ const randomCode=()=>Array.from(crypto.getRandomValues(new Uint8Array(8)),x=>'AB
 function token(){return btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
 function render(){
  const s=A.getState(),p=s.pendingTrade,select=$('trade-beetle'),old=select.value;
- const eligible=Object.values(s.beetles).filter(b=>!G.container(s,b.id)?.startsWith('jar-'));
+ const eligible=Object.values(s.beetles).filter(b=>!G.container(s,b.id)?.startsWith('jar-')&&!PatternFieldLife.away(s,b.id));
  select.innerHTML=eligible.map(b=>`<option value="${b.id}">${esc(b.name||b.id)} · Gen ${b.lineageGeneration}${s.collection.includes(b.id)?' · kept':''}</option>`).join('');
  select.value=p?.outgoing||(s.beetles[old]?old:eligible[0]?.id||'');select.disabled=!!p||busy;
  for(const id of ['trade-create','trade-join'])$(id).disabled=!!p||busy||!eligible.length||A.isBlocked();

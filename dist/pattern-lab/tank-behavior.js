@@ -1,8 +1,8 @@
 /* Harmless, temporary tank behavior. Never reads or writes genomes or breeding RNG. */
-(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./habitat.js'):root.PatternHabitat);if(typeof module==='object'&&module.exports)module.exports=api;else root.PatternTankBehavior=api;})(globalThis,function(H){
+(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./habitat.js'):root.PatternHabitat,typeof module==='object'&&module.exports?require('./field-life.js'):root.PatternFieldLife);if(typeof module==='object'&&module.exports)module.exports=api;else root.PatternTankBehavior=api;})(globalThis,function(H,F){
 'use strict';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),turn=(a,b)=>Math.atan2(Math.sin(b-a),Math.cos(b-a));
-const labels={explore:'Exploring',investigate:'Investigating',follow:'Following',greet:'Greeting',avoid:'Making space',shove:'Gentle shove',yield:'Backing away',rest:'Resting',food:'Finding food',eat:'Eating',water:'Finding water',drink:'Drinking',warm:'Seeking warmth',bask:'Warming up',held:'Being held',home:'Returning to favorite spot',settle:'Resting under cover',search:'Looking for moved shelter',groom:'Grooming',shelter:'Investigating shelter'};
+const labels={explore:'Exploring',investigate:'Investigating',follow:'Following',greet:'Greeting',avoid:'Making space',shove:'Gentle shove',yield:'Backing away',rest:'Resting',food:'Finding food',eat:'Eating',water:'Finding water',drink:'Drinking',warm:'Seeking warmth',bask:'Warming up',held:'Being held',home:'Returning to favorite spot',settle:'Resting under cover',search:'Looking for moved shelter',groom:'Grooming',shelter:'Investigating shelter',companion:'Approaching familiar neighbor',restmate:'Resting with familiar neighbor',contest:'Contesting a perch'};
 const stations=[{kind:'food',x:.16,y:.72},{kind:'water',x:.82,y:.75},{kind:'warm',x:.78,y:.22}];
 const value=(p,k)=>clamp(Number.isFinite(p[k])?p[k]:.5,0,1);
 const needKey={food:'hunger',water:'thirst',warm:'chill'},taskMode={food:'food',eat:'food',water:'water',drink:'water',warm:'warm',bask:'warm'};
@@ -18,43 +18,47 @@ function anatomy(p){
  const stance=clamp((n('legSpread')-.7)/.7,0,1),foot=clamp((n('foot')-.5)/1.3,0,1);
  return {sense:60+36*Math.sqrt(antenna)+12*value(p,'hairs')+12*value(p,'branchLength'),footing:clamp(.3+.3*value(p,'grip')+.2*stance+.15*foot+(['hooked','sturdy','spiny'].includes(p.leg)?.05:0),0,1),size:clamp(n('bodyFactor'),.125,4)};
 }
-function comfort(p,o){return o.kind==='bark'?.45+.45*value(p,'caution')+.1*(1-value(p,'wander')):o.kind==='leaf'?.4+.3*value(p,'curiosity')+.15*value(p,'caution'):0;}
+function comfort(p,o){return ['bark','arch'].includes(o.kind)?.45+.45*value(p,'caution')+.1*(1-value(p,'wander')):['leaf','sprout'].includes(o.kind)?.4+.3*value(p,'curiosity')+.15*value(p,'caution'):0;}
 function remember(a,m,memories,o){
  if(!memories)return;const old=memories[a.id],score=o?comfort(a.traits||{},o):.35;
  if(!old||old.objectId===(o?.id||null)||score>old.comfort+.06){memories[a.id]={objectId:o?.id||null,x:o?.x??a.x,y:o?.y??a.y,visits:Math.min(1000000,(old?.objectId===(o?.id||null)?old.visits:0)+1),comfort:score};}
  m.learned=true;
 }
-function pose(a){const mode=a.held?'held':a.behavior?.mode;return ['rest','settle'].includes(mode)?'rest':mode==='groom'?'groom':['investigate','shelter','search'].includes(mode)?'look':['food','eat','drink','water'].includes(mode)?(mode==='eat'||mode==='drink'?'eat':'look'):mode==='bask'?'bask':['avoid','yield','shove','greet'].includes(mode)?'alert':mode==='held'?'held':'walk';}
-function step(agents,{width,height,dt,rng=Math.random,stations:places=stations,objects=[],memories}={}){
+function pose(a){if(a.held)return 'held';if(a.behavior?.drama)return {bridge:'look',leaf:'balance',crumb:'groom'}[a.behavior.drama.kind];const mode=a.held?'held':a.behavior?.mode;return ['rest','settle','restmate'].includes(mode)?'rest':mode==='groom'?'groom':['investigate','shelter','search'].includes(mode)?'look':['food','eat','drink','water'].includes(mode)?(mode==='eat'||mode==='drink'?'eat':'look'):mode==='bask'?'bask':['avoid','yield','shove','greet'].includes(mode)?'alert':mode==='held'?'held':'walk';}
+function step(agents,{width,height,dt,rng=Math.random,stations:places=stations,objects=[],memories,life}={}){
  if(!(width>0&&height>0&&dt>0))return;
  dt=Math.min(dt,.05);
  // All decisions see the same position snapshot; each contact pair is resolved once.
  const rows=agents.map(a=>{a.behavior=a.behavior||memory(rng);const radius=clamp((a.radius||30)*.55,11,Math.min(width,height)*.36);return {a,m:a.behavior,p:a.traits||{},x:a.x*width,y:a.y*height,r:radius,dx:0,dy:0};});
+ F.tickLife(agents,{life,objects,width,height,dt,rng});
  const byId=new Map(rows.map(r=>[r.a.id,r]));
  for(const r of rows){const {a,m,p}=r;
   m.cooldown=Math.max(0,m.cooldown-dt);m.socialWait=Math.max(0,(m.socialWait||0)-dt);m.bubble=Math.max(0,m.bubble-dt);m.decision-=dt;m.remaining-=dt;
   if(a.held){hold(a);continue;}
   if(m.wasHeld)release(a);
+  if(m.drama&&m.drama.kind!=='leaf'){m.bubble=.5;continue;}
   const rates=drives(p);for(const kind of Object.keys(needKey)){const k=needKey[kind];m[k]=clamp((m[k]||0)+dt*rates[kind],0,1);}
   const focus=value(p,'focus');m.distraction=Math.max(0,(m.distraction||0)-dt);m.intentAge=(m.intentAge||0)+dt;
   if(m.intent&&(m[needKey[m.intent]]<.24||m.intentAge>10+180*focus||!places.some(q=>q.kind===m.intent))){m.intent=null;m.intentAge=0;}
   m.familiarWait=Math.max(0,(m.familiarWait??(10+Math.abs(m.heading)*3))-dt);m.groomWait=Math.max(0,(m.groomWait??(18+Math.abs(m.heading)*4))-dt);
-  const body=anatomy(p),shelters=objects.filter(o=>o.kind!=='stone'),favorite=memories?.[a.id];
+  const body=anatomy(p),shelters=objects.filter(o=>['leaf','bark','arch','sprout'].includes(o.kind)),favorite=memories?.[a.id];
   const sensed=shelters.filter(o=>Math.hypot(o.x*width-r.x,o.y*height-r.y)<body.sense+60*value(p,'tracking')).sort((a,b)=>comfort(p,b)-comfort(p,a));
   const currentObject=objects.find(o=>o.id===m.objectId);
   if(['shelter','settle'].includes(m.mode)&&(!currentObject||currentObject.kind==='stone')){m.mode='search';m.remaining=2;m.decision=2;}
   if(m.mode==='settle'&&currentObject&&Math.hypot(currentObject.x*width-r.x,currentObject.y*height-r.y)>Math.max(30,r.r)){m.mode='search';m.remaining=2;m.decision=2;}
   if(['shelter','home'].includes(m.mode)&&m.point){m.point.x=m.point.nx*width;m.point.y=m.point.ny*height;}
-  if(['settle','groom'].includes(m.mode)&&m.remaining<=0){m.mode='explore';m.heading=a.angle+Math.PI/2;m.remaining=2;m.decision=2;m.familiarWait=14+20*(1-value(p,'persistence'));m.groomWait=25;}
+  if(['settle','groom','restmate'].includes(m.mode)&&m.remaining<=0){m.mode='explore';m.heading=a.angle+Math.PI/2;m.remaining=2;m.decision=2;m.familiarWait=14+20*(1-value(p,'persistence'));m.groomWait=25;}
 
   const social=value(p,'sociality'),caution=value(p,'caution'),curious=value(p,'curiosity'),persist=value(p,'persistence'),wander=value(p,'wander');
   const neighbors=rows.filter(o=>o!==r).map(o=>({o,d:Math.hypot(o.x-r.x,o.y-r.y)})).sort((x,y)=>x.d-y.d),near=neighbors[0],sense=40+body.sense+70*value(p,'tracking')+80*social;
+  const friends=neighbors.filter(n=>F.bond(life,a.id,n.o.a.id)?.familiarity>=.4),friend=friends.find(n=>n.d<sense),rival=neighbors.find(n=>n.d<sense&&F.bond(life,a.id,n.o.a.id)?.rivalry>=.35),nearBond=near&&F.bond(life,a.id,near.o.a.id);
   const target=byId.get(m.target);
   if(m.mode==='greet'&&m.remaining<=0){m.mode='explore';m.heading=target?Math.atan2(r.x-target.x,-(r.y-target.y)):a.angle+Math.PI;m.target=null;m.socialWait=3;m.remaining=1.3;m.decision=1.3;}
   if(m.decision<=0||m.remaining<=0||m.target&&!target||m.mode==='held'){
    m.decision=.6+1.4*(1-value(p,'reaction'))+rng()*.4;m.remaining=1.2+persist*3+value(p,'focus');m.target=null;
    if(m.energy<.18||m.mode==='rest'&&m.energy<.72){
-    if(favorite&&m.energy>.08){m.mode='home';m.point={nx:favorite.x,ny:favorite.y,x:favorite.x*width,y:favorite.y*height};m.objectId=favorite.objectId;m.remaining=14;m.decision=14;}
+    if(friend&&m.energy>.08){m.mode='companion';m.target=friend.o.a.id;m.remaining=12;m.decision=12;}
+    else if(favorite&&m.energy>.08){m.mode='home';m.point={nx:favorite.x,ny:favorite.y,x:favorite.x*width,y:favorite.y*height};m.objectId=favorite.objectId;m.remaining=14;m.decision=14;}
     else {m.mode='rest';m.remaining=2;m.decision=1;}
    }
    else if(m.distraction<=0&&places.length&&(m.intent||places.some(q=>m[needKey[q.kind]]>=threshold(p,q.kind)))){
@@ -63,8 +67,10 @@ function step(agents,{width,height,dt,rng=Math.random,stations:places=stations,o
      if(!m.intent)m.intentAge=0;m.intent=wanted;m.mode=wanted;m.point={x:place.x*width,y:place.y*height};m.remaining=1.2+8*focus+2*persist;m.decision=m.remaining;
     }else {m.mode='explore';m.heading=a.angle+(rng()-.5)*2;m.remaining=1+2*(1-focus);m.decision=m.remaining;}
    }
-   else if(near&&near.d<sense&&caution>.6&&social<.6){m.mode='avoid';m.target=near.o.a.id;}
+   else if(near&&near.d<sense&&caution>.6&&social<.6&&!(nearBond?.familiarity>=.4)){m.mode='avoid';m.target=near.o.a.id;}
    else if(near&&near.d<sense&&m.socialWait<=0&&rng()<social*(1-.45*wander)){m.mode='follow';m.target=near.o.a.id;}
+   else if(friend&&m.familiarWait<=0){m.mode='companion';m.target=friend.o.a.id;m.remaining=12;m.decision=12;m.familiarWait=25;}
+   else if(rival&&m.cooldown<=0&&value(p,'pushDrive')>.55&&objects.some(o=>Math.hypot(o.x*width-r.x,o.y*height-r.y)<100)){m.mode='contest';m.target=rival.o.a.id;m.remaining=2;m.decision=2;}
    else if(memories&&favorite&&m.familiarWait<=0){m.mode='home';m.objectId=favorite.objectId;m.point={nx:favorite.x,ny:favorite.y,x:favorite.x*width,y:favorite.y*height};m.remaining=16;m.decision=16;m.familiarWait=20;}
    else if(memories&&sensed.length&&(m.familiarWait<=0||!favorite)&&rng()<.22+.5*curious+.25*caution){const o=sensed[0];m.mode='shelter';m.objectId=o.id;m.point={nx:o.x,ny:o.y,x:o.x*width,y:o.y*height};m.remaining=12;m.decision=12;}
    else if(memories&&m.groomWait<=0){m.mode='groom';m.remaining=1.6+1.2*value(p,'recovery');m.decision=m.remaining;m.groomWait=25;}
@@ -73,13 +79,14 @@ function step(agents,{width,height,dt,rng=Math.random,stations:places=stations,o
   }
   let desired=a.angle,pace=1;
   const other=byId.get(m.target),distance=other?Math.hypot(other.x-r.x,other.y-r.y):Infinity;
-  if(['rest','settle','groom','search'].includes(m.mode)){pace=0;
+  if(['rest','settle','restmate','groom','search'].includes(m.mode)){pace=0;
    if(m.mode==='rest'&&!m.learned)remember(a,m,memories,null);
    if(m.mode==='settle'){m.dwell=(m.dwell||0)+dt;if(m.dwell>1.5&&!m.learned)remember(a,m,memories,currentObject);}
    if(m.mode==='search'){a.angle+=dt*.7;if(sensed.length){const o=sensed[0];m.mode='shelter';m.objectId=o.id;m.point={nx:o.x,ny:o.y,x:o.x*width,y:o.y*height};m.remaining=12;m.decision=12;}else if(m.remaining<.1){if(memories&&favorite)delete memories[a.id];m.familiarWait=8;}}
 m.energy=Math.min(1,m.energy+dt*(.09+.13*value(p,'recovery')));}
   else {
-   if(['home','shelter'].includes(m.mode)&&m.point){
+   if(m.mode==='companion'&&other){desired=Math.atan2(other.x-r.x,-(other.y-r.y));pace=.65;if(distance<r.r+other.r+30){m.mode='restmate';m.remaining=3+3*social;m.decision=m.remaining;F.relate(life,a,other.a,'rest');pace=0;}}
+   else if(['home','shelter'].includes(m.mode)&&m.point){
     desired=Math.atan2(m.point.x-r.x,-(m.point.y-r.y));pace=.6+.25*curious;
     const arrived=Math.hypot(m.point.x-r.x,m.point.y-r.y)<Math.max(16,r.r*.6);
     if(arrived){const found=currentObject&&Math.hypot(currentObject.x*width-r.x,currentObject.y*height-r.y)<Math.max(30,r.r);
@@ -93,11 +100,11 @@ m.energy=Math.min(1,m.energy+dt*(.09+.13*value(p,'recovery')));}
      pace=0;m.bubble=.4;m.energy=Math.min(1,m.energy+dt*(.035+.025*value(p,'recovery')));
      const need={eat:'hunger',drink:'thirst',bask:'chill'}[m.mode];m[need]=Math.max(0,m[need]-dt*.23);
     }else {m.mode={eat:'food',drink:'water',bask:'warm'}[m.mode]||m.mode;pace=.8;}
-   }else if((m.mode==='follow'||m.mode==='greet')&&other){
+   }else if((m.mode==='follow'||m.mode==='greet'||m.mode==='contest')&&other){
     const gap=r.r+other.r+22;
     desired=Math.atan2(other.x-r.x,-(other.y-r.y));
-    if(distance<gap+12){if(m.mode!=='greet'){m.remaining=.8+.5*social;m.decision=m.remaining;}m.mode='greet';pace=.1;m.bubble=.4;}
-    else {m.mode='follow';pace=.85;}
+    if(distance<gap+12){if(m.mode==='contest'){pace=.2;m.bubble=.4;}else {if(m.mode!=='greet'){m.remaining=.8+.5*social;m.decision=m.remaining;F.relate(life,a,other.a,'greet');}m.mode='greet';pace=.1;m.bubble=.4;}}
+    else {if(m.mode!=='contest')m.mode='follow';pace=.85;}
    }else if((m.mode==='avoid'||m.mode==='yield')&&other){desired=Math.atan2(r.x-other.x,-(r.y-other.y));pace=m.mode==='yield'?1.12:.9;}
    else if(m.mode==='shove'&&other){desired=Math.atan2(other.x-r.x,-(other.y-r.y));pace=.25;}
    else if(m.mode==='investigate'&&m.point){desired=Math.atan2(m.point.x-r.x,-(m.point.y-r.y));pace=.65+.3*curious;if(Math.hypot(m.point.x-r.x,m.point.y-r.y)<20)m.remaining=0;}
@@ -110,6 +117,7 @@ m.energy=Math.min(1,m.energy+dt*(.09+.13*value(p,'recovery')));}
    for(const o of objects.filter(o=>o.kind==='stone')){const q=H.shape(o,width,height),dx=r.x-q.x,dy=r.y-q.y,clear=Math.max(q.rx,q.ry)+r.r+10;
     if(Math.hypot(dx,dy)<clear+28){const away=Math.atan2(dx,-dy),diff=turn(desired,away);desired+=diff*(1-(Math.max(0,Math.hypot(dx,dy)-clear)/28));pace*=.55+.4*body.footing;}
    }
+   if(m.drama?.kind==='leaf')pace*=.35;
    a.angle+=clamp(turn(a.angle,desired),-(.8+3*value(p,'turnRate'))*dt,(.8+3*value(p,'turnRate'))*dt);
    const speed=Math.max(.1,a.speed||p.speed||1)*38*pace*(.55+.45*m.energy);
    r.dx+=Math.sin(a.angle)*speed*dt;r.dy-=Math.cos(a.angle)*speed*dt;
@@ -121,15 +129,17 @@ m.energy=Math.min(1,m.energy+dt*(.09+.13*value(p,'recovery')));}
   const a=rows[i],b=rows[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),contact=a.r+b.r+7;
   if(d>contact+4)continue;
   const nx=d>1e-6?dx/d:1,ny=d>1e-6?dy/d:0;
-  if(!a.a.held&&!b.a.held&&a.m.cooldown<=0&&b.m.cooldown<=0&&!['rest','settle','groom'].includes(a.m.mode)&&!['rest','settle','groom'].includes(b.m.mode)){
+  if(!a.a.held&&!b.a.held&&a.m.cooldown<=0&&b.m.cooldown<=0&&!a.m.drama&&!b.m.drama&&!['rest','settle','restmate','groom'].includes(a.m.mode)&&!['rest','settle','restmate','groom'].includes(b.m.mode)){
    const urge=r=>value(r.p,'pushDrive')*(1-.65*value(r.p,'caution'))*(r.m.intent?1-.95*value(r.p,'focus'):1);
    const first=urge(a)>urge(b)?a:b,second=first===a?b:a;
    if(urge(first)>.48&&first.m.energy>.3&&rng()<urge(first)*.8){
     first.m.mode='shove';first.m.target=second.a.id;first.m.remaining=.65;first.m.decision=.65;first.m.bubble=.8;first.m.energy=Math.max(0,first.m.energy-.045);
     second.m.mode='yield';second.m.target=first.a.id;second.m.remaining=.85;second.m.decision=.85;second.m.bubble=.8;
+    if(objects.some(o=>Math.hypot(o.x*width-first.x,o.y*height-first.y)<100))F.relate(life,first.a,second.a,'contest');
     const force=(5+7*value(first.p,'strength'))/((.8+.7*value(second.p,'mass'))*Math.sqrt(anatomy(second.p).size));
     const sign=first===a?1:-1;second.dx+=nx*force*sign;second.dy+=ny*force*sign;
    }else if(value(a.p,'sociality')+value(b.p,'sociality')>1&&![a,b].some(r=>r.m.intent&&rng()<value(r.p,'focus'))){
+    F.relate(life,a.a,b.a,'greet');
     for(const [r,o] of [[a,b],[b,a]]){r.m.mode='greet';r.m.target=o.a.id;r.m.remaining=.8;r.m.decision=.8;r.m.bubble=.8;}
    }
    a.m.cooldown=3+4*(1-value(a.p,'persistence'))+rng()*2;b.m.cooldown=3+4*(1-value(b.p,'persistence'))+rng()*2;
@@ -145,6 +155,6 @@ m.energy=Math.min(1,m.energy+dt*(.09+.13*value(p,'recovery')));}
   }
   const {dx,dy}=row;const mx=Math.min(.48,(a.radius||24)/width),my=Math.min(.48,(a.radius||28)/height);a.x=clamp(a.x+dx/width,mx,1-mx);a.y=clamp(a.y+dy/height,my,1-my);}
 }
-function activity(agent){if(!agent.held&&agent.behavior?.mode==='settle'&&!agent.behavior.objectId)return 'Resting at favorite spot';return labels[agent.held?'held':agent.behavior?.mode]||'Exploring';}
+function activity(agent){if(agent.behavior?.drama&&!agent.held)return {bridge:'Pausing at narrow bridge',leaf:'Balancing on a bending leaf',crumb:'Grooming a crumb from its horn'}[agent.behavior.drama.kind];if(!agent.held&&agent.behavior?.mode==='settle'&&!agent.behavior.objectId)return 'Resting at favorite spot';return labels[agent.held?'held':agent.behavior?.mode]||'Exploring';}
 return {step,activity,labels,stations,anatomy,comfort,pose,drives,hold,release};
 });

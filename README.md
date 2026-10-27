@@ -3,6 +3,20 @@
 Complete SUMO9 trait audit: the original 110 inherited records show an effect under their expression conditions (67 appearance, 55 movement or battle, with overlap). Recovery, grip, stamina, balance, behavior and anatomy have distinct measured roles. Full-stat comparison marks inactive anatomy-dependent factors and ring captions show energy and applied push. [Read the complete audit](https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/stat-audit.html). All 251 checks pass, including inherited habitat drives, task focus, old replays and current brood saving. Refresh both screens and create a new friend room.
 
 
+## A larger, quieter tank
+
+The main tank uses the full workspace width with a taller viewing area. Parent jars sit side by side in a horizontal row beneath it; observation and cleanup tools follow below. Floating activity, name and favorite-marker labels are hidden, while hover descriptions and the inspector retain names and current actions. The Keep tank also has more viewing room.
+
+## Field expeditions, familiar neighbors and little moments
+
+**Plan field expedition** sends one to three beetles from the breeder tank, Keep tank or nursery to a fallen log, garden or leaf-litter maze. Each destination has three obstacles with multiple trait-based approaches. Small bodies can squeeze through, strength and jaws can shift debris, antennae help investigate, and legs, grip, balance, attention and endurance support other routes. The planner previews promising approaches; independent chance still affects each observation. Everyone returns to their original home slot, with field notes and sometimes an unusual seed or weathered bark arch. Discoveries can be planted or placed in either tank. The Field notebook retains the last twenty trips and their actual observations.
+
+Trips have their own pause, 1×/2×/5×/10× playback and recall controls. Closing the expedition window keeps a trip running; hiding the browser tab pauses it. Device and tank-file saves retain progress, so reopening never awards a second copy. Explorers are protected from cleanup and remain unavailable for jars, local contests or sharing until they return. Other beetles can continue breeding and sharing. Recall returns everyone without awarding a discovery. No health, injury, death, gene changes or breeding effects are introduced.
+
+Both tanks remember repeated encounters separately from inherited personality. Greetings and resting together build familiarity; familiar neighbors may approach and rest beside each other. Two pushy beetles can develop recurring rivalry through gentle encounters around a perch. The inspector and **Familiar neighbors & little moments** show these learned relationships. At most 192 pairs and twenty notable moments are retained per tank; relationships involving retired beetles are removed while short observation captions can remain.
+
+Small events arise from current conditions, with cooldowns: beetles meeting at opposite ends of a twig bridge pause briefly, a heavier visitor balances on a bending leaf, and a feeding beetle with functional horns can groom away a crumb. **Arrange habitat → + Twig bridge** adds a crossing. Event poses preserve inherited anatomy and respect cooling, holding and reduced-motion settings. Nothing is scripted to alter DNA or sumo outcomes. Old tanks gain empty field notebooks and relationship records without losing existing beetles, favorite places or habitat layouts.
+
 ## Living habitat and learned favorite places
 
 Both tanks have an **Arrange habitat** control. Drag leaf canopies, bark tunnels and smooth stones; add up to twelve objects per tank, rotate or remove a selected object, or use arrow keys, R and Delete. Arranging pauses the beetles and finishing restores the prior running state. Layouts are independent and persist in device and tank-file saves. Leaf and bark cover can be investigated and used for rest; stones steer and separate beetles according to their visible size and footing. Food, water and the warm light remain available.
