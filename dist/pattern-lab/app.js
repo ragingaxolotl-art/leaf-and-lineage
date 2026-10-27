@@ -98,7 +98,7 @@ function inspect(id){
  $('genetics-report-open').hidden=blocked||Boolean(classConfig&&!state.settings.showStats);$('simple-report-open').hidden=$('genetics-report-open').hidden;
  $('genetic-details').hidden=!state.settings.showStats;
  if(state.settings.showStats){const allele=(a,l)=>l.type==='number'?a.toFixed(2):l.type==='color'?'RGB '+a.rgb.join(',')+' · exp '+a.expression.toFixed(2):a.value+' · exp '+a.expression.toFixed(2);$('genetic-details').innerHTML=`<h3>Behind the shell</h3><p class="hint">Continuous anatomy and behavior use many-gene breeding-value approximations. Babies normally stay near the parents’ averages, with small variation in either direction. Rare larger mutations can shift a value further. Colors, patterns, finish and categorical forms still inherit actual parental copies.</p><p>Body size ${p.size.toFixed(4)} × reference<br>${p.speed} body lengths/s · strength ${p.strengthIndex}/100<br>Antenna length ${(p.antennaLength).toFixed(2)} × body · ${Math.round(p.segments)} segments<br>${b.mutations.length} mutated copies at birth · ${G.loci.length} paired records (including quantitative estimates)<br>Hidden pattern colors: ${p.primary.join(', ')} / ${p.secondary.join(', ')}</p><details><summary>Paired gene copies and quantitative contributions</summary>${G.chromosomes.map(c=>`<h3>Chromosome ${c.id}</h3><table><thead><tr><th>Gene</th><th>Copy 1</th><th>Copy 2</th></tr></thead><tbody>${c.loci.map(l=>{const cp=G.copies(b,l.key);return `<tr><td>${l.label}</td><td>${allele(cp[0],l)}</td><td>${allele(cp[1],l)}</td></tr>`;}).join('')}</tbody></table>`).join('')}</details>`;}
- if(!$('inspector').open)$('inspector').showModal();
+ if(!$('inspector').open)$('inspector').showModal();globalThis.PatternHabitatUI?.update();
 }
 function browse(type='all',targetJar=null){browseType=type;browsePage=0;$('browse').dataset.target=targetJar||'';renderBrowse();if(!$('browse').open)$('browse').showModal();}
 function renderBrowse(){
@@ -118,29 +118,30 @@ function showHistory(){
  $('history-list').innerHTML=state.history.slice().reverse().slice(0,100).map(h=>`<article class="history-item"><strong>Round ${h.broodId.split('-')[1]} · ${h.total} babies</strong><p>${h.allocations.map(a=>a.jarId.replace('-',' ')+': '+a.count+' babies from '+a.parents.map(id=>esc(shortName(G.record(state,id)))).join(', ')).join('<br>')}</p>${h.offspring.map(id=>`<button class="family-link" data-family="${id}" ${state.beetles[id]?'':'disabled'}>${esc(shortName(G.record(state,id)))}${state.beetles[id]?'':' · left tank'}</button>`).join('')}</article>`).join('')||'<p>No broods yet. Choose two parents to begin.</p>';
  $('history').showModal();
 }
-// Behavior uses temporary view memory and its own RNG, never the inheritance stream.
-let behaviorClock=0;
+// Motion uses its own RNG. Only learned places are persisted outside the genome.
+let behaviorClock=0,habitatClock=0,habitatSignature='';
 function frame(now){
  if(now-last<1000/30){requestAnimationFrame(frame);return;}
- const dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;behaviorClock+=dt;
+ const dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;behaviorClock+=dt;habitatClock+=dt;
  for(const kind of ['tank','keep']){
   if(kind==='keep'&&!$('keep').open)continue;
   const ids=kind==='keep'?state.collection:state.tank,layout=kind==='keep'?state.keepLayout:state.tankLayout,box=$(kind==='keep'?'keep-bugs':'tank-bugs'),width=box.clientWidth,height=box.clientHeight;
   if(!width||!height)continue;
   fitTank(box,ids,kind);
-  const agents=ids.map(id=>ensureView(id,kind));
+  const habitat=PatternHabitat.ensure(state)[kind],agents=ids.map(id=>ensureView(id,kind));
   for(const v of agents){v.held=held?.id===v.id;}
-  if(running&&!document.hidden){let time=dt*animationSpeed;while(time>0){const slice=Math.min(time,1/30);PatternTankBehavior.step(agents,{width,height,dt:slice,rng:motionRandom});time-=slice;}}
+  if(running&&!document.hidden){let time=dt*animationSpeed;while(time>0){const slice=Math.min(time,1/30);PatternTankBehavior.step(agents,{width,height,dt:slice,rng:motionRandom,objects:habitat.objects,memories:habitat.memories});time-=slice;}}
   for(const v of agents){layout[v.id]={x:v.x,y:v.y,angle:v.angle};paint(v,box,kind);
    const activity=PatternTankBehavior.activity(v),shown=running?activity:'Cooled & paused';
-   if(v.el){v.el.dataset.activity=activity;v.el.classList.toggle('tank-resting',running&&activity==='Resting');v.el.title=name(state.beetles[v.id])+' · '+shown;v.el.setAttribute('aria-label','Inspect '+name(state.beetles[v.id])+' · '+shown);}
+   if(v.el){v.el.dataset.pose=PatternTankBehavior.pose(v);v.el.style.setProperty('--feel-angle',(7+15*G.clamp(v.traits.antennaLength*v.traits.antennaFactor/3,0,1))+'deg');v.el.style.setProperty('--feel-duration',(3.2-1.8*v.traits.curiosity)+'s');v.el.style.setProperty('--step-duration',((.25+.65*(1-v.traits.gait))/Math.sqrt(Math.max(.2,v.speed)))+'s');v.el.dataset.activity=activity;v.el.classList.toggle('tank-resting',running&&activity==='Resting');v.el.title=name(state.beetles[v.id])+' · '+shown;v.el.setAttribute('aria-label','Inspect '+name(state.beetles[v.id])+' · '+shown);}
    if(!v.activityTag){v.activityTag=document.createElement('span');v.activityTag.className='tank-activity-tag';v.activityTag.dataset.activityFor=v.id;v.activityTag.setAttribute('aria-hidden','true');box.append(v.activityTag);}
    if(!v.activityTag.isConnected)box.append(v.activityTag);
-   v.activityTag.textContent=activity;v.activityTag.hidden=!running||!((v.behavior?.bubble>0&&['greet','shove','yield','eat','drink','bask'].includes(v.behavior?.mode))||v.behavior?.mode==='rest');v.activityTag.style.left=v.x*width+'px';v.activityTag.style.top=Math.max(12,v.y*height-(v.radius||28)*.65-14)+'px';
+   v.activityTag.textContent=activity;v.activityTag.hidden=!running||!((v.behavior?.bubble>0&&['greet','shove','yield','eat','drink','bask','groom','search'].includes(v.behavior?.mode))||['rest','settle'].includes(v.behavior?.mode));v.activityTag.style.left=v.x*width+'px';v.activityTag.style.top=Math.max(12,v.y*height-(v.radius||28)*.65-14)+'px';
   }
   if(kind==='tank'&&behaviorClock>=.5){const counts={};for(const v of agents){const label=PatternTankBehavior.activity(v);counts[label]=(counts[label]||0)+1;}$('tank-behavior-summary').textContent=running?Object.entries(counts).map(([label,n])=>n+' '+label.toLowerCase()).join(' · '):'Cooled & paused. Resume to watch their personalities.';}
  }
- if(behaviorClock>=.5)behaviorClock=0;
+ if(behaviorClock>=.5){globalThis.PatternHabitatUI?.update();behaviorClock=0;}
+ if(habitatClock>=2){habitatClock=0;const signature=JSON.stringify([state.habitat.tank.memories,state.habitat.keep.memories]);if(signature!==habitatSignature){habitatSignature=signature;saveSoon();}}
  requestAnimationFrame(frame);
 }
 document.querySelector('a.skip').onclick=e=>{e.preventDefault();$('tank').scrollIntoView({block:'start'});$('motion').focus({preventScroll:true});};

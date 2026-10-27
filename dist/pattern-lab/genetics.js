@@ -1,5 +1,6 @@
 (function(root){
 'use strict';
+const Habitat=typeof module==='object'&&module.exports?require('./habitat.js'):root.PatternHabitat;
 const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
 const num=(key,label,min=0,max=1)=>({key,label,type:'number',min,max});
 const cat=(key,label,values)=>({key,label,type:'category',values});
@@ -156,13 +157,14 @@ function breedRound(state,opts={}){
 }
 // Keep ten recent breeding rounds of detail; ancestry labels and living genomes remain.
 function trimHistory(s){
+ Habitat.prune(s);
  const first=Math.max(0,s.round-10);s.history=s.history.filter(h=>Number(h.broodId.slice(6))>first);s.historyStartRound=first;
  for(const b of Object.values(s.retired)){const round=b.arrivedRound??(b.broodId?Number(b.broodId.slice(6)):0);if(round<Math.max(0,s.round-9)){delete b.measurements;delete b.appearance;b.dataExpired=true;}}
  s.matchHistory=(s.matchHistory||[]).filter(m=>m.breedingRound===undefined||m.breedingRound>=Math.max(0,s.round-9)).slice(-10);return s;
 }
 // Beetle recovery snapshots retain actual living genomes without replay/measurement bulk.
 function beetleSnapshot(s){const copy=clone(s);trimHistory(copy);copy.matchHistory=[];for(const b of Object.values(copy.retired)){delete b.measurements;delete b.appearance;b.dataExpired=true;}return copy;}
-function createState(seed=42){const r=seeded(seed),s={version:'PL2',round:0,historyStartRound:0,lastTankRefreshRound:0,nextId:17,seed,store:null,settings:{mutation:.005,showStats:false,backdrop:'moss',allowBackdrop:true,allowSumo:true,broods:2},beetles:{},retired:{},cleanupExcluded:[],tradeLocks:[],tradeReceipts:[],battleCopies:[],tank:[],nursery:[],collection:[],keepLayout:{},tankLayout:{},jars:[{id:'jar-1',active:true,members:[]},{id:'jar-2',active:false,members:[]}],history:[],matchHistory:[],notes:''};for(let i=0;i<16;i++){const id='B'+(i+1);s.beetles[id]=founder(id,r,i);s.tank.push(id);}return s;}
+function createState(seed=42){const r=seeded(seed),s={version:'PL2',round:0,historyStartRound:0,lastTankRefreshRound:0,nextId:17,seed,store:null,habitat:Habitat.create(),settings:{mutation:.005,showStats:false,backdrop:'moss',allowBackdrop:true,allowSumo:true,broods:2},beetles:{},retired:{},cleanupExcluded:[],tradeLocks:[],tradeReceipts:[],battleCopies:[],tank:[],nursery:[],collection:[],keepLayout:{},tankLayout:{},jars:[{id:'jar-1',active:true,members:[]},{id:'jar-2',active:false,members:[]}],history:[],matchHistory:[],notes:''};for(let i=0;i<16;i++){const id='B'+(i+1);s.beetles[id]=founder(id,r,i);s.tank.push(id);}return s;}
 function container(s,id){if(s.tank.includes(id))return 'tank';if(s.nursery.includes(id))return 'nursery';if(s.collection.includes(id))return 'collection';return s.jars.find(j=>j.members.includes(id))?.id||null;}
 // Retired beetles retain only family labels, never a playable genome.
 function record(s,id){return s.beetles[id]||s.retired?.[id];}
@@ -177,7 +179,7 @@ function retire(s,id,reason='released'){
  s.retired=s.retired||{};s.retired[id]={id:b.id,name:b.name,parents:b.parents.slice(),sourceJarId:b.sourceJarId,broodId:b.broodId,lineageGeneration:b.lineageGeneration,reason,arrivedRound:b.arrivedRound??(b.broodId?Number(b.broodId.split('-')[1]):0),origin:b.provenance?'imported':b.parents.length?'bred':'founder',measurementVersion:2,measurements:measurements(b),appearance:appearance(b)};
  for(const list of [s.tank,s.nursery,s.collection,...s.jars.map(j=>j.members)]){const i=list.indexOf(id);if(i>=0)list.splice(i,1);}
  s.cleanupExcluded=(s.cleanupExcluded||[]).filter(x=>x!==id);
- delete s.beetles[id];delete s.keepLayout?.[id];delete s.tankLayout?.[id];return true;
+ delete s.habitat?.tank.memories[id];delete s.habitat?.keep.memories[id];delete s.beetles[id];delete s.keepLayout?.[id];delete s.tankLayout?.[id];return true;
 }
 function cleanup(s,{all=false,broods=s.settings.broods??2,ids=null}={}){
  const removed=[],reviewed=ids===null?null:new Set(ids);
@@ -250,6 +252,7 @@ function upgradeState(s){
 }
 function validate(s){
  s=upgradeState(s);
+ Habitat.validate(s);
  if(!s||s.version!=='PL2'||!s.settings||typeof s.beetles!=='object'||!Array.isArray(s.jars)||s.jars.length!==2)throw Error('This is not a Pattern Lab save.');
  if(s.historyStartRound===undefined)s.historyStartRound=0;
  if(!Number.isInteger(s.historyStartRound)||s.historyStartRound<0||s.historyStartRound>s.round)throw Error('Invalid retained history range.');

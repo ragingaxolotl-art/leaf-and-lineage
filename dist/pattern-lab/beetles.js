@@ -35,7 +35,7 @@ function draw(b,prefix='bug'){
   const elbow=p.antenna==='elbow'?p.elbow*.35:0;
   const point=t=>({x:12+(endX-12)*t+Math.sin(t*Math.PI)*(curve+elbow),y:-48+(endY+48)*t});
   const n=Math.round(p.segments),pts=Array.from({length:n+1},(_,i)=>point(i/n));
-  parts.push(`<g class="antenna" transform="scale(${side} 1)"><path d="${pts.map((v,i)=>(i?'L':'M')+round(v.x)+' '+round(v.y)).join(' ')}" fill="none" stroke="${limb}" stroke-width="${p.shaftWidth}" stroke-linejoin="round" stroke-linecap="round"/>`);
+  parts.push(`<g class="antenna" transform="scale(${side} 1)"><g class="antenna-sweep"><path d="${pts.map((v,i)=>(i?'L':'M')+round(v.x)+' '+round(v.y)).join(' ')}" fill="none" stroke="${limb}" stroke-width="${p.shaftWidth}" stroke-linejoin="round" stroke-linecap="round"/>`);
   for(let i=1;i<=n;i++){
    const t=i/n,q=point(t),bead=p.antenna==='bead'?1.3+p.beadRoundness*2:p.shaftWidth*.65;
    if(p.antenna==='bead'||p.banding>.45)parts.push(`<circle cx="${round(q.x)}" cy="${round(q.y)}" r="${round(bead)}" fill="${p.banding>.65&&i%2===0?rgb(p.primary):limb}"/>`);
@@ -56,7 +56,7 @@ function draw(b,prefix='bug'){
   }
   if(p.antenna==='aristate'){const q=point(.65);parts.push(`<ellipse cx="${round(q.x)}" cy="${round(q.y)}" rx="4" ry="7" fill="${limb}"/><path d="M${round(q.x)} ${round(q.y)} q35 -15 22 -36" fill="none" stroke="${limb}" stroke-width="1"/>`);}
   for(let i=0;i<Math.round(p.hairs*23);i++){const q=point(.1+.87*i/Math.max(1,Math.round(p.hairs*23))),lenHair=2+p.hairLength*14;parts.push(`<path d="M${round(q.x)} ${round(q.y)} l${lenHair} -${lenHair*.8} M${round(q.x)} ${round(q.y)} l-${lenHair} -${lenHair*.6}" stroke="${limb}" stroke-width=".65"/>`);}
-  parts.push('</g>');
+  parts.push('</g></g>');
  }
  parts.push(`<ellipse cy="11" rx="${w}" ry="43" fill="${body}" stroke="${line}" stroke-width="1.5"/>`);
  // Shared anchor field gives inherited placement tendencies. Development noise is fixed at birth.
@@ -82,7 +82,7 @@ function draw(b,prefix='bug'){
  const path=p.hornShape==='forked'?`M-3 0 Q-6 ${-h*.5} -8 ${-h} Q-2 ${-h*.9} 0 ${-h*.5} Q2 ${-h*.9} 8 ${-h} Q6 ${-h*.5} 3 0Z`:`M-4 0 Q${-7+curve} ${-h*.65} ${curve} ${-h} Q${7+curve} ${-h*.65} 4 0Z`;
  parts.push(`<path class="inherited-horn" data-horn="${i+1}" d="${path}" transform="translate(${offset} -55)" fill="${limb}" stroke="${line}" stroke-width="1"/>`);}
  if(p.jaw>.01)parts.push(`<path transform="translate(0 -57) scale(${p.jawFactor}) translate(0 57)" d="M-7 -57 q${-8-p.jaw*8} ${-8-p.jaw*12} ${5+p.jaw*5} ${-10-p.jaw*14} M7 -57 q${8+p.jaw*8} ${-8-p.jaw*12} ${-5-p.jaw*5} ${-10-p.jaw*14}" stroke="${limb}" stroke-width="${1+p.jaw*3}" fill="none"/>`);
- parts.push(`<ellipse cy="11" rx="${w}" ry="43" fill="url(#${id}-shine)"/><path d="M0 -31 Q-2 12 0 54" fill="none" stroke="${line}" stroke-width="1.3"/><ellipse cy="-29" rx="${23*p.bodyWidth*p.pronotum}" ry="15" fill="${thoraxPigment}" stroke="${line}" stroke-width="1.5"/><g transform="translate(0 -47) scale(${p.headFactor}) translate(0 47)"><ellipse cy="-47" rx="${16*p.headWidth}" ry="13" fill="${body}" stroke="${line}" stroke-width="1.5"/><ellipse cx="-13" cy="-49" rx="3" ry="5" fill="#182a24"/><ellipse cx="13" cy="-49" rx="3" ry="5" fill="#182a24"/><path d="M-5 -60 L-3 -64 M5 -60 L3 -64" stroke="${limb}" stroke-width="2" stroke-linecap="round"/></g></g></svg>`);
+ parts.push(`<ellipse cy="11" rx="${w}" ry="43" fill="url(#${id}-shine)"/><path d="M0 -31 Q-2 12 0 54" fill="none" stroke="${line}" stroke-width="1.3"/><ellipse cy="-29" rx="${23*p.bodyWidth*p.pronotum}" ry="15" fill="${thoraxPigment}" stroke="${line}" stroke-width="1.5"/><g class="head-pose"><g transform="translate(0 -47) scale(${p.headFactor}) translate(0 47)"><ellipse cy="-47" rx="${16*p.headWidth}" ry="13" fill="${body}" stroke="${line}" stroke-width="1.5"/><ellipse cx="-13" cy="-49" rx="3" ry="5" fill="#182a24"/><ellipse cx="13" cy="-49" rx="3" ry="5" fill="#182a24"/><path d="M-5 -60 L-3 -64 M5 -60 L3 -64" stroke="${limb}" stroke-width="2" stroke-linecap="round"/></g></g></g></svg>`);
  return parts.join('');
 }
 root.PatternBeetles={draw,rgb,bounds};
