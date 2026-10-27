@@ -2,7 +2,7 @@
 const test=require('node:test'),assert=require('node:assert/strict'),G=require('../dist/pattern-lab/genetics.js'),S=require('../dist/pattern-lab/sumo.js'),V3=require('../dist/pattern-lab/sumo-v3.js');
 function parents(){const s=G.createState(32);return [s.beetles.B1,s.beetles.B2];}
 test('Every continuous physical and behavior value has bounded gradual inheritance, even with extreme hidden copies',()=>{
- const[a,b]=parents(),r=G.seeded(77);assert.equal(G.quantitativeKeys.size,77);for(const key of G.quantitativeKeys){const l=G.byKey[key];G.setCopies(a,key,l.min,l.max);G.setCopies(b,key,l.min,l.max);}const signs=Object.fromEntries([...G.quantitativeKeys].map(k=>[k,[0,0]]));
+ const[a,b]=parents(),r=G.seeded(77);assert.equal(G.quantitativeKeys.size,80);for(const key of G.quantitativeKeys){const l=G.byKey[key];G.setCopies(a,key,l.min,l.max);G.setCopies(b,key,l.min,l.max);}const signs=Object.fromEntries([...G.quantitativeKeys].map(k=>[k,[0,0]]));
  for(let n=0;n<1200;n++){const child=G.baby(a,b,'C',{rate:0,rng:r});assert.equal(child.mutations.length,0);for(const key of G.quantitativeKeys){const l=G.byKey[key],mean=(l.min+l.max)/2,v=G.expressed(child,key);assert.ok(Math.abs(v-mean)<=.035000001*(l.max-l.min),key);signs[key][v>mean?0:1]++;}}
  for(const[key,[above,below]]of Object.entries(signs))assert.ok(above>400&&below>400,key);
 });

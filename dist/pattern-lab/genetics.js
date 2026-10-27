@@ -21,6 +21,9 @@ chromosomes.push({id:'I',loci:[color('legColor','Leg color'),color('thoraxColor'
 const abilityNames={lift:'Horn lift',jump:'Spring jump',puff:'Bombardier puff'};
 const abilityFactors=['Power','Reach','Control','Efficiency','Recovery','Instinct'];
 chromosomes.push({id:'J',loci:[cat('jumpGate','Spring-joint suppressor',['N','n']),cat('puffGate','Puff-gland suppressor',['N','n']),...Object.entries(abilityNames).flatMap(([key,name])=>abilityFactors.map(f=>num(key+f,name+' · '+({Control:'aim / landing control',Recovery:'recovery speed',Instinct:'use instinct'}[f]||f.toLowerCase()))))]});
+const tankKeys=new Set(['appetite','thirstDrive','heatPreference']);
+chromosomes.push({id:'K',loci:[num('appetite','Appetite'),num('thirstDrive','Thirst drive'),num('heatPreference','Warmth preference')]});
+const neutralHabits=()=>({id:'K',copies:[[.5,.5,.5],[.5,.5,.5]]});
 const abilityKeys=new Set(chromosomes[9].loci.map(l=>l.key));
 const neutralAbilities=()=>({id:'J',copies:[0,1].map(()=>chromosomes[9].loci.map(l=>l.type==='number'?.5:{value:'N',expression:.5}))});
 const growthKeys=new Set(chromosomes[7].loci.filter(l=>l.type==='number').map(l=>l.key));
@@ -28,7 +31,7 @@ const neutralGrowth=()=>({id:'H',copies:[0,1].map(()=>chromosomes[7].loci.map(l=
 const loci=chromosomes.flatMap(c=>c.loci), byKey=Object.fromEntries(loci.map(l=>[l.key,l]));
 // Continuous anatomy and behavior use bounded quantitative breeding values.
 // Pigment, markings, finish and categorical frameworks retain Mendelian surprises.
-const quantitativeKeys=new Set([...chromosomes[9].loci.filter(l=>l.type==='number').map(l=>l.key),...growthKeys,'bodyWidth',...chromosomes.filter(c=>['D','E','F'].includes(c.id)).flatMap(c=>c.loci.filter(l=>l.type==='number').map(l=>l.key)),'bodyLength','headWidth','horn','jaw','pronotum','gait']);
+const quantitativeKeys=new Set([...tankKeys,...chromosomes[9].loci.filter(l=>l.type==='number').map(l=>l.key),...growthKeys,'bodyWidth',...chromosomes.filter(c=>['D','E','F'].includes(c.id)).flatMap(c=>c.loci.filter(l=>l.type==='number').map(l=>l.key)),'bodyLength','headWidth','horn','jaw','pronotum','gait']);
 for(const l of loci)if(quantitativeKeys.has(l.key))l.model='quantitative';
 const clueGroups=[
  {key:'speed',words:['Dew','Bramble','Echo'],min:.25,max:1.95},
@@ -71,9 +74,10 @@ function founder(id,r=Math.random,index=0){
  const ar=seeded(b.developmentSeed^0x6a09e667);
  for(const key of ['jumpGate','puffGate']){const roll=ar();if(roll<.002)setCopies(b,key,{value:'n',expression:.5});else if(roll<.027)setCopies(b,key,{value:'N',expression:.5},{value:'n',expression:.5});}
  for(const l of chromosomes[9].loci)if(l.type==='number')setCopies(b,l.key,.25+ar()*.5,.25+ar()*.5);
+ const hr=seeded(b.developmentSeed^0x3c6ef372);b.genome.push({id:'K',copies:[0,1].map(()=>chromosomes[10].loci.map(()=>.1+hr()*.8))});
  return b;
 }
-function copies(b,key){const ci=chromosomes.findIndex(c=>c.loci.some(l=>l.key===key)),li=chromosomes[ci].loci.findIndex(l=>l.key===key);return (b.genome[ci]||(ci===7?neutralGrowth():ci===8?neutralColors(b):ci===9?neutralAbilities():null)).copies.map(c=>c[li]);}
+function copies(b,key){const ci=chromosomes.findIndex(c=>c.loci.some(l=>l.key===key)),li=chromosomes[ci].loci.findIndex(l=>l.key===key);return (b.genome[ci]||(ci===7?neutralGrowth():ci===8?neutralColors(b):ci===9?neutralAbilities():ci===10?neutralHabits():null)).copies.map(c=>c[li]);}
 function expressed(b,key){const l=byKey[key],[a,c]=copies(b,key);if(l.type==='number')return (a+c)/2;if(l.type==='category')return a.expression>=c.expression?a.value:c.value;return a.expression===c.expression?a.rgb.map((v,i)=>Math.round((v+c.rgb[i])/2)):(a.expression>c.expression?a.rgb.slice():c.rgb.slice());}
 function phenotype(b){
  const p=Object.fromEntries(loci.map(l=>[l.key,expressed(b,l.key)]));
@@ -99,7 +103,7 @@ const studentTraits=[
  {key:'visibleLayers',label:'Visible pattern colors',unit:'colors',group:'Shell and patterns',min:0,max:2},
  ...['R','G','B'].map((channel,i)=>({key:'body'+channel,label:'Body color · '+['red','green','blue'][i]+' channel',unit:'RGB channel (0–255)',group:'Shell and patterns',min:0,max:255})),
  ...['leg','thorax'].flatMap(part=>['R','G','B'].map((channel,i)=>({key:part+channel,label:(part==='leg'?'Leg':'Thorax')+' color · '+['red','green','blue'][i]+' channel',unit:'RGB channel (0–255)',group:'Shell and patterns',min:0,max:255}))),
- ...['tracking','reaction','focus','pushDrive','wander','tactics','edgeSense','brace','lateralBalance','mass','centerDrive','curiosity','sociality','caution','persistence'].map(key=>({key,label:byKey[key].label,unit:'model index (0–1)',group:'Behavior and contest',min:0,max:1}))
+ ...[...tankKeys,'tracking','reaction','focus','pushDrive','wander','tactics','edgeSense','brace','lateralBalance','mass','centerDrive','curiosity','sociality','caution','persistence'].map(key=>({key,label:byKey[key].label,unit:'model index (0–1)',group:'Behavior and contest',min:0,max:1}))
 ];
 const dimensionFactors={bodyLength:'body',bodyWidth:'body',headWidth:'head',legLength:'leg',horn:'horn',jaw:'jaw',antennaLength:'antenna'};
 for(const t of studentTraits){const part=dimensionFactors[t.key];if(part){const l=byKey[part+'Growth'];t.min*=2**l.min;t.max*=2**l.max;t.unit='relative model scale';}}
@@ -107,8 +111,10 @@ function measurements(b){
  const p=phenotype(b);return Object.fromEntries(studentTraits.map(t=>[t.key,t.key==='segments'?Math.round(p.segments):/^(body|leg|thorax)[RGB]$/.test(t.key)?(t.key.startsWith('body')?p.body:t.key.startsWith('leg')?p.visibleLegColor:p.visibleThoraxColor)['RGB'.indexOf(t.key.slice(-1))]:p[t.key]*(dimensionFactors[t.key]?p[dimensionFactors[t.key]+'Factor']:1)]));
 }
 function validateMeasurements(m){
- if(!m||typeof m!=='object'||Array.isArray(m)||![studentTraits.length,studentTraits.length-6].includes(Object.keys(m).length))throw Error('Invalid archived trait measurements.');
- for(const t of studentTraits){if(!Object.hasOwn(m,t.key)&&/^(leg|thorax)[RGB]$/.test(t.key)&&Object.keys(m).length===studentTraits.length-6)continue;if(!Object.hasOwn(m,t.key)||!Number.isFinite(m[t.key])||m[t.key]<t.min||m[t.key]>t.max)throw Error('Invalid archived trait measurement.');}
+ if(!m||typeof m!=='object'||Array.isArray(m))throw Error('Invalid archived trait measurements.');
+ const optional=new Set([...tankKeys,...studentTraits.filter(t=>/^(leg|thorax)[RGB]$/.test(t.key)).map(t=>t.key)]);
+ if(Object.keys(m).some(k=>!studentTraits.some(t=>t.key===k)))throw Error('Invalid archived trait measurements.');
+ for(const t of studentTraits){if(!Object.hasOwn(m,t.key)&&optional.has(t.key))continue;if(!Object.hasOwn(m,t.key)||!Number.isFinite(m[t.key])||m[t.key]<t.min||m[t.key]>t.max)throw Error('Invalid archived trait measurement.');}
 }
 function mutate(a,l,rate,r){
  if(['jumpGate','puffGate'].includes(l.key))rate*=.01;
@@ -124,7 +130,7 @@ function gamete(b,rate,r){
  const mutations=[];
  const chromosomesOut=chromosomes.map((c,ci)=>{let side=r()<.5?0:1;const cross=r()<.35?1+Math.floor(r()*(c.loci.length-1)):-1;return c.loci.map((l,i)=>{if(i===cross)side=1-side;// Quantitative records summarize many small effects. Other loci transmit
  // actual parental copies and retain chromosome linkage.
- const inherited=l.model==='quantitative'?clamp(expressed(b,l.key)+.035*(growthKeys.has(l.key)?1:l.max-l.min)*(r()+r()-1),l.min,l.max):(b.genome[ci]||(ci===7?neutralGrowth():ci===8?neutralColors(b):ci===9?neutralAbilities():null)).copies[side][i];const m=mutate(inherited,l,rate,r);if(m.changed)mutations.push(l.key);return m.allele;});});
+ const inherited=l.model==='quantitative'?clamp(expressed(b,l.key)+.035*(growthKeys.has(l.key)?1:l.max-l.min)*(r()+r()-1),l.min,l.max):(b.genome[ci]||(ci===7?neutralGrowth():ci===8?neutralColors(b):ci===9?neutralAbilities():ci===10?neutralHabits():null)).copies[side][i];const m=mutate(inherited,l,rate,r);if(m.changed)mutations.push(l.key);return m.allele;});});
  return {chromosomes:chromosomesOut,mutations};
 }
 function baby(a,b,id,{rate=.005,rng=Math.random,jarId=null,broodId=null}={}){
@@ -182,7 +188,7 @@ function cleanup(s,{all=false,broods=s.settings.broods??2,ids=null}={}){
  while(s.tank.length<48&&s.nursery.length)s.tank.push(s.nursery.shift());
  return removed;
 }
-function fingerprint(b){const genome=clone(b.genome);if(genome.length===10&&JSON.stringify(genome[9])===JSON.stringify(neutralAbilities()))genome.pop();if(genome.length===9&&JSON.stringify(genome[8])===JSON.stringify(neutralColors(b)))genome.pop();if(genome.length===8&&JSON.stringify(genome[7])===JSON.stringify(neutralGrowth()))genome.pop();return checksum(JSON.stringify(genome)+'|'+b.developmentSeed);}
+function fingerprint(b){const genome=clone(b.genome);if(genome.length===11&&JSON.stringify(genome[10])===JSON.stringify(neutralHabits()))genome.pop();if(genome.length===10&&JSON.stringify(genome[9])===JSON.stringify(neutralAbilities()))genome.pop();if(genome.length===9&&JSON.stringify(genome[8])===JSON.stringify(neutralColors(b)))genome.pop();if(genome.length===8&&JSON.stringify(genome[7])===JSON.stringify(neutralGrowth()))genome.pop();return checksum(JSON.stringify(genome)+'|'+b.developmentSeed);}
 function finishTrade(s,{code,outgoing,fingerprint:expected,incoming,mode='swap'}){
  if(s.tradeReceipts.includes(code))return null;
  const data=validatePacket(incoming),b=s.beetles[outgoing];
@@ -231,6 +237,7 @@ function upgradeState(s){
   if(Array.isArray(b.genome)&&b.genome.length===7)b.genome.push(neutralGrowth());
   if(Array.isArray(b.genome)&&b.genome.length===8)b.genome.push(neutralColors(b));
   if(Array.isArray(b.genome)&&b.genome.length===9)b.genome.push(neutralAbilities());
+  if(Array.isArray(b.genome)&&b.genome.length===10)b.genome.push(neutralHabits());
  }
  // Older archives already measured both dimensions, so overall size needs no guessed genes.
  for(const b of Object.values(s.retired||{})){if(b.appearance?.traits){for(const key of ['legColor','thoraxColor'])if(!Object.hasOwn(b.appearance.traits,key))b.appearance.traits[key]=clone(b.appearance.traits.body);}const m=b.measurements;if(m&&b.measurementVersion===undefined){if(!Object.hasOwn(m,'size')&&Number.isFinite(m.bodyWidth)&&Number.isFinite(m.bodyLength))m.size=Math.sqrt(m.bodyWidth*m.bodyLength);m.visibleHorns=m.horn>.05?1:0;b.measurementVersion=2;}}
@@ -298,7 +305,7 @@ function validate(s){
  cleanup(s,{broods:2});return s;
 }
 function forecast(s,jar,n=240){if(jar.members.length<2)return null;const r=seeded(713),choices=pairs(jar.members),out={layers:[0,0,0],antennae:{},legs:{},speed:0,strength:0};for(let i=0;i<n;i++){let [a,b]=pick(choices,r);if(r()<.5)[a,b]=[b,a];const p=phenotype(baby(s.beetles[a],s.beetles[b],'preview',{rate:s.settings.mutation,rng:r}));out.layers[p.visibleLayers]++;out.antennae[p.antenna]=(out.antennae[p.antenna]||0)+1;out.legs[p.leg]=(out.legs[p.leg]||0)+1;out.speed+=p.speed;out.strength+=p.strengthIndex;}out.n=n;return out;}
-const visualKeys=loci.filter(l=>!abilityKeys.has(l.key)&&!['tracking','reaction','focus','pushDrive','wander','turnRate','tactics','edgeSense','brace','lateralBalance','grip','endurance','recovery','mass','acceleration','centerDrive','curiosity','sociality','caution','persistence','strength','motor','stride'].includes(l.key)).map(l=>l.key);
+const visualKeys=loci.filter(l=>!tankKeys.has(l.key)&&!abilityKeys.has(l.key)&&!['tracking','reaction','focus','pushDrive','wander','turnRate','tactics','edgeSense','brace','lateralBalance','grip','endurance','recovery','mass','acceleration','centerDrive','curiosity','sociality','caution','persistence','strength','motor','stride'].includes(l.key)).map(l=>l.key);
 function appearance(b){const p=phenotype(b);return {developmentSeed:b.developmentSeed,traits:Object.fromEntries([...visualKeys,'visibleLayers','hairs'].map(k=>[k,clone(p[k])]))};}
 function validateAppearance(a){if(!a||!Number.isInteger(a.developmentSeed)||a.developmentSeed<0||a.developmentSeed>4294967295||!a.traits||Object.keys(a.traits).length!==visualKeys.length+2)throw Error('Invalid appearance record.');for(const key of visualKeys){const l=byKey[key],v=a.traits[key];if(l.type==='number'&&(!Number.isFinite(v)||v<l.min||v>l.max)||l.type==='category'&&!l.values.includes(v)||l.type==='color'&&(!Array.isArray(v)||v.length!==3||v.some(x=>!Number.isInteger(x)||x<0||x>255)))throw Error('Invalid appearance trait.');}if(![0,1,2].includes(a.traits.visibleLayers)||!Number.isFinite(a.traits.hairs)||a.traits.hairs<0||a.traits.hairs>1)throw Error('Invalid appearance layer.');return a;}
 function visualPhenotype(b){if(b.genome)return phenotype(b);const p=clone(validateAppearance(b.appearance).traits);for(const part of ['body','antenna','leg','horn','head','jaw'])p[part+'Factor']=2**p[part+'Growth'];p.visibleHorns=p.horn>.008?{single:1,double:2,triple:3}[p.hornCount]:0;return p;}
@@ -315,19 +322,19 @@ function validConfig(c){
 function encodeConfig(c){const data=btoa(JSON.stringify(validConfig(c))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');return 'PL1.'+data+'.'+checksum(data);}
 function decodeConfig(code){try{const a=code.split('.');if(a.length!==3||a[0]!=='PL1'||checksum(a[1])!==a[2])throw Error('This class link is incomplete or damaged. Ask for the full link.');return validConfig(JSON.parse(atob(a[1].replace(/-/g,'+').replace(/_/g,'/'))));}catch(e){throw Error(e.message||'This class link could not be read.');}}
 function validatePacket(input){
- if(!input||input.format!=='PatternLabBeetle'||![1,2,3].includes(input.version)||!input.beetle)throw Error('Choose a Pattern Lab beetle JSON file.');
+ if(!input||input.format!=='PatternLabBeetle'||![1,2,3,4].includes(input.version)||!input.beetle)throw Error('Choose a Pattern Lab beetle JSON file.');
  const source=clone(input.beetle);
  if(typeof source.id!=='string'||source.id.length>80||typeof source.name!=='string'||source.name.length>40||!Array.isArray(source.parents)||![0,2].includes(source.parents.length)||source.parents.some(x=>typeof x!=='string'||x.length>80))throw Error('Invalid beetle identity.');
  const specimen={...source,id:'B1',parents:[],sourceJarId:null,broodId:null};delete specimen.arrivedRound;
  const state=createState(1);state.beetles={B1:specimen};state.nextId=2;state.tank=['B1'];state.jars.forEach(j=>j.members=[]);
  if(source.genome?.length===5)state.version='PL1';
  validate(state);
- return {format:'PatternLabBeetle',version:3,beetle:{...state.beetles.B1,id:source.id,parents:source.parents},model:'Invented teaching genetics; sumo traits are game measurements.'};
+ return {format:'PatternLabBeetle',version:4,beetle:{...state.beetles.B1,id:source.id,parents:source.parents},model:'Invented teaching genetics; sumo traits are game measurements.'};
 }
 function packet(b,{anonymous=false}={}){
  const specimen=clone(b);
  if(anonymous){specimen.name='';specimen.parents=[];specimen.sourceJarId=null;specimen.broodId=null;delete specimen.provenance;delete specimen.upgradeNote;}
- return validatePacket({format:'PatternLabBeetle',version:3,beetle:specimen});
+ const out=validatePacket({format:'PatternLabBeetle',version:4,beetle:specimen});if(JSON.stringify(out.beetle.genome[10])===JSON.stringify(neutralHabits())){out.beetle.genome.pop();out.version=3;}return out;
 }
 function importPacket(s,input){
  const data=validatePacket(input),b=clone(data.beetle),source=clone(b);
@@ -360,6 +367,6 @@ function takeStoreBeetle(s,index){
  if(s.store.claimed.length>=2)throw Error('You have chosen two beetles. Breed a new round for fresh arrivals.');
  const candidate=storeStock(s)[index],b=importPacket(s,packet(candidate));s.store.claimed.push(index);return b;
 }
-const api={starterRecoveryAllowed,workingTankEmpty,beetleSnapshot,trimHistory,battleCopyKey,copyBattleBeetle,refreshWait,refreshTank,abilityNames,abilityFactors,abilityKeys,neutralAbilities,ensureStore,storeStock,takeStoreBeetle,appearance,validateAppearance,visualPhenotype,growthKeys,studentTraits,measurements,chromosomes,loci,byKey,quantitativeKeys,observationTags,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,record,retire,cleanup,excludeFromCleanup,fingerprint,finishTrade,move,validate,upgradeState,packet,validatePacket,importPacket,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
+const api={tankKeys,neutralHabits,starterRecoveryAllowed,workingTankEmpty,beetleSnapshot,trimHistory,battleCopyKey,copyBattleBeetle,refreshWait,refreshTank,abilityNames,abilityFactors,abilityKeys,neutralAbilities,ensureStore,storeStock,takeStoreBeetle,appearance,validateAppearance,visualPhenotype,growthKeys,studentTraits,measurements,chromosomes,loci,byKey,quantitativeKeys,observationTags,antennaNames,legNames,seeded,clone,founder,setCopies,copies,expressed,phenotype,gamete,baby,pairs,breedRound,createState,container,record,retire,cleanup,excludeFromCleanup,fingerprint,finishTrade,move,validate,upgradeState,packet,validatePacket,importPacket,forecast,clamp,checksum,validConfig,encodeConfig,decodeConfig};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PatternGenetics=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

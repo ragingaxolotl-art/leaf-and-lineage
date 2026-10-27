@@ -2,7 +2,7 @@
   "date": "2026-10-26",
   "engine": "SUMO9",
   "allInheritedRecords": {
-    "loci": 110,
+    "loci": 113,
     "rows": [
       {
         "chromosome": "A",
@@ -24,6 +24,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -38,6 +39,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -52,6 +54,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -66,6 +69,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -80,6 +84,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -94,6 +99,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -108,6 +114,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -122,6 +129,7 @@
         ],
         "renderChanged": true,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -144,6 +152,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -158,6 +167,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -174,6 +184,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -188,6 +199,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -202,6 +214,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -216,6 +229,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -230,6 +244,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -252,6 +267,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -266,6 +282,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -280,6 +297,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -294,6 +312,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -308,6 +327,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -322,6 +342,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -347,6 +368,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -361,6 +383,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -375,6 +398,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -389,6 +413,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -403,6 +428,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -417,6 +443,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -431,6 +458,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -445,6 +473,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -459,6 +488,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -473,6 +503,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -487,6 +518,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -501,6 +533,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -515,6 +548,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -529,6 +563,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -543,6 +578,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -563,6 +599,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -577,6 +614,7 @@
         ],
         "renderChanged": true,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -591,6 +629,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -605,6 +644,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -619,6 +659,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -633,6 +674,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -647,6 +689,7 @@
         ],
         "renderChanged": true,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -661,6 +704,7 @@
         ],
         "renderChanged": true,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -675,6 +719,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -689,6 +734,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -703,6 +749,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -717,6 +764,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -731,6 +779,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -745,6 +794,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -759,6 +809,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -773,6 +824,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -787,6 +839,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -801,6 +854,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -815,6 +869,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -829,6 +884,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -843,6 +899,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -857,6 +914,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -871,6 +929,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -885,6 +944,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -899,6 +959,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -913,6 +974,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -927,6 +989,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -941,6 +1004,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -955,6 +1019,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -969,6 +1034,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -983,6 +1049,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -997,6 +1064,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1011,6 +1079,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1025,6 +1094,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1039,6 +1109,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1053,6 +1124,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1067,6 +1139,7 @@
         ],
         "renderChanged": true,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1081,6 +1154,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1095,6 +1169,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1109,6 +1184,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1123,6 +1199,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1137,6 +1214,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1151,6 +1229,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1165,6 +1244,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1179,6 +1259,7 @@
         ],
         "renderChanged": true,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1193,6 +1274,7 @@
         ],
         "renderChanged": true,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1207,6 +1289,7 @@
         ],
         "renderChanged": true,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1221,6 +1304,7 @@
         ],
         "renderChanged": true,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1235,6 +1319,7 @@
         ],
         "renderChanged": true,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1249,6 +1334,7 @@
         ],
         "renderChanged": true,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1264,6 +1350,7 @@
         ],
         "renderChanged": true,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1279,6 +1366,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1301,6 +1389,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1323,6 +1412,7 @@
         ],
         "renderChanged": true,
         "battleChanged": false,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1337,6 +1427,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1351,6 +1442,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1365,6 +1457,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1379,6 +1472,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1393,6 +1487,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1407,6 +1502,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1421,6 +1517,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1435,6 +1532,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1449,6 +1547,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1463,6 +1562,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1477,6 +1577,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1491,6 +1592,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1505,6 +1607,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1519,6 +1622,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1533,6 +1637,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1547,6 +1652,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1561,6 +1667,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1575,6 +1682,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1589,6 +1697,7 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
         "covered": true
       },
       {
@@ -1603,11 +1712,57 @@
         ],
         "renderChanged": false,
         "battleChanged": true,
+        "tankChanged": false,
+        "covered": true
+      },
+      {
+        "chromosome": "K",
+        "key": "appetite",
+        "label": "Appetite",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": false,
+        "tankChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "K",
+        "key": "thirstDrive",
+        "label": "Thirst drive",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": false,
+        "tankChanged": true,
+        "covered": true
+      },
+      {
+        "chromosome": "K",
+        "key": "heatPreference",
+        "label": "Warmth preference",
+        "type": "number",
+        "gate": null,
+        "expressedValues": [
+          0,
+          1
+        ],
+        "renderChanged": false,
+        "battleChanged": false,
+        "tankChanged": true,
         "covered": true
       }
     ],
     "unexpressed": [],
-    "method": "For each locus vary both expressed copies across the full legal range; hold every other trait fixed. Enable matching anatomy and expression gates. Compare actual SVG rendering and actual battle trajectories, energy, decisions and temporary effects across four seeds."
+    "method": "For each locus vary both expressed copies across the full legal range; hold every other trait fixed. Enable matching anatomy and expression gates. Compare actual SVG rendering and actual battle trajectories, energy, decisions and temporary effects across four seeds. For habitat drive genes, compare actual tank activity transitions over 300 simulated seconds."
   },
   "before": {
     "engine": "SUMO8",
@@ -2397,9 +2552,9 @@
     "n": 300
   },
   "verification": {
-    "automatedChecks": 237,
+    "automatedChecks": 251,
     "controlledMatchesPerEngine": 13200,
-    "conditions": "The win-rate sweep compares 1 versus 0.01 with other numeric traits at midpoints, neutral growth and no special anatomy. Motor and stride vary together for speed. Each of 300 seeds is repeated with corners swapped. Full expression tests vary every locus across its full legal range, with expression gates and relevant situations enabled.",
+    "conditions": "The win-rate sweep compares 1 versus 0.01 with other numeric traits at midpoints, neutral growth and no special anatomy. Motor and stride vary together for speed. Each of 300 seeds is repeated with corners swapped. Full expression tests vary every locus across its full legal range, with expression gates and relevant situations enabled. Habitat genes are separately checked against actual visits over 300 simulated seconds, with repeated drag interruptions for focus.",
     "interpretation": "Traits have distinct roles and tradeoffs. A conditional trait can have a strong direct effect without increasing overall win rate in an arbitrary neutral matchup. Appearance genes change appearance; anatomy and suppressor gates can intentionally hide inherited potential."
   }
 }

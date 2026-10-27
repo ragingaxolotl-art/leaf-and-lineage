@@ -16,8 +16,9 @@ function cleanPacket(input:any,model:string='SUMO6X10'){
  const raw=input?.beetle;if(!raw)throw Error('Choose a beetle before sharing.');
  const packet=G.validatePacket({format:'PatternLabBeetle',version:2,beetle:{id:'B1',name:'',parents:[],sourceJarId:null,broodId:null,lineageGeneration:raw.lineageGeneration,developmentSeed:raw.developmentSeed,genome:raw.genome,mutations:Array.isArray(raw.mutations)?raw.mutations:[]}});
  const genome=packet.beetle.genome;
+ if(genome.length===11&&JSON.stringify(genome[10])===JSON.stringify(G.neutralHabits())){genome.pop();packet.version=3;}
  const neutralAbilities=JSON.stringify(genome[9])===JSON.stringify(G.neutralAbilities());
- if(neutralAbilities)genome.pop();
+ if(neutralAbilities&&genome.length===10)genome.pop();
  if(!['SUMO6','SUMO6X10'].includes(model)&&!neutralAbilities)throw Error('This beetle needs the latest battle rules. Refresh both screens.');
  const body=genome[0].copies.map((cp:any[])=>cp[0]),colors=genome[8];
  const neutralColors=colors&&colors.copies.every((cp:any[],i:number)=>cp.every((a:any)=>JSON.stringify(a)===JSON.stringify(body[i])));
