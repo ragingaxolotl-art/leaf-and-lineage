@@ -18,10 +18,10 @@ function shortName(b){return b?.name||b?.id||'Unknown ancestor';}
 async function checkpoint(next=state,snapshot){if(loadFailure||!deviceSave)throw Error('Device saving is unavailable. Download a tank file before trading.');clearTimeout(saveTimer);persisting=true;document.body.inert=true;try{G.trimHistory(next);await deviceSave.save(next,{snapshot});dirty=false;$('save-warning').hidden=true;$('save-status').textContent='Saved on this device. Last 10 breeding rounds and 10 matches retained.';}catch(e){saveWarning(e.message);throw e;}finally{persisting=false;document.body.inert=false;}}
 function noPending(){if(state.pendingTrade)throw Error('Finish or cancel your pending trade first.');}
 function cool(mist=true){running=false;$('tank').classList.add('cooled');$('keep-tank').classList.add('cooled');$('keep-motion').textContent='▶ Run tank';$('motion').textContent='▶ Run tank';$('motion-state').textContent='Cooled & paused';$('motion-state').classList.add('cold');if(mist){$('mist').classList.remove('cooling');void $('mist').offsetWidth;$('mist').classList.add('cooling');setTimeout(()=>$('mist').classList.remove('cooling'),1100);}}
-function run(){if(blocked)return;running=true;$('tank').classList.remove('cooled');$('keep-tank').classList.remove('cooled');$('keep-motion').textContent='❄ Cool & pause';$('motion').textContent='❄ Cool & pause';$('motion-state').textContent='Wandering';$('motion-state').classList.remove('cold');}
+function run(){if(blocked)return;running=true;$('tank').classList.remove('cooled');$('keep-tank').classList.remove('cooled');$('keep-motion').textContent='❄ Cool & pause';$('motion').textContent='❄ Cool & pause';$('motion-state').textContent='Exploring & interacting';$('motion-state').classList.remove('cold');}
 function ensureView(id,kind='tank'){
  const cache=kind==='keep'?keepViews:views,layout=kind==='keep'?state.keepLayout:state.tankLayout;
- if(!cache.has(id)){const p=G.phenotype(state.beetles[id]),saved=layout[id];cache.set(id,{x:saved?.x??(.08+motionRandom()*.84),y:saved?.y??(.1+motionRandom()*.8),angle:saved?.angle??(motionRandom()*Math.PI*2),turn:0,speed:p.speed,traits:p,el:null});}return cache.get(id);
+ if(!cache.has(id)){const p=G.phenotype(state.beetles[id]),saved=layout[id];cache.set(id,{id,x:saved?.x??(.08+motionRandom()*.84),y:saved?.y??(.1+motionRandom()*.8),angle:saved?.angle??(motionRandom()*Math.PI*2),turn:0,speed:p.speed,traits:p,el:null});}return cache.get(id);
 }
 function syncNameTag(box,id,kind){
  const v=ensureView(id,kind),text=state.beetles[id].name.trim();
@@ -45,7 +45,7 @@ function bindBeetle(el,id,kind){
 }
 function renderTank(){
  const box=$('tank-bugs'),present=new Set(state.tank);fitTank(box,state.tank,'tank');
- for(const el of [...box.children])if(!present.has(el.dataset.id||el.dataset.nameFor)){el.remove();const v=views.get(el.dataset.id);if(v)v.el=null;}
+ for(const el of [...box.children])if(!present.has(el.dataset.id||el.dataset.nameFor||el.dataset.activityFor)){el.remove();const v=views.get(el.dataset.id);if(v)v.el=null;}
  for(const id of views.keys())if(!state.beetles[id])views.delete(id);
  for(const id of state.tank){let el=[...box.children].find(e=>e.dataset.id===id);if(!el){el=document.createElement('button');el.className='tank-bug';el.dataset.id=id;el.innerHTML=B.draw(state.beetles[id],'tank');bindBeetle(el,id,'tank');box.append(el);}el.setAttribute('aria-label','Inspect '+name(state.beetles[id]));el.title=name(state.beetles[id]);const v=ensureView(id);v.el=el;syncNameTag(box,id,'tank');paint(v,box,'tank');}
  $('tank-count').textContent=state.tank.length+' / 48 in tank';$('nursery-count').textContent=state.nursery.length;$('collection-count').textContent=state.collection.length;
@@ -118,30 +118,29 @@ function showHistory(){
  $('history-list').innerHTML=state.history.slice().reverse().slice(0,100).map(h=>`<article class="history-item"><strong>Round ${h.broodId.split('-')[1]} · ${h.total} babies</strong><p>${h.allocations.map(a=>a.jarId.replace('-',' ')+': '+a.count+' babies from '+a.parents.map(id=>esc(shortName(G.record(state,id)))).join(', ')).join('<br>')}</p>${h.offspring.map(id=>`<button class="family-link" data-family="${id}" ${state.beetles[id]?'':'disabled'}>${esc(shortName(G.record(state,id)))}${state.beetles[id]?'':' · left tank'}</button>`).join('')}</article>`).join('')||'<p>No broods yet. Choose two parents to begin.</p>';
  $('history').showModal();
 }
-// All wandering randomness is isolated from the genetics stream and saved appearance.
+// Behavior uses temporary view memory and its own RNG, never the inheritance stream.
+let behaviorClock=0;
 function frame(now){
  if(now-last<1000/30){requestAnimationFrame(frame);return;}
- const dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;
- for(const kind of ['tank','keep']){if(kind==='keep'&&!$('keep').open)continue;const ids=kind==='keep'?state.collection:state.tank,cache=kind==='keep'?keepViews:views,layout=kind==='keep'?state.keepLayout:state.tankLayout,box=$(kind==='keep'?'keep-bugs':'tank-bugs'),width=box.clientWidth,height=box.clientHeight;
- if(width&&height)fitTank(box,ids,kind);
- if(width&&height)for(const id of ids){const v=ensureView(id,kind);if(!v.el)continue;
-  if(running&&!document.hidden&&held?.id!==id){
-   v.turn+=(motionRandom()-.5)*dt*(.7+3*v.traits.wander+v.traits.curiosity);v.turn*=.98;v.angle+=v.turn*dt;
-   let repelX=0,repelY=0,closest=null,closestDistance=Infinity;
-   for(const otherId of ids){if(otherId===id)continue;const other=cache.get(otherId);if(!other)continue;const dx=(v.x-other.x)*width,dy=(v.y-other.y)*height,d=Math.hypot(dx,dy);if(d<closestDistance){closestDistance=d;closest=other;}if(d>0&&d<35){repelX+=dx/d*(35-d)*.3;repelY+=dy/d*(35-d)*.3;}}
-   v.x+=repelX*dt/width;v.y+=repelY*dt/height;
-   if(v.traits.sociality>.6){if(closest&&closestDistance>45){const target=Math.atan2(closest.x-v.x,-(closest.y-v.y));v.angle+=Math.atan2(Math.sin(target-v.angle),Math.cos(target-v.angle))*dt*v.traits.sociality*.45;}}
-   const speed=v.speed*29*animationSpeed;
-   v.x+=Math.sin(v.angle)*speed*dt/width;v.y-=Math.cos(v.angle)*speed*dt/height;
-   const mx=Math.min(.48,(v.radius||24)/width),my=Math.min(.48,(v.radius||28)/height);
-   if(v.x<mx){v.x=mx;v.angle=Math.abs(v.angle% (Math.PI*2));if(Math.sin(v.angle)<0)v.angle=-v.angle;}
-   if(v.x>1-mx){v.x=1-mx;if(Math.sin(v.angle)>0)v.angle=-v.angle;}
-   if(v.y<my){v.y=my;if(Math.cos(v.angle)>0)v.angle=Math.PI-v.angle;}
-   if(v.y>1-my){v.y=1-my;if(Math.cos(v.angle)<0)v.angle=Math.PI-v.angle;}
+ const dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;behaviorClock+=dt;
+ for(const kind of ['tank','keep']){
+  if(kind==='keep'&&!$('keep').open)continue;
+  const ids=kind==='keep'?state.collection:state.tank,layout=kind==='keep'?state.keepLayout:state.tankLayout,box=$(kind==='keep'?'keep-bugs':'tank-bugs'),width=box.clientWidth,height=box.clientHeight;
+  if(!width||!height)continue;
+  fitTank(box,ids,kind);
+  const agents=ids.map(id=>ensureView(id,kind));
+  for(const v of agents){v.held=held?.id===v.id;}
+  if(running&&!document.hidden){let time=dt*animationSpeed;while(time>0){const slice=Math.min(time,1/30);PatternTankBehavior.step(agents,{width,height,dt:slice,rng:motionRandom});time-=slice;}}
+  for(const v of agents){layout[v.id]={x:v.x,y:v.y,angle:v.angle};paint(v,box,kind);
+   const activity=PatternTankBehavior.activity(v),shown=running?activity:'Cooled & paused';
+   if(v.el){v.el.dataset.activity=activity;v.el.classList.toggle('tank-resting',running&&activity==='Resting');v.el.title=name(state.beetles[v.id])+' · '+shown;v.el.setAttribute('aria-label','Inspect '+name(state.beetles[v.id])+' · '+shown);}
+   if(!v.activityTag){v.activityTag=document.createElement('span');v.activityTag.className='tank-activity-tag';v.activityTag.dataset.activityFor=v.id;v.activityTag.setAttribute('aria-hidden','true');box.append(v.activityTag);}
+   if(!v.activityTag.isConnected)box.append(v.activityTag);
+   v.activityTag.textContent=activity;v.activityTag.hidden=!running||!((v.behavior?.bubble>0&&['greet','shove','yield','eat','drink','bask'].includes(v.behavior?.mode))||v.behavior?.mode==='rest');v.activityTag.style.left=v.x*width+'px';v.activityTag.style.top=Math.max(12,v.y*height-(v.radius||28)*.65-14)+'px';
   }
-  layout[id]={x:v.x,y:v.y,angle:v.angle};paint(v,box,kind);
+  if(kind==='tank'&&behaviorClock>=.5){const counts={};for(const v of agents){const label=PatternTankBehavior.activity(v);counts[label]=(counts[label]||0)+1;}$('tank-behavior-summary').textContent=running?Object.entries(counts).map(([label,n])=>n+' '+label.toLowerCase()).join(' · '):'Cooled & paused. Resume to watch their personalities.';}
  }
- }
+ if(behaviorClock>=.5)behaviorClock=0;
  requestAnimationFrame(frame);
 }
 document.querySelector('a.skip').onclick=e=>{e.preventDefault();$('tank').scrollIntoView({block:'start'});$('motion').focus({preventScroll:true});};

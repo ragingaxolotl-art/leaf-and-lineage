@@ -3,6 +3,10 @@
 Complete SUMO9 trait audit: all 110 inherited records show an effect under their expression conditions (67 appearance, 55 movement or battle, with overlap). Recovery, grip, stamina, balance, behavior and anatomy have distinct measured roles. Full-stat comparison marks inactive anatomy-dependent factors and ring captions show energy and applied push. [Read the complete audit](https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/stat-audit.html). All 237 checks pass, including old replays and current brood saving. Refresh both screens and create a new friend room.
 
 
+## Tank personalities
+
+Both the breeder and Keep tanks express existing inherited behavior traits: social beetles approach, follow and greet, cautious beetles make space, curious beetles investigate, and push-driven beetles sometimes give a gentle shove. Attention, persistence and wandering influence paths; strength and mass affect contact, and endurance and recovery affect rest. Encounters are brief with cooldowns. Food and water dishes and a warm light spot appear in both tanks. Temporary appetite, thirst and warmth preferences send beetles to eat, drink or bask; supplies are unlimited, with no survival requirements or extra genetic records. Temporary activity labels and hover descriptions show actions without revealing numeric statistics. Cooling pauses all behavior; holding stops just that beetle. These interactions cannot injure, breed, delete or alter any beetle. Motion uses an independent random stream and temporary view memory, leaving breeding and sumo unchanged.
+
 ## Pattern Lab: creative breeding
 
 [Open Pattern Lab](https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/) · [Pattern Lab teacher setup](https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/?teacher=1)
