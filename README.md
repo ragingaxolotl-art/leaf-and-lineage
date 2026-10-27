@@ -3,6 +3,10 @@
 Complete SUMO9 trait audit: the original 110 inherited records show an effect under their expression conditions (67 appearance, 55 movement or battle, with overlap). Recovery, grip, stamina, balance, behavior and anatomy have distinct measured roles. Full-stat comparison marks inactive anatomy-dependent factors and ring captions show energy and applied push. [Read the complete audit](https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/stat-audit.html). All 251 checks pass, including inherited habitat drives, task focus, old replays and current brood saving. Refresh both screens and create a new friend room.
 
 
+## Compact breeding action row — 20261027-cleanup1
+
+**Automatic tank cleanup** now sits immediately beside **Breed selected jars** in the same action row. Static explanatory paragraphs below the controls are hidden or removed; the last-brood confirmation remains. The existing guidance stays available to assistive technology through control descriptions. Cleanup behavior and saved settings are unchanged. Both parent jars continue across the full panel width. Controls wrap only when the screen is too narrow.
+
 ## Battle behavior tallies and paused optional life — 20261027-tally1
 
 Completed battles now reveal a collapsed **Battle behavior tally** dropdown directly below the result. It shows the 17 current corner readouts, separately for red and blue, with the number of times each behavior started, tally marks, and total battle seconds. Starting a local match, replay or friend rematch hides, closes and clears the previous dropdown. The next completed battle supplies a fresh summary. **Copy tally to share** produces plain text; **Download tally CSV** produces one row per beetle and behavior, including exact tick counts. Totals use fixed 1/60-second simulation ticks, independently of playback speed, browser frame rate or shared catch-up. Pausing adds no time. Tallies observe the displayed modes without changing physics, random decisions, seeds or outcomes. They are retained with new saved match records; legacy records still load and their replays can generate tallies.
