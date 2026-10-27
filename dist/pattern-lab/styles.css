@@ -101,3 +101,5 @@
 
 /* Jars and breeding actions belong to the same panel as the breeder tank. */
 .tank-panel>.breeding-workspace{padding:0;margin-top:18px;border:0;border-radius:0;background:none;box-shadow:none}.tank-panel>.breeding-workspace .breeding>#jars{margin-top:0}
+
+.online-room>h3{font:700 14px/1.5 system-ui;margin:0 0 16px;color:#254b3e}

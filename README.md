@@ -3,6 +3,10 @@
 Complete SUMO9 trait audit: the original 110 inherited records show an effect under their expression conditions (67 appearance, 55 movement or battle, with overlap). Recovery, grip, stamina, balance, behavior and anatomy have distinct measured roles. Full-stat comparison marks inactive anatomy-dependent factors and ring captions show energy and applied push. [Read the complete audit](https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/stat-audit.html). All 251 checks pass, including inherited habitat drives, task focus, old replays and current brood saving. Refresh both screens and create a new friend room.
 
 
+## Always-visible friend battle setup — 20261027-openfriend1
+
+**Battle together on two computers** is a permanently visible section with a heading, not a collapsible dropdown. The friend beetle picker, speed, room code and send controls are immediately available. The completed battle behavior summary remains a dropdown.
+
 ## Attached parent jars — 20261027-attached1
 
 Parent jar cards and the breeding/cleanup action row now sit inside the **Small lives. Big possibilities.** panel, directly below the trait magnifier. The separate parent-jar panel, eyebrow, title and introductory paragraph are removed. Jar names, controls, accessibility labels and breeding behavior remain.
