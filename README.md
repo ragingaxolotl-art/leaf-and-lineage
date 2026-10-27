@@ -3,6 +3,10 @@
 Complete SUMO9 trait audit: the original 110 inherited records show an effect under their expression conditions (67 appearance, 55 movement or battle, with overlap). Recovery, grip, stamina, balance, behavior and anatomy have distinct measured roles. Full-stat comparison marks inactive anatomy-dependent factors and ring captions show energy and applied push. [Read the complete audit](https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/stat-audit.html). All 251 checks pass, including inherited habitat drives, task focus, old replays and current brood saving. Refresh both screens and create a new friend room.
 
 
+## Attached parent jars — 20261027-attached1
+
+Parent jar cards and the breeding/cleanup action row now sit inside the **Small lives. Big possibilities.** panel, directly below the trait magnifier. The separate parent-jar panel, eyebrow, title and introductory paragraph are removed. Jar names, controls, accessibility labels and breeding behavior remain.
+
 ## FAQ, compact header and explicit friend-table choices — 20261027-faq1
 
 Long battle explanations, friend-table instructions, cleanup guidance and sharing notes now live on a separate **FAQ** page. Context links open its relevant answer in a new tab while keeping the lab open. The field guide and full battle-trait explanations remain available there. The self-contained offline edition embeds the FAQ in an in-page reading window without a network request.

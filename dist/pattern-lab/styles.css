@@ -98,3 +98,6 @@
 .online-room>.room-beetle-field,.online-room>label{display:flex;flex-direction:column;align-items:stretch;gap:7px}.online-room .room-send,.online-room #room-beetle,.online-room #room-speed{box-sizing:border-box;max-width:100%}.online-room #room-speed{width:100%}
 
 #offline-faq{width:min(1000px,calc(100% - 24px));max-height:88vh;padding:24px}#offline-faq-close{position:sticky;top:0;float:right;z-index:2}.offline-faq-body{clear:both}.offline-faq-body>details{border:1px solid #d7dfcd;border-radius:10px;padding:16px;margin:12px 0}.offline-faq-body .answer{padding-top:12px;font-size:14px}.offline-faq-body nav{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px}.offline-faq-body .trait-reference dt{font-weight:700;margin-top:16px}.offline-faq-body .trait-reference dd{margin:5px 0 14px}
+
+/* Jars and breeding actions belong to the same panel as the breeder tank. */
+.tank-panel>.breeding-workspace{padding:0;margin-top:18px;border:0;border-radius:0;background:none;box-shadow:none}.tank-panel>.breeding-workspace .breeding>#jars{margin-top:0}
