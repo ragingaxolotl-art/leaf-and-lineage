@@ -3,6 +3,16 @@
 Complete SUMO9 trait audit: the original 110 inherited records show an effect under their expression conditions (67 appearance, 55 movement or battle, with overlap). Recovery, grip, stamina, balance, behavior and anatomy have distinct measured roles. Full-stat comparison marks inactive anatomy-dependent factors and ring captions show energy and applied push. [Read the complete audit](https://ragingaxolotl-art.github.io/leaf-and-lineage/pattern-lab/stat-audit.html). All 251 checks pass, including inherited habitat drives, task focus, old replays and current brood saving. Refresh both screens and create a new friend room.
 
 
+## FAQ, compact header and explicit friend-table choices — 20261027-faq1
+
+Long battle explanations, friend-table instructions, cleanup guidance and sharing notes now live on a separate **FAQ** page. Context links open its relevant answer in a new tab while keeping the lab open. The field guide and full battle-trait explanations remain available there. The self-contained offline edition embeds the FAQ in an in-page reading window without a network request.
+
+The friend-battle setup has its own **Your beetle for this table** dropdown. Create and join send that selected beetle, independently of the local red corner. A complete eight-character friend code unlocks and emphasizes the full-width, bold **Send beetle to table** button. Empty/invalid codes, missing beetles, an existing connection and pending requests prevent duplicate or incomplete sends. Failures unlock the form without changing the tank. Existing shared speed, room capabilities and battle physics are unchanged.
+
+Tank actions and generation counts occupy the header space above the tank. Sharing is directly below sumo. Battle summaries and exports show numeric counts and seconds, with the physical tally-mark symbols removed. The post-battle dropdown and next-match reset remain.
+
+All **317 automated tests pass**, including six new friend-form tests verifying input state and the exact selected anonymous packet for create/join, plus failure recovery. Browser checks verify the picker, send-button emphasis, FAQ anchors, the header layout, section order, counts-only summaries and the embedded offline FAQ.
+
 ## Compact breeding action row — 20261027-cleanup1
 
 **Automatic tank cleanup** now sits immediately beside **Breed selected jars** in the same action row. Static explanatory paragraphs below the controls are hidden or removed; the last-brood confirmation remains. The existing guidance stays available to assistive technology through control descriptions. Cleanup behavior and saved settings are unchanged. Both parent jars continue across the full panel width. Controls wrap only when the screen is too narrow.
