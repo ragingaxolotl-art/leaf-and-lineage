@@ -38,17 +38,17 @@ function relate(l,a,b,kind,objectId=null){
 }
 function drama(l,kind,actors,o,rng){
  const duration=kind==='bridge'?1.8:kind==='leaf'?2.6:3.2;
- for(const a of actors){a.behavior.drama={kind,objectId:o?.id||null,remaining:duration,role:actors.indexOf(a),load:kind==='leaf'?clamp(.3+.35*value(a.traits||{},'mass')+.2*(a.traits?.bodyFactor||1)):0};a.behavior.dramaWait=35;}
+ for(const a of actors){a.behavior.drama={kind,objectId:o?.id||null,remaining:duration,role:actors.indexOf(a),resumeCrossing:kind==='bridge'&&a.behavior.mode==='crossing',resumeRemaining:a.behavior.remaining,load:kind==='leaf'?clamp(.3+.35*value(a.traits||{},'mass')+.2*(a.traits?.bodyFactor||1)):0};a.behavior.dramaWait=35;}
  note(l,kind,actors,o?.id||null,actors[0].behavior.drama.load);l.nextDrama=l.clock+14+rng()*20;
 }
 function tickLife(agents,{life:l,objects,width,height,dt,rng:random=Math.random}){
  if(!l)return;l.clock=Math.min(1e9,l.clock+dt);
- for(const a of agents){const m=a.behavior;if(a.held)continue;m.dramaWait=Math.max(0,(m.dramaWait||0)-dt);if(m.drama){m.drama.remaining-=dt;if(m.drama.remaining<=0){const d=m.drama;m.drama=null;m.mode='explore';m.decision=0;m.remaining=0;if(d.kind==='bridge')m.heading=a.angle+(d.role?-.7:.7);}}}
+ for(const a of agents){const m=a.behavior;if(a.held)continue;m.dramaWait=Math.max(0,(m.dramaWait||0)-dt);if(m.drama){m.drama.remaining-=dt;if(m.drama.remaining<=0){const d=m.drama;m.drama=null;m.mode='explore';m.decision=0;m.remaining=0;if(d.kind==='bridge'){if(d.resumeCrossing){m.mode='crossing';m.remaining=m.decision=Math.max(6,d.resumeRemaining||0);m.bridgeYield=d.role?1.2:0;}else m.heading=a.angle+(d.role?-.7:.7);}}}}
  for(let i=0;i<agents.length;i++)for(let j=i+1;j<agents.length;j++){const a=agents[i],b=agents[j];if(a.held||b.held)continue;const r=bond(l,a.id,b.id);if(!r)continue;if(['rest','settle','restmate'].includes(a.behavior.mode)&&['rest','settle','restmate'].includes(b.behavior.mode)&&Math.hypot((a.x-b.x)*width,(a.y-b.y)*height)<90){r.rest+=dt;if(r.rest>=5){r.rest=0;relate(l,a,b,'rest');}}}
  if(l.clock<l.nextDrama||agents.some(a=>a.behavior.drama)||random()>dt*.7)return;
  const ready=agents.filter(a=>!a.held&&!a.behavior.dramaWait&&!a.behavior.intent&&!['rest','settle','restmate'].includes(a.behavior.mode));
  for(const o of objects){const dx=a=>(a.x-o.x)*width,dy=a=>(a.y-o.y)*height,c=Math.cos(o.angle*Math.PI/180),s=Math.sin(o.angle*Math.PI/180),local=a=>({x:c*dx(a)+s*dy(a),y:-s*dx(a)+c*dy(a)}),base=Math.min(width,height);
-  if(o.kind==='bridge'){const close=ready.filter(a=>{const p=local(a);return Math.abs(p.x)<base*.24&&Math.abs(p.y)<base*.08;});for(let i=0;i<close.length;i++)for(let j=i+1;j<close.length;j++)if(local(close[i]).x*local(close[j]).x<0){drama(l,'bridge',[close[i],close[j]],o,random);return;}}
+  if(o.kind==='bridge'){const close=ready.filter(a=>{const p=local(a);const toward=(Math.sin(a.angle)*-dx(a)-Math.cos(a.angle)*-dy(a))/Math.max(1,Math.hypot(dx(a),dy(a)));return Math.abs(p.x)<base*.24&&Math.abs(p.y)<base*.08&&(a.behavior.mode==='crossing'||toward>.1);});for(let i=0;i<close.length;i++)for(let j=i+1;j<close.length;j++)if(local(close[i]).x*local(close[j]).x<0){drama(l,'bridge',[close[i],close[j]],o,random);return;}}
   if(o.kind==='leaf'){const a=ready.find(a=>{const p=local(a),load=value(a.traits||{},'mass')*(a.traits?.bodyFactor||1);return load>.45&&Math.hypot(p.x/(base*.135),p.y/(base*.067))<1;});if(a){drama(l,'leaf',[a],o,random);return;}}
  }
  const a=ready.find(a=>a.behavior.mode==='eat'&&a.traits?.visibleHorns>0&&(a.traits.horn*a.traits.hornFactor)>.06);if(a)drama(l,'crumb',[a],null,random);

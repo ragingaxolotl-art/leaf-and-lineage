@@ -1,0 +1,856 @@
+{
+  "baseline_commit": "135a8134df98df304da801fa0124f945f7d02e70",
+  "release": "20261027-world1",
+  "automated_tests": {
+    "pass": 302,
+    "fail": 0,
+    "focused_new_tests": 19
+  },
+  "cover_and_navigation_before": {
+    "decorations": {
+      "leaf": {
+        "visits": 103,
+        "returns": 234.4666666666667,
+        "investigations": 54.433333333333344,
+        "crossings": 0,
+        "events": 62,
+        "insideSeconds": 1154.6666666666667,
+        "seeds": 24
+      },
+      "bark": {
+        "visits": 120,
+        "returns": 286.76666666666665,
+        "investigations": 54.533333333333346,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 1218.1999999999998,
+        "seeds": 24
+      },
+      "stone": {
+        "visits": 0,
+        "returns": 0,
+        "investigations": 0,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 0,
+        "seeds": 24
+      },
+      "bridge": {
+        "visits": 0,
+        "returns": 0,
+        "investigations": 0,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 410.43333333333334,
+        "seeds": 24
+      },
+      "sprout": {
+        "visits": 120,
+        "returns": 286.76666666666665,
+        "investigations": 54.533333333333346,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 1256.2333333333331,
+        "seeds": 24
+      },
+      "arch": {
+        "visits": 120,
+        "returns": 286.76666666666665,
+        "investigations": 54.533333333333346,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 1218.1999999999998,
+        "seeds": 24
+      }
+    },
+    "navigation": [
+      {
+        "rotation": 0,
+        "speed": 0.5,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.9379624046083309,
+        "finalY": 0.5254527920772202,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 0,
+        "speed": 0.5,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.7056885266878516,
+        "finalY": 0.7900900309544272,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 0,
+        "speed": 1.4,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.12216160596544107,
+        "finalY": 0.14441916330580473,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 0,
+        "speed": 1.4,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.8881106806076906,
+        "finalY": 0.21989709949231703,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 0,
+        "speed": 2,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.0593552461354912,
+        "finalY": 0.5291711110279362,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 0,
+        "speed": 2,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.5772115702838005,
+        "finalY": 0.17042463485628045,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 45,
+        "speed": 0.5,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.9379624046083309,
+        "finalY": 0.5254527920772202,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 45,
+        "speed": 0.5,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.7056885266878516,
+        "finalY": 0.7900900309544272,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 45,
+        "speed": 1.4,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.12216160596544107,
+        "finalY": 0.14441916330580473,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 45,
+        "speed": 1.4,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.8881106806076906,
+        "finalY": 0.21989709949231703,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 45,
+        "speed": 2,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.0593552461354912,
+        "finalY": 0.5291711110279362,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 45,
+        "speed": 2,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.5772115702838005,
+        "finalY": 0.17042463485628045,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 90,
+        "speed": 0.5,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.9379624046083309,
+        "finalY": 0.5254527920772202,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 90,
+        "speed": 0.5,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.7056885266878516,
+        "finalY": 0.7900900309544272,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 90,
+        "speed": 1.4,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.12216160596544107,
+        "finalY": 0.14441916330580473,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 90,
+        "speed": 1.4,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.8881106806076906,
+        "finalY": 0.21989709949231703,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 90,
+        "speed": 2,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.0593552461354912,
+        "finalY": 0.5291711110279362,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 90,
+        "speed": 2,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.5772115702838005,
+        "finalY": 0.17042463485628045,
+        "overlapFrames": 0
+      }
+    ],
+    "shelterGeometry": [
+      {
+        "kind": "leaf",
+        "angle": 0,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "leaf",
+        "angle": 90,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "bark",
+        "angle": 0,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "bark",
+        "angle": 90,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "sprout",
+        "angle": 0,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "sprout",
+        "angle": 90,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "arch",
+        "angle": 0,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "arch",
+        "angle": 90,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      }
+    ],
+    "validation": []
+  },
+  "cover_and_navigation_after": {
+    "decorations": {
+      "leaf": {
+        "visits": 103,
+        "returns": 234.4666666666667,
+        "investigations": 54.433333333333344,
+        "crossings": 0,
+        "events": 62,
+        "insideSeconds": 1154.6666666666667,
+        "seeds": 24
+      },
+      "bark": {
+        "visits": 120,
+        "returns": 286.76666666666665,
+        "investigations": 54.533333333333346,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 1218.1999999999998,
+        "seeds": 24
+      },
+      "stone": {
+        "visits": 0,
+        "returns": 0,
+        "investigations": 0,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 0,
+        "seeds": 24
+      },
+      "bridge": {
+        "visits": 0,
+        "returns": 0,
+        "investigations": 0,
+        "crossings": 786.7,
+        "events": 0,
+        "insideSeconds": 682.7666666666667,
+        "seeds": 24
+      },
+      "sprout": {
+        "visits": 120,
+        "returns": 286.76666666666665,
+        "investigations": 54.533333333333346,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 1256.2333333333331,
+        "seeds": 24
+      },
+      "arch": {
+        "visits": 120,
+        "returns": 286.76666666666665,
+        "investigations": 54.533333333333346,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 1218.1999999999998,
+        "seeds": 24
+      },
+      "droplet": {
+        "visits": 0,
+        "returns": 0,
+        "investigations": 0,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 0,
+        "seeds": 24
+      },
+      "soil": {
+        "visits": 0,
+        "returns": 0,
+        "investigations": 0,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 648.8666666666666,
+        "seeds": 24
+      },
+      "crumb": {
+        "visits": 0,
+        "returns": 0,
+        "investigations": 0,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 19.166666666666668,
+        "seeds": 24
+      },
+      "fungus": {
+        "visits": 0,
+        "returns": 0,
+        "investigations": 0,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 280.1333333333333,
+        "seeds": 24
+      },
+      "litter": {
+        "visits": 0,
+        "returns": 0,
+        "investigations": 0,
+        "crossings": 0,
+        "events": 0,
+        "insideSeconds": 458.9,
+        "seeds": 24
+      }
+    },
+    "navigation": [
+      {
+        "rotation": 0,
+        "speed": 0.5,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.9379624046083309,
+        "finalY": 0.5254527920772202,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 0,
+        "speed": 0.5,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.7056885266878516,
+        "finalY": 0.7900900309544272,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 0,
+        "speed": 1.4,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.12216160596544107,
+        "finalY": 0.14441916330580473,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 0,
+        "speed": 1.4,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.8881106806076906,
+        "finalY": 0.21989709949231703,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 0,
+        "speed": 2,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.0593552461354912,
+        "finalY": 0.5291711110279362,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 0,
+        "speed": 2,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.5772115702838005,
+        "finalY": 0.17042463485628045,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 45,
+        "speed": 0.5,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.9379624046083309,
+        "finalY": 0.5254527920772202,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 45,
+        "speed": 0.5,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.7056885266878516,
+        "finalY": 0.7900900309544272,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 45,
+        "speed": 1.4,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.12216160596544107,
+        "finalY": 0.14441916330580473,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 45,
+        "speed": 1.4,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.8881106806076906,
+        "finalY": 0.21989709949231703,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 45,
+        "speed": 2,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.0593552461354912,
+        "finalY": 0.5291711110279362,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 45,
+        "speed": 2,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.5772115702838005,
+        "finalY": 0.17042463485628045,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 90,
+        "speed": 0.5,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.9379624046083309,
+        "finalY": 0.5254527920772202,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 90,
+        "speed": 0.5,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.7056885266878516,
+        "finalY": 0.7900900309544272,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 90,
+        "speed": 1.4,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.12216160596544107,
+        "finalY": 0.14441916330580473,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 90,
+        "speed": 1.4,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.8881106806076906,
+        "finalY": 0.21989709949231703,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 90,
+        "speed": 2,
+        "withStone": false,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.0593552461354912,
+        "finalY": 0.5291711110279362,
+        "overlapFrames": 0
+      },
+      {
+        "rotation": 90,
+        "speed": 2,
+        "withStone": true,
+        "ate": true,
+        "eatingSeconds": 6.066666666666666,
+        "finalX": 0.5772115702838005,
+        "finalY": 0.17042463485628045,
+        "overlapFrames": 0
+      }
+    ],
+    "shelterGeometry": [
+      {
+        "kind": "leaf",
+        "angle": 0,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "leaf",
+        "angle": 90,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "bark",
+        "angle": 0,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "bark",
+        "angle": 90,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "sprout",
+        "angle": 0,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "sprout",
+        "angle": 90,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "arch",
+        "angle": 0,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      },
+      {
+        "kind": "arch",
+        "angle": 90,
+        "visits": 1,
+        "restSeconds": 6.633333333333334
+      }
+    ],
+    "validation": []
+  },
+  "dish_obstruction_before": [
+    {
+      "position": "middle of route",
+      "seed": 1,
+      "firstEat": 17.333333333333332,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.9267552892299907,
+      "y": 0.25095763992023334
+    },
+    {
+      "position": "middle of route",
+      "seed": 2,
+      "firstEat": 17.333333333333332,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.9372842992155211,
+      "y": 0.29234049505234033
+    },
+    {
+      "position": "middle of route",
+      "seed": 3,
+      "firstEat": 17.333333333333332,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.8392935617436991,
+      "y": 0.41839518275518145
+    },
+    {
+      "position": "middle of route",
+      "seed": 4,
+      "firstEat": 17.333333333333332,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.33822708848397504,
+      "y": 0.1327016530164207
+    },
+    {
+      "position": "middle of route",
+      "seed": 5,
+      "firstEat": 17.333333333333332,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.7725462466730224,
+      "y": 0.9435324814643109
+    },
+    {
+      "position": "middle of route",
+      "seed": 6,
+      "firstEat": 17.333333333333332,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.5724640426461105,
+      "y": 0.90663648970598
+    },
+    {
+      "position": "over the food dish",
+      "seed": 1,
+      "firstEat": null,
+      "eatingSeconds": 0,
+      "finalMode": "Finding food",
+      "x": 0.8333054094236205,
+      "y": 0.33463909850598633
+    },
+    {
+      "position": "over the food dish",
+      "seed": 2,
+      "firstEat": null,
+      "eatingSeconds": 0,
+      "finalMode": "Finding food",
+      "x": 0.8333054094236205,
+      "y": 0.33463909850598633
+    },
+    {
+      "position": "over the food dish",
+      "seed": 3,
+      "firstEat": null,
+      "eatingSeconds": 0,
+      "finalMode": "Finding food",
+      "x": 0.8333054094236205,
+      "y": 0.33463909850598633
+    },
+    {
+      "position": "over the food dish",
+      "seed": 4,
+      "firstEat": null,
+      "eatingSeconds": 0,
+      "finalMode": "Finding food",
+      "x": 0.8333054094236205,
+      "y": 0.33463909850598633
+    },
+    {
+      "position": "over the food dish",
+      "seed": 5,
+      "firstEat": null,
+      "eatingSeconds": 0,
+      "finalMode": "Finding food",
+      "x": 0.8333054094236205,
+      "y": 0.33463909850598633
+    },
+    {
+      "position": "over the food dish",
+      "seed": 6,
+      "firstEat": null,
+      "eatingSeconds": 0,
+      "finalMode": "Finding food",
+      "x": 0.8333054094236205,
+      "y": 0.33463909850598633
+    }
+  ],
+  "dish_obstruction_after": [
+    {
+      "position": "middle of route",
+      "seed": 1,
+      "firstEat": 17.333333333333332,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.9267552892299907,
+      "y": 0.25095763992023334
+    },
+    {
+      "position": "middle of route",
+      "seed": 2,
+      "firstEat": 17.333333333333332,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.9372842992155211,
+      "y": 0.29234049505234033
+    },
+    {
+      "position": "middle of route",
+      "seed": 3,
+      "firstEat": 17.333333333333332,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.8392935617436991,
+      "y": 0.41839518275518145
+    },
+    {
+      "position": "middle of route",
+      "seed": 4,
+      "firstEat": 17.333333333333332,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.33822708848397504,
+      "y": 0.1327016530164207
+    },
+    {
+      "position": "middle of route",
+      "seed": 5,
+      "firstEat": 17.333333333333332,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.7725462466730224,
+      "y": 0.9435324814643109
+    },
+    {
+      "position": "middle of route",
+      "seed": 6,
+      "firstEat": 17.333333333333332,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.5724640426461105,
+      "y": 0.90663648970598
+    },
+    {
+      "position": "over the food dish",
+      "seed": 1,
+      "firstEat": 13.966666666666667,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.9295890280246558,
+      "y": 0.7907933301115032
+    },
+    {
+      "position": "over the food dish",
+      "seed": 2,
+      "firstEat": 13.966666666666667,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.9222777419452303,
+      "y": 0.5420667564822691
+    },
+    {
+      "position": "over the food dish",
+      "seed": 3,
+      "firstEat": 13.966666666666667,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.62043891180516,
+      "y": 0.13022842552614847
+    },
+    {
+      "position": "over the food dish",
+      "seed": 4,
+      "firstEat": 13.966666666666667,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.040059382090795174,
+      "y": 0.9247853266842034
+    },
+    {
+      "position": "over the food dish",
+      "seed": 5,
+      "firstEat": 13.966666666666667,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.8274751040467585,
+      "y": 0.7704327122269995
+    },
+    {
+      "position": "over the food dish",
+      "seed": 6,
+      "firstEat": 13.966666666666667,
+      "eatingSeconds": 6.066666666666666,
+      "finalMode": "Exploring",
+      "x": 0.385980140574865,
+      "y": 0.14464385805008895
+    }
+  ]
+}

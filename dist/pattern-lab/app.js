@@ -21,7 +21,7 @@ function cool(mist=true){running=false;$('tank').classList.add('cooled');$('keep
 function run(){if(blocked)return;running=true;$('tank').classList.remove('cooled');$('keep-tank').classList.remove('cooled');$('keep-motion').textContent='❄ Cool & pause';$('motion').textContent='❄ Cool & pause';$('motion-state').textContent='Exploring & interacting';$('motion-state').classList.remove('cold');}
 function ensureView(id,kind='tank'){
  const cache=kind==='keep'?keepViews:views,layout=kind==='keep'?state.keepLayout:state.tankLayout;
- if(!cache.has(id)){const p=G.phenotype(state.beetles[id]),saved=layout[id];cache.set(id,{id,x:saved?.x??(.08+motionRandom()*.84),y:saved?.y??(.1+motionRandom()*.8),angle:saved?.angle??(motionRandom()*Math.PI*2),turn:0,speed:p.speed,traits:p,el:null});}return cache.get(id);
+ if(!cache.has(id)){const p=G.phenotype(state.beetles[id]),saved=layout[id];cache.set(id,{id,x:saved?.x??(.08+motionRandom()*.84),y:saved?.y??(.1+motionRandom()*.8),angle:saved?.angle??(motionRandom()*Math.PI*2),turn:0,speed:p.speed,traits:p,portrait:G.appearance(state.beetles[id]),el:null});}return cache.get(id);
 }
 function syncNameTag(box,id,kind){
  const v=ensureView(id,kind),text=state.beetles[id].name.trim();
@@ -128,22 +128,22 @@ function frame(now){
   const ids=kind==='keep'?state.collection:state.tank,layout=kind==='keep'?state.keepLayout:state.tankLayout,box=$(kind==='keep'?'keep-bugs':'tank-bugs'),width=box.clientWidth,height=box.clientHeight;
   if(!width||!height)continue;
   fitTank(box,ids,kind);
-  const habitat=PatternHabitat.ensure(state)[kind],agents=ids.map(id=>ensureView(id,kind));
-  for(const v of agents){v.held=held?.id===v.id;v.name=state.beetles[v.id].name;v.away=PatternFieldLife.away(state,v.id);}
-  if(running&&!document.hidden){let time=dt*animationSpeed;while(time>0){const slice=Math.min(time,1/30);PatternTankBehavior.step(agents.filter(v=>!v.away),{width,height,dt:slice,rng:motionRandom,objects:habitat.objects,memories:habitat.memories,life:habitat.life});time-=slice;}}
+  const habitat=PatternHabitat.ensure(state)[kind];habitat.world.backdrop=state.settings.backdrop;const agents=ids.map(id=>ensureView(id,kind));
+  for(const v of agents){v.held=held?.id===v.id;v.name=state.beetles[v.id].name;v.away=PatternFieldLife.away(state,v.id);v.clipWidth=(Number(box.dataset.art)||95)*(Number(box.dataset.zoom)||1)/width;}
+  if(running&&!document.hidden){let time=dt*animationSpeed;while(time>0){const slice=Math.min(time,1/30);PatternTankBehavior.step(agents.filter(v=>!v.away),{width,height,dt:slice,rng:motionRandom,objects:habitat.objects,memories:habitat.memories,life:habitat.life,world:habitat.world});time-=slice;}}
   for(const v of agents){layout[v.id]={x:v.x,y:v.y,angle:v.angle};paint(v,box,kind);
    const activity=v.away?'On field expedition':PatternTankBehavior.activity(v),shown=v.away?activity:running?activity:'Cooled & paused';
-   if(v.el){v.el.hidden=v.away;v.el.dataset.drama=v.behavior?.drama?.kind||'';v.el.dataset.pose=PatternTankBehavior.pose(v);v.el.style.setProperty('--feel-angle',(7+15*G.clamp(v.traits.antennaLength*v.traits.antennaFactor/3,0,1))+'deg');v.el.style.setProperty('--feel-duration',(3.2-1.8*v.traits.curiosity)+'s');v.el.style.setProperty('--step-duration',((.25+.65*(1-v.traits.gait))/Math.sqrt(Math.max(.2,v.speed)))+'s');v.el.dataset.activity=activity;v.el.classList.toggle('tank-resting',running&&activity==='Resting');v.el.title=name(state.beetles[v.id])+' · '+shown;v.el.setAttribute('aria-label','Inspect '+name(state.beetles[v.id])+' · '+shown);}
+   if(v.el){v.el.hidden=v.away;v.el.dataset.tableau=v.behavior?.tableau?(v.behavior.tableau.kind==='lift'&&v.behavior.tableau.role===1&&v.behavior.tableau.success?'lifted':v.behavior.tableau.kind):'';v.el.dataset.drama=v.behavior?.drama?.kind||'';v.el.dataset.pose=PatternTankBehavior.pose(v);v.el.style.setProperty('--feel-angle',(7+15*G.clamp(v.traits.antennaLength*v.traits.antennaFactor/3,0,1))+'deg');v.el.style.setProperty('--feel-duration',(3.2-1.8*v.traits.curiosity)+'s');v.el.style.setProperty('--step-duration',((.25+.65*(1-v.traits.gait))/Math.sqrt(Math.max(.2,v.speed)))+'s');v.el.dataset.activity=activity;v.el.classList.toggle('tank-resting',running&&activity==='Resting');v.el.title=name(state.beetles[v.id])+' · '+shown;v.el.setAttribute('aria-label','Inspect '+name(state.beetles[v.id])+' · '+shown);}
    if(!v.activityTag){v.activityTag=document.createElement('span');v.activityTag.className='tank-activity-tag';v.activityTag.dataset.activityFor=v.id;v.activityTag.setAttribute('aria-hidden','true');box.append(v.activityTag);}
    if(!v.activityTag.isConnected)box.append(v.activityTag);
    v.activityTag.textContent=activity;v.activityTag.hidden=true;v.activityTag.style.left=v.x*width+'px';v.activityTag.style.top=Math.max(12,v.y*height-(v.radius||28)*.65-14)+'px';
   }
-  globalThis.PatternFieldUI?.paint(kind,agents);
+  globalThis.PatternFieldUI?.paint(kind,agents);globalThis.PatternWorldUI?.paint(kind);
   if(kind==='tank'&&behaviorClock>=.5){const counts={};for(const v of agents){const label=PatternTankBehavior.activity(v);counts[label]=(counts[label]||0)+1;}$('tank-behavior-summary').textContent=running?Object.entries(counts).map(([label,n])=>n+' '+label.toLowerCase()).join(' · '):'Cooled & paused. Resume to watch their personalities.';}
  }
- if(behaviorClock>=.5){globalThis.PatternHabitatUI?.update();globalThis.PatternFieldUI?.update();behaviorClock=0;}
+ if(behaviorClock>=.5){globalThis.PatternHabitatUI?.update();globalThis.PatternFieldUI?.update();globalThis.PatternWorldUI?.update();behaviorClock=0;}
  if(!document.hidden&&PatternFieldLife.advance(state,dt,G)){render();saveSoon();globalThis.PatternFieldUI?.update();}
- if(habitatClock>=2){habitatClock=0;const signature=JSON.stringify(['tank','keep'].map(k=>{const t=state.habitat[k];return [t.memories,t.life.relationships,t.life.events];}))+JSON.stringify(state.fieldwork);if(signature!==habitatSignature){habitatSignature=signature;saveSoon();}}
+ if(habitatClock>=2){habitatClock=0;const signature=JSON.stringify(['tank','keep'].map(k=>{const t=state.habitat[k];return [t.memories,t.life.relationships,t.life.events,t.objects,t.world];}))+JSON.stringify(state.fieldwork);if(signature!==habitatSignature){habitatSignature=signature;saveSoon();}}
  requestAnimationFrame(frame);
 }
 document.querySelector('a.skip').onclick=e=>{e.preventDefault();$('tank').scrollIntoView({block:'start'});$('motion').focus({preventScroll:true});};

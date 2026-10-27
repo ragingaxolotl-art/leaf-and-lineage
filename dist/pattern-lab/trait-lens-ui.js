@@ -7,7 +7,7 @@ let choices=[],keys=['size','antennaLength','horn'],selected=null,anchor={x:0,y:
 const full=()=>A.canViewGenetics();
 function hide(){popup.hidden=true;selected=null;}
 function position(){const w=popup.offsetWidth,h=popup.offsetHeight;popup.style.left=Math.max(8,Math.min(innerWidth-w-8,anchor.x+18))+'px';popup.style.top=Math.max(8,Math.min(innerHeight-h-8,anchor.y+14))+'px';}
-function show(id,box){if(!enabled.checked||A.isBlocked())return;const modal=document.querySelector('dialog[open]');if(modal&&modal.id!=='keep')return hide();const b=A.getState().beetles[id];if(!b)return hide();const parent=box.id==='keep-bugs'?$('keep'):document.body;if(popup.parentElement!==parent)parent.append(popup);selected=id;lastBox=box;const values=L.rows(b,keys.filter(Boolean),{full:full()});popup.innerHTML='<div class="lens-portrait">'+B.draw(b,'lens')+'</div><div class="lens-readings"><strong>'+esc(b.name?b.name+' · '+b.id:b.id)+'</strong><dl>'+values.map(t=>'<div><dt>'+esc(t.label)+'</dt><dd><b>'+esc(t.display)+'</b>'+(t.unit?'<small>'+esc(t.unit)+'</small>':'')+'</dd></div>').join('')+'</dl></div>';popup.hidden=false;position();}
+function show(id,box){if(!enabled.checked||A.isBlocked())return hide();const modal=document.querySelector('dialog[open]');if(modal&&modal.id!=='keep')return hide();const b=A.getState().beetles[id];if(!b)return hide();const parent=box.id==='keep-bugs'?$('keep'):document.body;if(popup.parentElement!==parent)parent.append(popup);selected=id;lastBox=box;const values=L.rows(b,keys.filter(Boolean),{full:full()});popup.innerHTML='<div class="lens-portrait">'+B.draw(b,'lens')+'</div><div class="lens-readings"><strong>'+esc(b.name?b.name+' · '+b.id:b.id)+'</strong><dl>'+values.map(t=>'<div><dt>'+esc(t.label)+'</dt><dd><b>'+esc(t.display)+'</b>'+(t.unit?'<small>'+esc(t.unit)+'</small>':'')+'</dd></div>').join('')+'</dl></div>';popup.hidden=false;position();}
 const inputs=[1,2,3].map(i=>$('lens-trait-'+i));
 let openSlot=-1,active=-1,filtered=[];
 function closeMenus(){for(let i=0;i<3;i++){inputs[i].setAttribute('aria-expanded','false');inputs[i].removeAttribute('aria-activedescendant');$('lens-options-'+(i+1)).hidden=true;}openSlot=-1;active=-1;}
@@ -20,7 +20,7 @@ function menu(i,query=''){
  list.hidden=false;inputs[i].setAttribute('aria-expanded','true');
 }
 function choose(i,n){const t=filtered[n];if(!t)return;keys[i]=t.key;inputs[i].value=t.label==='No trait'?'':t.label;closeMenus();inputs[i].removeAttribute('aria-invalid');if(selected&&lastBox)show(selected,lastBox);}
-function populate(){choices=L.options(full()).sort((a,b)=>a.label.localeCompare(b.label));keys=Array.from({length:3},(_,i)=>choices.some(t=>t.key===keys[i])?keys[i]:'');for(let i=0;i<3;i++){if(document.activeElement!==inputs[i])inputs[i].value=labelFor(keys[i]);inputs[i].disabled=A.isBlocked();}enabled.disabled=A.isBlocked();if(selected&&lastBox)show(selected,lastBox);}
+function populate(){choices=L.options(full()).sort((a,b)=>a.label.localeCompare(b.label));keys=Array.from({length:3},(_,i)=>choices.some(t=>t.key===keys[i])?keys[i]:'');for(let i=0;i<3;i++){if(document.activeElement!==inputs[i])inputs[i].value=labelFor(keys[i]);inputs[i].disabled=A.isBlocked();}enabled.disabled=A.isBlocked();if(selected&&lastBox){const live=lastBox.querySelector(lastBox.id==='jars'?'.parent-bug[data-inspect="'+selected+'"]':'[data-id="'+selected+'"],[data-keep="'+selected+'"]');if(live)show(selected,lastBox);else hide();}}
 for(let i=0;i<3;i++){
  const input=inputs[i],list=$('lens-options-'+(i+1));
  input.addEventListener('click',()=>menu(i));
@@ -36,7 +36,16 @@ for(let i=0;i<3;i++){
   if(e.key==='Enter'&&openSlot===i){e.preventDefault();const n=active>=0?active:filtered.findIndex(t=>t.label.toLowerCase()===input.value.toLowerCase());if(n>=0)choose(i,n);}
  });
 }
-enabled.onchange=()=>{for(const id of ['tank-bugs','keep-bugs'])$(id).classList.toggle('lens-active',enabled.checked);if(!enabled.checked)hide();};
-for(const id of ['tank-bugs','keep-bugs']){const box=$(id);box.addEventListener('pointermove',e=>{if(!enabled.checked||e.buttons)return;anchor={x:e.clientX,y:e.clientY};const bug=e.target.closest('button[data-id],button[data-keep]');if(bug&&(bug.dataset.id||bug.dataset.keep)!==selected)show(bug.dataset.id||bug.dataset.keep,box);else if(selected&&!popup.hidden)position();});box.addEventListener('focusin',e=>{const bug=e.target.closest('button[data-id],button[data-keep]');if(!bug)return;const r=bug.getBoundingClientRect();anchor={x:r.right,y:r.top};show(bug.dataset.id||bug.dataset.keep,box);});box.addEventListener('pointerleave',hide);box.addEventListener('pointerdown',hide);}
+const sources=['tank-bugs','keep-bugs','jars'];
+const target=(box,node)=>box.id==='jars'?node.closest('.parent-bug[data-inspect]'):node.closest('button[data-id],button[data-keep]');
+const targetId=bug=>bug.dataset.id||bug.dataset.keep||bug.dataset.inspect;
+enabled.onchange=()=>{for(const id of sources)$(id).classList.toggle('lens-active',enabled.checked);if(!enabled.checked)hide();};
+for(const id of sources){const box=$(id);
+ box.addEventListener('pointermove',e=>{if(!enabled.checked||e.buttons)return;anchor={x:e.clientX,y:e.clientY};const bug=target(box,e.target);if(bug){if(targetId(bug)!==selected)show(targetId(bug),box);else if(selected&&!popup.hidden)position();}else if(id==='jars')hide();else if(selected&&!popup.hidden)position();});
+ box.addEventListener('focusin',e=>{const bug=target(box,e.target);if(!bug){if(id==='jars')hide();return;}const r=bug.getBoundingClientRect();anchor={x:r.right,y:r.top};show(targetId(bug),box);});
+ box.addEventListener('focusout',e=>{if(!e.relatedTarget||!box.contains(e.relatedTarget)||id==='jars'&&!target(box,e.relatedTarget))hide();});
+ box.addEventListener('pointerleave',hide);box.addEventListener('pointerdown',hide);
+}
+window.addEventListener('scroll',()=>{const bug=lastBox&&document.activeElement&&lastBox.contains(document.activeElement)?target(lastBox,document.activeElement):null;if(selected&&bug&&targetId(bug)===selected){const r=bug.getBoundingClientRect();anchor={x:r.right,y:r.top};position();}else hide();},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hide();});document.addEventListener('click',e=>{if(e.target.closest('button')&&!e.target.closest('#trait-lens-controls'))hide();});window.addEventListener('resize',hide);window.addEventListener('pattern-state',populate);document.addEventListener('visibilitychange',()=>{if(document.hidden)hide();});$('keep').addEventListener('close',hide);populate();
 })();

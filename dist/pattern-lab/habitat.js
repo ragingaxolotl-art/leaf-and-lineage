@@ -1,21 +1,23 @@
 /* Tank scenery and learned places. Deliberately separate from inherited beetles. */
-(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./field-life.js'):root.PatternFieldLife);if(typeof module==='object'&&module.exports)module.exports=api;else root.PatternHabitat=api;})(globalThis,function(F){
+(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./field-life.js'):root.PatternFieldLife,typeof module==='object'&&module.exports?require('./living-world.js'):root.PatternLivingWorld);if(typeof module==='object'&&module.exports)module.exports=api;else root.PatternHabitat=api;})(globalThis,function(F,W){
 'use strict';
-const kinds=['leaf','bark','stone','bridge','sprout','arch'],names={leaf:'Leaf canopy',bark:'Bark tunnel',stone:'Smooth stone',bridge:'Twig bridge',sprout:'Unusual seedling',arch:'Weathered bark arch'};
+const kinds=['leaf','bark','stone','bridge','sprout','arch','droplet','soil','crumb','fungus','litter'],names={leaf:'Leaf canopy',bark:'Bark tunnel',stone:'Smooth stone',bridge:'Twig bridge',sprout:'Unusual seedling',arch:'Weathered bark arch',droplet:'Water droplet',soil:'Loose soil',crumb:'Movable food crumb',fungus:'Fungal patch',litter:'Decomposing leaf litter'};
+const roles={leaf:'Provides cover, a remembered resting place, and weight-sensitive bending.',bark:'Attracts shelter visits and becomes a favorite resting place.',stone:'Blocks walking paths; beetles steer around it with body clearance.',bridge:'Attracts deliberate crossings; grip and stance affect pace, and opposing visitors may hesitate.',sprout:'Provides a discovered patch of cover and a remembered resting place.',arch:'Provides a discovered bark shelter and a remembered resting place.',droplet:'Short-legged beetles skirt the droplet; long-legged grippy beetles can wade through. Adds moisture nearby.',soil:'Loose grains slow walking and collect tracks; grip helps maintain pace.',crumb:'Can be pushed by moving beetles, eaten, and shared. Disappears as it is eaten.',fungus:'Grows with moisture and helps nearby leaf litter decompose.',litter:'Slowly decomposes near fungi, enriching the patch for plants.'};
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 function objects(){return [{id:'leaf-1',kind:'leaf',x:.25,y:.29,angle:-22},{id:'bark-1',kind:'bark',x:.46,y:.58,angle:24},{id:'stone-1',kind:'stone',x:.63,y:.32,angle:-12}];}
-function create(){return {tank:{objects:objects(),memories:{},life:F.life()},keep:{objects:objects(),memories:{},life:F.life()}};}
-function ensure(s){if(s.habitat===undefined)s.habitat=create();if(s.habitat&&typeof s.habitat==='object')for(const k of ['tank','keep'])if(s.habitat[k])F.ensureLife(s.habitat[k]);return s.habitat;}
+function create(){return {tank:{objects:objects(),memories:{},life:F.life(),world:W.create()},keep:{objects:objects(),memories:{},life:F.life(),world:W.create()}};}
+function ensure(s){if(s.habitat===undefined)s.habitat=create();if(s.habitat&&typeof s.habitat==='object')for(const k of ['tank','keep'])if(s.habitat[k]){F.ensureLife(s.habitat[k]);W.ensure(s.habitat[k]);}return s.habitat;}
 function validate(s){
  const h=ensure(s);if(!h||typeof h!=='object'||Array.isArray(h))throw Error('Invalid habitat.');
  for(const k of ['tank','keep']){const t=h[k];if(!t||!Array.isArray(t.objects)||t.objects.length>12||!t.memories||typeof t.memories!=='object'||Array.isArray(t.memories)||Object.keys(t.memories).length>3000)throw Error('Invalid tank habitat.');
   const ids=new Set();for(const o of t.objects){if(!o||typeof o.id!=='string'||!/^[a-z]+-[a-z0-9]+$/.test(o.id)||ids.has(o.id)||!kinds.includes(o.kind)||!Number.isFinite(o.x)||o.x<.08||o.x>.92||!Number.isFinite(o.y)||o.y<.1||o.y>.9||!Number.isFinite(o.angle)||Math.abs(o.angle)>360)throw Error('Invalid habitat object.');ids.add(o.id);}
   for(const [id,m] of Object.entries(t.memories)){if(!Object.hasOwn(s.beetles,id)||!m||!Number.isFinite(m.x)||m.x<0||m.x>1||!Number.isFinite(m.y)||m.y<0||m.y>1||!Number.isInteger(m.visits)||m.visits<1||m.visits>1000000||!Number.isFinite(m.comfort)||m.comfort<0||m.comfort>1||m.objectId!==null&&(typeof m.objectId!=='string'||!/^[a-z]+-[a-z0-9]+$/.test(m.objectId)))throw Error('Invalid favorite spot.');}
-  F.validateLife(t.life,s.beetles);
+  F.validateLife(t.life,s.beetles);W.validate(t);
  }return h;
 }
 function prune(s){const h=ensure(s);F.prune(s);for(const k of ['tank','keep'])for(const id of Object.keys(h[k].memories))if(!s.beetles[id])delete h[k].memories[id];}
-function shape(o,width,height){const base=Math.min(width,height),scale=o.kind==='leaf'?[.135,.067]:['bark','arch'].includes(o.kind)?[.14,.064]:o.kind==='bridge'?[.17,.052]:o.kind==='sprout'?[.1,.1]:[.085,.065];return {x:o.x*width,y:o.y*height,rx:base*scale[0],ry:base*scale[1],angle:o.angle*Math.PI/180};}
+function shape(o,width,height){const base=Math.min(width,height),scale=o.kind==='leaf'?[.135,.067]:['bark','arch'].includes(o.kind)?[.14,.064]:o.kind==='bridge'?[.17,.052]:o.kind==='sprout'?[.1,.1]:o.kind==='droplet'?[.047,.035]:o.kind==='soil'?[.16,.09]:o.kind==='crumb'?[.018,.014]:o.kind==='fungus'?[.08,.07]:o.kind==='litter'?[.12,.08]:[.085,.065];return {x:o.x*width,y:o.y*height,rx:base*scale[0],ry:base*scale[1],angle:o.angle*Math.PI/180};}
 function add(t,kind){if(!kinds.includes(kind))throw Error('Choose a habitat object.');if(t.objects.length>=12)throw Error('This tank has room for 12 habitat objects.');let n=1;while(t.objects.some(o=>o.id===kind+'-'+n))n++;const i=t.objects.length,o={id:kind+'-'+n,kind,x:clamp(.25+(i%3)*.22,.08,.92),y:clamp(.26+(Math.floor(i/3)%3)*.22,.1,.9),angle:0};t.objects.push(o);return o;}
-return {create,ensure,validate,prune,shape,add,names,kinds,clamp};
+function bridgeEnds(o,width,height,padding=0){const q=shape(o,width,height),reach=q.rx+12,c=Math.cos(q.angle),s=Math.sin(q.angle);return [-1,1].map(sign=>({x:clamp(q.x+sign*reach*c,Math.min(width*.48,padding),width-Math.min(width*.48,padding)),y:clamp(q.y+sign*reach*s,Math.min(height*.48,padding),height-Math.min(height*.48,padding))}));}
+return {create,ensure,validate,prune,shape,bridgeEnds,add,names,kinds,roles,clamp};
 });

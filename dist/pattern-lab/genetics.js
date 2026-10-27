@@ -253,7 +253,7 @@ function upgradeState(s){
 }
 function validate(s){
  s=upgradeState(s);
- Habitat.validate(s);FieldLife.validate(s);
+ Habitat.validate(s);FieldLife.validate(s);for(const t of Object.values(s.habitat))for(const film of t.world.films)for(const a of film.actors)validateAppearance(a.appearance);
  if(!s||s.version!=='PL2'||!s.settings||typeof s.beetles!=='object'||!Array.isArray(s.jars)||s.jars.length!==2)throw Error('This is not a Pattern Lab save.');
  if(s.historyStartRound===undefined)s.historyStartRound=0;
  if(!Number.isInteger(s.historyStartRound)||s.historyStartRound<0||s.historyStartRound>s.round)throw Error('Invalid retained history range.');

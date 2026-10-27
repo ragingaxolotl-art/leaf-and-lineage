@@ -9,12 +9,12 @@ function drawV1(b,prefix='bug'){
  const body=rgb(p.body),limb=rgb(p.body.map(v=>v*p.appendageShade*.7+14)),line='rgba(24,42,35,.7)';
  const legPigment=rgb(p.legColor.map(v=>v*p.appendageShade*.7+14)),thoraxPigment=rgb(p.thoraxColor.map(v=>v*p.appendageShade*.7+14));
  const w=29*p.bodyWidth,parts=[];
- const world=['tank','keep','arena-a','arena-b'].includes(prefix);
+ const world=['tank','keep','arena-a','arena-b'].includes(prefix)||prefix.startsWith('doc-');
  const {reachX,reachTop,bottom}=bounds(p);
  const box=world?'-110 -175 220 265':`${-reachX-10} ${(-reachTop-10)*p.bodyLength} ${2*reachX+20} ${(reachTop+bottom+20)*p.bodyLength}`;
  const overall=prefix.startsWith('arena-')?2**(.4*p.bodyGrowth):world?p.bodyFactor:1;
  parts.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box}" aria-hidden="true" focusable="false" style="overflow:visible;--gait-duration:${(.25+.65*(1-p.gait)).toFixed(2)}s"><defs><clipPath id="${id}"><ellipse cy="11" rx="${w}" ry="43"/></clipPath><linearGradient id="${id}-shine" x1="0" x2="1"><stop stop-color="#fff" stop-opacity=".32"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#152e25" stop-opacity=".22"/></linearGradient></defs>`);
- parts.push(`<g transform="scale(${overall} ${p.bodyLength*overall})">`);
+ parts.push(`${world&&!prefix.startsWith("arena-")?'<g class="world-stance">':''}<g transform="scale(${overall} ${p.bodyLength*overall})">`);
  // Six jointed legs. Front, middle and hind modifiers preserve real leg-pair structure.
  for(const side of [-1,1])for(let pair=0;pair<3;pair++){
   const y=-14+pair*25,front=pair===0,hind=pair===2;
@@ -84,7 +84,7 @@ function drawV1(b,prefix='bug'){
  parts.push(`<path class="inherited-horn" data-horn="${i+1}" d="${path}" transform="translate(${offset} -55)" fill="${limb}" stroke="${line}" stroke-width="1"/>`);}
  if(world&&p.visibleHorns>0)parts.push(`<ellipse class="horn-crumb" cx="0" cy="${-57-45*p.horn*p.hornFactor}" rx="3.3" ry="2.2" fill="#edce80" stroke="#a78145" stroke-width=".7"/>`);
  if(p.jaw>.01)parts.push(`<path transform="translate(0 -57) scale(${p.jawFactor}) translate(0 57)" d="M-7 -57 q${-8-p.jaw*8} ${-8-p.jaw*12} ${5+p.jaw*5} ${-10-p.jaw*14} M7 -57 q${8+p.jaw*8} ${-8-p.jaw*12} ${-5-p.jaw*5} ${-10-p.jaw*14}" stroke="${limb}" stroke-width="${1+p.jaw*3}" fill="none"/>`);
- parts.push(`<ellipse cy="11" rx="${w}" ry="43" fill="url(#${id}-shine)"/><path d="M0 -31 Q-2 12 0 54" fill="none" stroke="${line}" stroke-width="1.3"/><ellipse cy="-29" rx="${23*p.bodyWidth*p.pronotum}" ry="15" fill="${thoraxPigment}" stroke="${line}" stroke-width="1.5"/><g class="head-pose"><g transform="translate(0 -47) scale(${p.headFactor}) translate(0 47)"><ellipse cy="-47" rx="${16*p.headWidth}" ry="13" fill="${body}" stroke="${line}" stroke-width="1.5"/><ellipse cx="-13" cy="-49" rx="3" ry="5" fill="#182a24"/><ellipse cx="13" cy="-49" rx="3" ry="5" fill="#182a24"/><path d="M-5 -60 L-3 -64 M5 -60 L3 -64" stroke="${limb}" stroke-width="2" stroke-linecap="round"/></g></g></g></svg>`);
+ parts.push(`<ellipse cy="11" rx="${w}" ry="43" fill="url(#${id}-shine)"/><path d="M0 -31 Q-2 12 0 54" fill="none" stroke="${line}" stroke-width="1.3"/><ellipse cy="-29" rx="${23*p.bodyWidth*p.pronotum}" ry="15" fill="${thoraxPigment}" stroke="${line}" stroke-width="1.5"/><g class="head-pose"><g transform="translate(0 -47) scale(${p.headFactor}) translate(0 47)"><ellipse cy="-47" rx="${16*p.headWidth}" ry="13" fill="${body}" stroke="${line}" stroke-width="1.5"/><ellipse cx="-13" cy="-49" rx="3" ry="5" fill="#182a24"/><ellipse cx="13" cy="-49" rx="3" ry="5" fill="#182a24"/><path d="M-5 -60 L-3 -64 M5 -60 L3 -64" stroke="${limb}" stroke-width="2" stroke-linecap="round"/></g></g></g>${world&&!prefix.startsWith("arena-")?'</g>':''}</svg>`);
  return parts.join('');
 }
 function draw(b,prefix='bug'){if((b.appearanceVersion??1)!==1)throw Error('Unsupported beetle appearance version.');return drawV1(b,prefix);}
